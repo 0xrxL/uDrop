@@ -1,0 +1,304 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <StartupObject>uDrop.Code.Init</StartupObject>
+    <PackageIcon>icon.ico</PackageIcon>
+    <SignAssembly>False</SignAssembly>
+    <ErrorReport>none</ErrorReport>
+    <PlatformTarget>x64</PlatformTarget>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <EnableNETAnalyzers>False</EnableNETAnalyzers>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
+    <IsPublishable>False</IsPublishable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+    <IsPublishable>False</IsPublishable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Code\java\**" />
+    <Compile Remove="SignKey\**" />
+    <EmbeddedResource Remove="Code\java\**" />
+    <EmbeddedResource Remove="SignKey\**" />
+    <None Remove="Code\java\**" />
+    <None Remove="SignKey\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitignore" />
+    <None Remove="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.65" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_remix_filled_white_24.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_remix_filled_white_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_comment_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_dislike_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_dislike_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_dislike_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_like_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_like_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_like_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-hdpi\ic_right_share_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_remix_filled_white_24.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_remix_filled_white_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_comment_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_dislike_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_dislike_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_dislike_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_like_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_like_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_like_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-mdpi\ic_right_share_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_remix_filled_white_24.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_remix_filled_white_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_comment_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_dislike_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_dislike_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_dislike_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_like_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_like_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_like_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xhdpi\ic_right_share_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_remix_filled_white_24.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_remix_filled_white_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_comment_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_dislike_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_dislike_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_dislike_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_like_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_like_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_like_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxhdpi\ic_right_share_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_remix_filled_white_24.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_remix_filled_white_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_comment_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_dislike_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_dislike_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_dislike_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_like_off_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_like_on_32c.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_like_on_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable-xxxhdpi\ic_right_share_shadowed.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable\ic_right_comment_32c.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable\ic_right_dislike_off_32c.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable\ic_right_like_off_32c.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable\ic_right_share_32c.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\res\drawable\microg_settings_key_icon.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uClientType.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uPlayerRoutes.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uRequester.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uRoute%24CompiledRoute-IA.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uRoute%24CompiledRoute.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uRoute%24Method.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uRoute.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uSpoofing.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uStreamingDataRequest%24%24ExternalSyntheticLambda0.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uStreamingDataRequest%241.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uStreamingDataRequest.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uUtils%24%24ExternalSyntheticLambda0.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\StreamSpoofing\uUtils.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\uBlocker%24%24ExternalSyntheticLambda0.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\uBlocker%24%24ExternalSyntheticLambda1.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\uBlocker%24%24ExternalSyntheticLambda2.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\uBlocker%24%24ExternalSyntheticLambda3.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\uBlocker.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="AppIntegrations\youtube\smali_classes6\uDebug.smali">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icon.ico">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="Libs\apksigner.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Libs\apktool.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Libs\jli.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Libs\keytool.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Libs\zipalign.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AppIntegrations\youtube\smali_classes6\" />
+  </ItemGroup>
+
+</Project>
