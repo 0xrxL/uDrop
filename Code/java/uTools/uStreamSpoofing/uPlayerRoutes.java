@@ -2,6 +2,8 @@
 
 package uTools.uStreamSpoofing;
 
+import static uTools.uStreamSpoofing.uRequester.GetConnectionFromCompiledRoute;
+
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -15,14 +17,12 @@ final class uPlayerRoutes {
             JSONObject client = new JSONObject();
             client.put("clientName", clientType.name());
             client.put("clientVersion", clientType.appVersion);
+            client.put("deviceMake", clientType.osBrand);
             client.put("deviceModel", clientType.model);
+            client.put("osName", clientType.osName);
             client.put("osVersion", clientType.osVersion);
             if (clientType.androidSdkVersion != null) {
                 client.put("androidSdkVersion", clientType.androidSdkVersion);
-                client.put("osName", "Android");
-            } else {
-                client.put("deviceMake", "Apple");
-                client.put("osName", "iOS");
             }
 
             innerTubeBody.put("context", new JSONObject() {{
@@ -39,10 +39,10 @@ final class uPlayerRoutes {
     private static final int CONNECTION_TIMEOUT_MILLISECONDS = 10 * 1000;
     /** @noinspection SameParameterValue*/
     static HttpURLConnection GetPlayerResponseConnectionFromRoute(uRoute.CompiledRoute route, uClientType clientType) throws IOException {
-        var connection = uRequester.GetConnectionFromCompiledRoute(
-                                "https://youtubei.googleapis.com/youtubei/v1/",
-                                route
-                            );
+        HttpURLConnection connection = GetConnectionFromCompiledRoute(
+                                            "https://youtubei.googleapis.com/youtubei/v1/",
+                                            route
+                                        );
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("User-Agent", clientType.userAgent);
         connection.setUseCaches(false);
@@ -56,11 +56,11 @@ final class uPlayerRoutes {
     static final uRoute.CompiledRoute GET_STREAMING_DATA = new uRoute(
             uRoute.Method.POST,
             String.format(
-                    "%s%s%s",
+                "%s%s%s",
 
-                    "player",
-                    "?fields=streamingData",
-                    "&alt=proto"
+                "player",
+                "?fields=streamingData",
+                "&alt=proto"
             )
     ).Compile();
 }

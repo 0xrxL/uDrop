@@ -266,6 +266,7 @@ public class uBlocker {
                 "reel_player_disclosure",
                 "reel_sound_metadata",
                 "search_friction",
+                "sfv_audio_item",
                 "shelf_header",
                 "shorts_info_panel_overview",
                 "shorts_paused_state",

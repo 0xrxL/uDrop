@@ -12,19 +12,20 @@ public class uRoute {
         this.route = route;
         this.paramCount = CountMatches(route, '{');
 
-        if (paramCount != CountMatches(route, '}'))
+        if (paramCount != CountMatches(route, '}')) {
             throw new IllegalArgumentException("Not enough parameters");
+        }
     }
 
     public CompiledRoute Compile(String... params) {
         if (params.length != paramCount) {
             throw new IllegalArgumentException(
                 String.format(
-                        "Error compiling route [%s], incorrect amount of parameters provided. Expected: %s, provided: %s",
+                    "Error compiling route [%s], incorrect amount of parameters provided. Expected: %s, provided: %s",
 
-                        route,
-                        paramCount,
-                        params.length
+                    route,
+                    paramCount,
+                    params.length
                 )
             );
         }

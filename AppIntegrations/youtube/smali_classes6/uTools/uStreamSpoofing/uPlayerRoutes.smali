@@ -55,29 +55,29 @@
 .method constructor <init>()V
     .locals 0
 
-    .line 10
+    .line 12
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     return-void
 .end method
 
 .method static CreateInnertubeBody(LuTools/uStreamSpoofing/uClientType;)Ljava/lang/String;
-    .locals 5
+    .locals 4
     .param p0, "clientType"    # LuTools/uStreamSpoofing/uClientType;
 
-    .line 12
+    .line 14
     new-instance v0, Lorg/json/JSONObject;
 
     invoke-direct {v0}, Lorg/json/JSONObject;-><init>()V
 
-    .line 15
+    .line 17
     .local v0, "innerTubeBody":Lorg/json/JSONObject;
     :try_start_0
     new-instance v1, Lorg/json/JSONObject;
 
     invoke-direct {v1}, Lorg/json/JSONObject;-><init>()V
 
-    .line 16
+    .line 18
     .local v1, "client":Lorg/json/JSONObject;
     const-string v2, "clientName"
 
@@ -87,66 +87,55 @@
 
     invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 
-    .line 17
+    .line 19
     const-string v2, "clientVersion"
 
     iget-object v3, p0, LuTools/uStreamSpoofing/uClientType;->appVersion:Ljava/lang/String;
 
     invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 
-    .line 18
+    .line 20
+    const-string v2, "deviceMake"
+
+    iget-object v3, p0, LuTools/uStreamSpoofing/uClientType;->osBrand:Ljava/lang/String;
+
+    invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
+
+    .line 21
     const-string v2, "deviceModel"
 
     iget-object v3, p0, LuTools/uStreamSpoofing/uClientType;->model:Ljava/lang/String;
 
     invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 
-    .line 19
+    .line 22
+    const-string v2, "osName"
+
+    iget-object v3, p0, LuTools/uStreamSpoofing/uClientType;->osName:Ljava/lang/String;
+
+    invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
+
+    .line 23
     const-string v2, "osVersion"
 
     iget-object v3, p0, LuTools/uStreamSpoofing/uClientType;->osVersion:Ljava/lang/String;
 
     invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 
-    .line 20
+    .line 24
     iget-object v2, p0, LuTools/uStreamSpoofing/uClientType;->androidSdkVersion:Ljava/lang/String;
-    :try_end_0
-    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
-
-    const-string v3, "osName"
 
     if-eqz v2, :cond_0
 
-    .line 21
-    :try_start_1
+    .line 25
     const-string v2, "androidSdkVersion"
 
-    iget-object v4, p0, LuTools/uStreamSpoofing/uClientType;->androidSdkVersion:Ljava/lang/String;
+    iget-object v3, p0, LuTools/uStreamSpoofing/uClientType;->androidSdkVersion:Ljava/lang/String;
 
-    invoke-virtual {v1, v2, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
-
-    .line 22
-    const-string v2, "Android"
-
-    invoke-virtual {v1, v3, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
-
-    goto :goto_0
-
-    .line 24
-    :cond_0
-    const-string v2, "deviceMake"
-
-    const-string v4, "Apple"
-
-    invoke-virtual {v1, v2, v4}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
-
-    .line 25
-    const-string v2, "iOS"
-
-    invoke-virtual {v1, v3, v2}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
+    invoke-virtual {v1, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 
     .line 28
-    :goto_0
+    :cond_0
     const-string v2, "context"
 
     new-instance v3, LuTools/uStreamSpoofing/uPlayerRoutes$1;
@@ -173,20 +162,20 @@
     const-string v3, "%s"
 
     invoke-virtual {v0, v2, v3}, Lorg/json/JSONObject;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
-    :try_end_1
-    .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
+    :try_end_0
+    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     .line 34
     nop
 
     .end local v1    # "client":Lorg/json/JSONObject;
-    goto :goto_1
+    goto :goto_0
 
     :catch_0
     move-exception v1
 
     .line 36
-    :goto_1
+    :goto_0
     invoke-virtual {v0}, Lorg/json/JSONObject;->toString()Ljava/lang/String;
 
     move-result-object v1

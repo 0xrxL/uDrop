@@ -63,7 +63,7 @@
 
     if-ne v0, v1, :cond_0
 
-    .line 17
+    .line 18
     return-void
 
     .line 16
@@ -82,10 +82,10 @@
     .param p1, "seq"    # Ljava/lang/CharSequence;
     .param p2, "c"    # C
 
-    .line 60
+    .line 61
     const/4 v0, 0x0
 
-    .line 61
+    .line 62
     .local v0, "count":I
     const/4 v1, 0x0
 
@@ -97,23 +97,23 @@
 
     if-ge v1, v2, :cond_1
 
-    .line 62
+    .line 63
     invoke-interface {p1, v1}, Ljava/lang/CharSequence;->charAt(I)C
 
     move-result v2
 
     if-ne v2, p2, :cond_0
 
-    .line 63
+    .line 64
     add-int/lit8 v0, v0, 0x1
 
-    .line 61
+    .line 62
     :cond_0
     add-int/lit8 v1, v1, 0x1
 
     goto :goto_0
 
-    .line 66
+    .line 67
     .end local v1    # "i":I
     :cond_1
     return v0
@@ -125,21 +125,21 @@
     .locals 7
     .param p1, "params"    # [Ljava/lang/String;
 
-    .line 20
+    .line 21
     array-length v0, p1
 
     iget v1, p0, LuTools/uStreamSpoofing/uRoute;->paramCount:I
 
     if-ne v0, v1, :cond_1
 
-    .line 32
+    .line 33
     new-instance v0, Ljava/lang/StringBuilder;
 
     iget-object v1, p0, LuTools/uStreamSpoofing/uRoute;->route:Ljava/lang/String;
 
     invoke-direct {v0, v1}, Ljava/lang/StringBuilder;-><init>(Ljava/lang/String;)V
 
-    .line 33
+    .line 34
     .local v0, "compiledRoute":Ljava/lang/StringBuilder;
     array-length v1, p1
 
@@ -150,7 +150,7 @@
 
     aget-object v3, p1, v2
 
-    .line 34
+    .line 35
     .local v3, "param":Ljava/lang/String;
     const-string v4, "{"
 
@@ -158,7 +158,7 @@
 
     move-result v4
 
-    .line 35
+    .line 36
     .local v4, "paramStart":I
     const-string v5, "}"
 
@@ -166,13 +166,13 @@
 
     move-result v5
 
-    .line 36
+    .line 37
     .local v5, "paramEnd":I
     add-int/lit8 v6, v5, 0x1
 
     invoke-virtual {v0, v4, v6, v3}, Ljava/lang/StringBuilder;->replace(IILjava/lang/String;)Ljava/lang/StringBuilder;
 
-    .line 33
+    .line 34
     .end local v3    # "param":Ljava/lang/String;
     .end local v4    # "paramStart":I
     .end local v5    # "paramEnd":I
@@ -180,7 +180,7 @@
 
     goto :goto_0
 
-    .line 38
+    .line 39
     :cond_0
     new-instance v1, LuTools/uStreamSpoofing/uRoute$CompiledRoute;
 
@@ -194,7 +194,7 @@
 
     return-object v1
 
-    .line 21
+    .line 22
     .end local v0    # "compiledRoute":Ljava/lang/StringBuilder;
     :cond_1
     new-instance v0, Ljava/lang/IllegalArgumentException;
@@ -203,14 +203,14 @@
 
     iget v2, p0, LuTools/uStreamSpoofing/uRoute;->paramCount:I
 
-    .line 26
+    .line 27
     invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
     move-result-object v2
 
     array-length v3, p1
 
-    .line 27
+    .line 28
     invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
     move-result-object v3
@@ -219,7 +219,7 @@
 
     move-result-object v1
 
-    .line 22
+    .line 23
     const-string v2, "Error compiling route [%s], incorrect amount of parameters provided. Expected: %s, provided: %s"
 
     invoke-static {v2, v1}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
@@ -234,7 +234,7 @@
 .method public GetMethod()LuTools/uStreamSpoofing/uRoute$Method;
     .locals 1
 
-    .line 70
+    .line 71
     iget-object v0, p0, LuTools/uStreamSpoofing/uRoute;->method:LuTools/uStreamSpoofing/uRoute$Method;
 
     return-object v0

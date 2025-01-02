@@ -77,7 +77,7 @@
 
     .line 45
     .local v0, "clientTypes":[LuTools/uStreamSpoofing/uClientType;
-    sget-object v1, LuTools/uStreamSpoofing/uClientType;->ANDROID_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
+    sget-object v1, LuTools/uStreamSpoofing/uClientType;->IOS_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
 
     .line 47
     .local v1, "preferredClientType":LuTools/uStreamSpoofing/uClientType;
@@ -596,8 +596,10 @@
 
     if-ne v3, v4, :cond_2
 
+    .line 138
     return-object v0
 
+    .line 137
     .end local v0    # "connection":Ljava/net/HttpURLConnection;
     .end local v1    # "innerTubeBody":Ljava/lang/String;
     .end local v2    # "requestBody":[B
@@ -605,14 +607,14 @@
     :cond_2
     goto :goto_1
 
-    .line 138
+    .line 140
     :catch_0
     move-exception v0
 
     :goto_1
     nop
 
-    .line 140
+    .line 142
     const/4 v0, 0x0
 
     return-object v0
@@ -672,7 +674,7 @@
 .method public toString()Ljava/lang/String;
     .locals 2
 
-    .line 146
+    .line 148
     iget-object v0, p0, LuTools/uStreamSpoofing/uStreamingDataRequest;->videoId:Ljava/lang/String;
 
     filled-new-array {v0}, [Ljava/lang/Object;

@@ -15,6 +15,7 @@
             return [
                 new SmaliUtils.SubPatchModule<(string, int)[]>(
                     [
+                        ("Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;", 2),
                         ("Landroid/view/MotionEvent;->getAction()I", 1),
                         (" onDoubleTap(", 2),
                         (" onDoubleTapEvent(", 2),
@@ -38,7 +39,7 @@
                         patchInteractions,
                         xmlSmaliInfo
                     ) => {
-                        for (int i = 3; i <= 4; i++)
+                        for (int i = 0; i <= 0; i++)
                         {
                             if (new[] {
                                     xmlSmaliSearchKeys[i].Item1
@@ -48,7 +49,8 @@
 
                                 for (int j = 0; j < xmlSmaliProperties.LinesCount; j++)
                                 {
-                                    if (!xmlSmaliProperties.Lines[j].Contains("abstract") &&
+                                    if ((xmlSmaliSearchKeys[i].Item2 > 1 && xmlSmaliProperties.Lines[j].Contains(".method")) &&
+                                        !xmlSmaliProperties.Lines[j].Contains("abstract") &&
                                         xmlSmaliProperties.Lines[j].Contains(xmlSmaliSearchKeys[i].Item1))
                                     {
                                         (int, string[]) patch = (

@@ -42,7 +42,7 @@ public class uStreamingDataRequest {
     private static final List<uClientType> CLIENT_TYPES_ORDER_TO_USE = new ArrayList<>();
     static {
         uClientType[] clientTypes = uClientType.values();
-        uClientType preferredClientType = uClientType.ANDROID_UNPLUGGED;
+        uClientType preferredClientType = uClientType.IOS_UNPLUGGED;
 
         CLIENT_TYPES_ORDER_TO_USE.add(preferredClientType);
 
@@ -64,8 +64,8 @@ public class uStreamingDataRequest {
                     int contentLength = connection.getContentLength();
                     if (contentLength != 0) {
                         try (
-                                InputStream inputStream = new BufferedInputStream(connection.getInputStream());
-                                ByteArrayOutputStream bAOS = new ByteArrayOutputStream(Math.max(contentLength, READ_BUFFER_SIZE))
+                            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+                            ByteArrayOutputStream bAOS = new ByteArrayOutputStream(Math.max(contentLength, READ_BUFFER_SIZE))
                         ) {
                             byte[] buffer = new byte[READ_BUFFER_SIZE];
                             int bytesRead;
@@ -134,7 +134,9 @@ public class uStreamingDataRequest {
             connection.getOutputStream().write(requestBody);
 
             final int responseCode = connection.getResponseCode();
-            if (responseCode == 200) return connection;
+            if (responseCode == 200) {
+                return connection;
+            }
         } catch (Exception ignore) {}
 
         return null;

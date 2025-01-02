@@ -2,19 +2,25 @@
 
 package uTools.uStreamSpoofing;
 
+import static uTools.uStreamSpoofing.uStreamingDataRequest.GetRequestForVideoId;
+
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
 import java.nio.ByteBuffer;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Stream;
 
+@SuppressWarnings({
+    "ConstantConditions",
+})
 public class uSpoofing {
     public static Uri BlockGetWatchRequest(Uri playerRequestUri) {
         try {
             String path = playerRequestUri.getPath();
 
-            if (path != null && path.contains("get_watch")) {
+            if (path.contains("get_watch")) {
                 return Uri.parse("https://127.0.0.0");
             }
         } catch (Exception ignored) {}
@@ -27,7 +33,7 @@ public class uSpoofing {
             Uri originalUri = Uri.parse(originalUrlString);
             String path = originalUri.getPath();
 
-            if (path != null && path.contains("initplayback")) {
+            if (path.contains("initplayback")) {
                 return originalUri.buildUpon().clearQuery().build().toString();
             }
         } catch (Exception ignore) {}
@@ -39,7 +45,10 @@ public class uSpoofing {
         try {
             Uri uri = Uri.parse(url);
             String path = uri.getPath();
-            if (path != null && path.contains("player") && !path.contains("heartbeat")) {
+            if (path.contains("player") && Stream.of(
+                                                "heartbeat",
+                                                "refresh"
+                                            ).noneMatch(path::contains)) {
                 String videoId = Objects.requireNonNull(uri.getQueryParameter("id"));
                 uStreamingDataRequest.FetchRequest(videoId, requestHeaders);
             }
@@ -49,12 +58,11 @@ public class uSpoofing {
     @Nullable
     public static ByteBuffer GetStreamingData(String videoId) {
         try {
-            uStreamingDataRequest request = uStreamingDataRequest.GetRequestForVideoId(videoId);
-            if (request != null) {
-                var stream = request.GetStream();
-                if (stream != null) {
-                    return stream;
-                }
+            uStreamingDataRequest request = GetRequestForVideoId(videoId);
+            ByteBuffer stream = request.GetStream();
+
+            if (stream != null) {
+                return stream;
             }
         } catch (Exception ignore) {}
 
@@ -66,7 +74,7 @@ public class uSpoofing {
         try {
             if (method == 2) {
                 String path = uri.getPath();
-                if (path != null && path.contains("videoplayback")) {
+                if (path.contains("videoplayback")) {
                     return null;
                 }
             }

@@ -101,7 +101,7 @@
 
     sput-object v1, LuTools/uBlocker;->protoBufferComponents:Ljava/nio/ByteBuffer;
 
-    .line 286
+    .line 287
     sput-boolean v0, LuTools/uBlocker;->hideWelcomeAndRules:Z
 
     return-void
@@ -888,7 +888,7 @@
 
     .line 213
     :cond_d
-    const/16 v2, 0x42
+    const/16 v2, 0x43
 
     :try_start_b
     new-array v2, v2, [Ljava/lang/String;
@@ -1197,81 +1197,87 @@
 
     aput-object v3, v2, v4
 
-    const-string v3, "shelf_header"
+    const-string v3, "sfv_audio_item"
 
     const/16 v4, 0x35
 
     aput-object v3, v2, v4
 
-    const-string v3, "shorts_info_panel_overview"
+    const-string v3, "shelf_header"
 
     const/16 v4, 0x36
 
     aput-object v3, v2, v4
 
-    const-string v3, "shorts_paused_state"
+    const-string v3, "shorts_info_panel_overview"
 
     const/16 v4, 0x37
 
     aput-object v3, v2, v4
 
-    const-string v3, "shorts_shelf"
+    const-string v3, "shorts_paused_state"
 
     const/16 v4, 0x38
 
     aput-object v3, v2, v4
 
-    const-string v3, "single_item_information_panel"
+    const-string v3, "shorts_shelf"
 
     const/16 v4, 0x39
 
     aput-object v3, v2, v4
 
-    const-string v3, "statement_banner"
+    const-string v3, "single_item_information_panel"
 
     const/16 v4, 0x3a
 
     aput-object v3, v2, v4
 
-    const-string v3, "super_chat_item"
+    const-string v3, "statement_banner"
 
     const/16 v4, 0x3b
 
     aput-object v3, v2, v4
 
-    const-string v3, "text_post_root_slim"
+    const-string v3, "super_chat_item"
 
     const/16 v4, 0x3c
 
     aput-object v3, v2, v4
 
-    const-string v3, "timed_reaction"
+    const-string v3, "text_post_root_slim"
 
     const/16 v4, 0x3d
 
     aput-object v3, v2, v4
 
-    const-string v3, "topic_with_thumbnail_view_model"
+    const-string v3, "timed_reaction"
 
     const/16 v4, 0x3e
 
     aput-object v3, v2, v4
 
-    const-string v3, "transcript_section"
+    const-string v3, "topic_with_thumbnail_view_model"
 
     const/16 v4, 0x3f
 
     aput-object v3, v2, v4
 
-    const-string v3, "video_attributes_section"
+    const-string v3, "transcript_section"
 
     const/16 v4, 0x40
 
     aput-object v3, v2, v4
 
-    const-string v3, "|suggested_action."
+    const-string v3, "video_attributes_section"
 
     const/16 v4, 0x41
+
+    aput-object v3, v2, v4
+
+    const-string v3, "|suggested_action."
+
+    const/16 v4, 0x42
 
     aput-object v3, v2, v4
 
@@ -1279,7 +1285,7 @@
 
     move-result-object v2
 
-    .line 283
+    .line 284
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -1315,7 +1321,7 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 300
+    .line 301
     invoke-virtual {p0}, Landroid/view/View;->getViewTreeObserver()Landroid/view/ViewTreeObserver;
 
     move-result-object v0
@@ -1326,7 +1332,7 @@
 
     invoke-virtual {v0, v1}, Landroid/view/ViewTreeObserver;->addOnGlobalLayoutListener(Landroid/view/ViewTreeObserver$OnGlobalLayoutListener;)V
 
-    .line 309
+    .line 310
     return-void
 .end method
 
@@ -1334,17 +1340,17 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 288
+    .line 289
     sget-boolean v0, LuTools/uBlocker;->hideWelcomeAndRules:Z
 
     if-eqz v0, :cond_0
 
-    .line 289
+    .line 290
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 292
+    .line 293
     .local v0, "viewParent":Landroid/view/ViewParent;
     :try_start_0
     move-object v1, v0
@@ -1353,7 +1359,7 @@
 
     invoke-static {v1}, LuTools/uUtils;->HideViewByLinearLayoutParams(Landroid/view/View;)V
 
-    .line 294
+    .line 295
     const/4 v1, 0x0
 
     sput-boolean v1, LuTools/uBlocker;->hideWelcomeAndRules:Z
@@ -1362,14 +1368,14 @@
 
     goto :goto_0
 
-    .line 295
+    .line 296
     :catch_0
     move-exception v1
 
     :goto_0
     nop
 
-    .line 297
+    .line 298
     .end local v0    # "viewParent":Landroid/view/ViewParent;
     :cond_0
     return-void
@@ -1379,7 +1385,7 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 328
+    .line 329
     :try_start_0
     const-string v0, "TAB_SHORTS"
 
@@ -1389,7 +1395,7 @@
 
     sget-object v1, LuTools/uBlocker;->navigationBarPivot:Ljava/lang/Enum;
 
-    .line 330
+    .line 331
     invoke-virtual {v1}, Ljava/lang/Enum;->name()Ljava/lang/String;
 
     move-result-object v1
@@ -1406,14 +1412,14 @@
 
     if-eqz v0, :cond_0
 
-    .line 331
+    .line 332
     invoke-static {p0}, LuTools/uUtils;->HideView(Landroid/view/View;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    .line 333
+    .line 334
     :catch_0
     move-exception v0
 
@@ -1421,7 +1427,7 @@
     :goto_0
     nop
 
-    .line 334
+    .line 335
     return-void
 .end method
 
@@ -1429,7 +1435,7 @@
     .locals 1
     .param p0, "str"    # Ljava/lang/String;
 
-    .line 337
+    .line 338
     invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
 
     move-result v0
@@ -1442,7 +1448,7 @@
     .param p0, "view"    # Landroid/view/View;
     .param p1, "charSequence"    # Ljava/lang/CharSequence;
 
-    .line 313
+    .line 314
     :try_start_0
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
@@ -1458,7 +1464,7 @@
 
     check-cast v0, Landroid/view/ViewGroup;
 
-    .line 314
+    .line 315
     .local v0, "viewGroup":Landroid/view/ViewGroup;
     invoke-interface {p1}, Ljava/lang/CharSequence;->toString()Ljava/lang/String;
 
@@ -1472,7 +1478,7 @@
 
     if-eqz v1, :cond_1
 
-    .line 315
+    .line 316
     invoke-virtual {v0}, Landroid/view/ViewGroup;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
     move-result-object v1
@@ -1481,12 +1487,12 @@
 
     if-eqz v1, :cond_0
 
-    .line 316
+    .line 317
     invoke-static {v0}, LuTools/uUtils;->HideViewGroupByMarginLayout(Landroid/view/ViewGroup;)V
 
     goto :goto_0
 
-    .line 318
+    .line 319
     :cond_0
     invoke-static {v0}, LuTools/uUtils;->HideViewGroupByLayoutParams(Landroid/view/ViewGroup;)V
     :try_end_0
@@ -1494,7 +1500,7 @@
 
     goto :goto_0
 
-    .line 322
+    .line 323
     .end local v0    # "viewGroup":Landroid/view/ViewGroup;
     :catch_0
     move-exception v0
@@ -1503,7 +1509,7 @@
     :goto_0
     nop
 
-    .line 323
+    .line 324
     return-void
 .end method
 
@@ -1511,7 +1517,7 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 343
+    .line 344
     const/4 v0, 0x2
 
     :try_start_0
@@ -1535,7 +1541,7 @@
 
     sget-object v1, LuTools/uBlocker;->topBarPivot:Ljava/lang/Enum;
 
-    .line 346
+    .line 347
     invoke-virtual {v1}, Ljava/lang/Enum;->name()Ljava/lang/String;
 
     move-result-object v1
@@ -1552,14 +1558,14 @@
 
     if-eqz v0, :cond_0
 
-    .line 347
+    .line 348
     invoke-static {p0}, LuTools/uUtils;->HideView(Landroid/view/View;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    .line 349
+    .line 350
     :catch_0
     move-exception v0
 
@@ -1567,7 +1573,7 @@
     :goto_0
     nop
 
-    .line 350
+    .line 351
     return-void
 .end method
 
@@ -1575,7 +1581,7 @@
     .locals 2
     .param p0, "recyclerView"    # Landroid/support/v7/widget/RecyclerView;
 
-    .line 357
+    .line 358
     invoke-virtual {p0}, Landroid/support/v7/widget/RecyclerView;->getViewTreeObserver()Landroid/view/ViewTreeObserver;
 
     move-result-object v0
@@ -1586,7 +1592,7 @@
 
     invoke-virtual {v0, v1}, Landroid/view/ViewTreeObserver;->addOnDrawListener(Landroid/view/ViewTreeObserver$OnDrawListener;)V
 
-    .line 367
+    .line 368
     return-void
 .end method
 
@@ -1594,7 +1600,7 @@
     .locals 2
     .param p0, "trackingUrl"    # Landroid/net/Uri;
 
-    .line 353
+    .line 354
     invoke-virtual {p0}, Landroid/net/Uri;->buildUpon()Landroid/net/Uri$Builder;
 
     move-result-object v0
@@ -1616,12 +1622,12 @@
     .locals 6
     .param p0, "shortsVideoID"    # Ljava/lang/String;
 
-    .line 370
+    .line 371
     invoke-static {}, LuTools/uUtils;->GetMainActivityContext()Landroid/content/Context;
 
     move-result-object v0
 
-    .line 372
+    .line 373
     .local v0, "context":Landroid/content/Context;
     sget v1, LuTools/uBlocker;->currentNavBarIndex:I
 
@@ -1629,7 +1635,7 @@
 
     if-eq v1, v2, :cond_0
 
-    .line 374
+    .line 375
     :try_start_0
     new-instance v1, Landroid/content/Intent;
 
@@ -1641,45 +1647,45 @@
 
     move-result-object v5
 
-    .line 378
+    .line 379
     invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v4
 
-    .line 377
+    .line 378
     invoke-static {v4}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v4
 
     invoke-direct {v1, v3, v4}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
 
-    .line 385
+    .line 386
     .local v1, "videoPlayerIntent":Landroid/content/Intent;
     const/high16 v3, 0x10000000
 
     invoke-virtual {v1, v3}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
 
-    .line 386
+    .line 387
     invoke-virtual {v0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
 
     move-result-object v3
 
     invoke-virtual {v1, v3}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
 
-    .line 388
+    .line 389
     invoke-virtual {v0, v1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 390
+    .line 391
     return v2
 
-    .line 391
+    .line 392
     .end local v1    # "videoPlayerIntent":Landroid/content/Intent;
     :catch_0
     move-exception v1
 
-    .line 394
+    .line 395
     :cond_0
     const/4 v1, 0x0
 
@@ -1707,19 +1713,19 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 301
+    .line 302
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 304
+    .line 305
     .local v0, "parent":Landroid/view/ViewParent;
     :try_start_0
     instance-of v1, v0, Landroid/support/v7/widget/RecyclerView;
 
     if-eqz v1, :cond_0
 
-    .line 305
+    .line 306
     move-object v1, v0
 
     check-cast v1, Landroid/support/v7/widget/RecyclerView;
@@ -1732,7 +1738,7 @@
 
     goto :goto_0
 
-    .line 307
+    .line 308
     :catch_0
     move-exception v1
 
@@ -1740,7 +1746,7 @@
     :goto_0
     nop
 
-    .line 308
+    .line 309
     return-void
 .end method
 
@@ -1748,18 +1754,18 @@
     .locals 3
     .param p0, "recyclerView"    # Landroid/support/v7/widget/RecyclerView;
 
-    .line 359
+    .line 360
     :try_start_0
     sget-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
     if-eqz v0, :cond_0
 
-    .line 360
+    .line 361
     const/4 v0, 0x0
 
     sput-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
-    .line 362
+    .line 363
     invoke-virtual {p0}, Landroid/support/v7/widget/RecyclerView;->getParent()Landroid/view/ViewParent;
 
     move-result-object v1
@@ -1778,7 +1784,7 @@
 
     invoke-virtual {v1, v2}, Landroid/view/ViewGroup;->setVisibility(I)V
 
-    .line 363
+    .line 364
     invoke-virtual {p0, v0}, Landroid/support/v7/widget/RecyclerView;->getChildAt(I)Landroid/view/View;
 
     move-result-object v0
@@ -1797,7 +1803,7 @@
 
     goto :goto_0
 
-    .line 365
+    .line 366
     :catch_0
     move-exception v0
 
@@ -1805,6 +1811,6 @@
     :goto_0
     nop
 
-    .line 366
+    .line 367
     return-void
 .end method

@@ -26,16 +26,16 @@
     .param p1, "baseRoute"    # LuTools/uStreamSpoofing/uRoute;
     .param p2, "compiledRoute"    # Ljava/lang/String;
 
-    .line 45
+    .line 46
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    .line 46
+    .line 47
     iput-object p1, p0, LuTools/uStreamSpoofing/uRoute$CompiledRoute;->baseRoute:LuTools/uStreamSpoofing/uRoute;
 
-    .line 47
+    .line 48
     iput-object p2, p0, LuTools/uStreamSpoofing/uRoute$CompiledRoute;->compiledRoute:Ljava/lang/String;
 
-    .line 48
+    .line 49
     return-void
 .end method
 
@@ -52,7 +52,7 @@
 .method public getCompiledRoute()Ljava/lang/String;
     .locals 1
 
-    .line 51
+    .line 52
     iget-object v0, p0, LuTools/uStreamSpoofing/uRoute$CompiledRoute;->compiledRoute:Ljava/lang/String;
 
     return-object v0
@@ -61,7 +61,7 @@
 .method public getMethod()LuTools/uStreamSpoofing/uRoute$Method;
     .locals 1
 
-    .line 55
+    .line 56
     iget-object v0, p0, LuTools/uStreamSpoofing/uRoute$CompiledRoute;->baseRoute:LuTools/uStreamSpoofing/uRoute;
 
     invoke-static {v0}, LuTools/uStreamSpoofing/uRoute;->-$$Nest$fgetmethod(LuTools/uStreamSpoofing/uRoute;)LuTools/uStreamSpoofing/uRoute$Method;
