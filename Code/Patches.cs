@@ -6899,12 +6899,8 @@
                                                                             m + 2,
 
                                                                             [
-                                                                                $"invoke-static {{}}, L{uUtilsPath};->CheckIsShortsPlayer()Z",
-                                                                                "move-result v0",
-                                                                                "if-nez v0, :hide_engagement_panel",
                                                                                 "const/4 v0, 0x0",
-                                                                                $"sput-boolean v0, L{uBlockerPath};->initVideoPanel:Z",
-                                                                                ":hide_engagement_panel"
+                                                                                $"sput-boolean v0, L{uBlockerPath};->initVideoPanel:Z"
                                                                             ])
                                                                         ]
                                                                     ).Write();
@@ -7179,11 +7175,15 @@
                                                     j + 1,
 
                                                     [
+                                                        $"invoke-static {{}}, L{uUtilsPath};->CheckIsShortsPlayer()Z",
+                                                        "move-result v0",
+                                                        "if-nez v0, :check_player_type",
                                                         $"sget-boolean v0, L{uBlockerPath};->initVideoPanel:Z",
                                                         "if-nez v0, :hide_engagement_panel",
                                                         "const/4 v0, 0x0",
                                                         "return-object v0",
-                                                        ":hide_engagement_panel"
+                                                        ":hide_engagement_panel",
+                                                        ":check_player_type"
                                                     ])
                                                 ]
                                             ).Write();
