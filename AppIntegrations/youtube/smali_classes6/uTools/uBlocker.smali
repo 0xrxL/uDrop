@@ -101,7 +101,7 @@
 
     sput-object v1, LuTools/uBlocker;->protoBufferComponents:Ljava/nio/ByteBuffer;
 
-    .line 287
+    .line 288
     sput-boolean v0, LuTools/uBlocker;->hideWelcomeAndRules:Z
 
     return-void
@@ -888,7 +888,7 @@
 
     .line 213
     :cond_d
-    const/16 v2, 0x43
+    const/16 v2, 0x44
 
     :try_start_b
     new-array v2, v2, [Ljava/lang/String;
@@ -1005,279 +1005,285 @@
 
     aput-object v3, v2, v4
 
-    const-string v3, "featured_channel_watermark_overlay"
+    const-string v3, "expandable_section"
 
     const/16 v4, 0x15
 
     aput-object v3, v2, v4
 
-    const-string v3, "feed_nudge"
+    const-string v3, "featured_channel_watermark_overlay"
 
     const/16 v4, 0x16
 
     aput-object v3, v2, v4
 
-    const-string v3, "fullscreen_related_videos_entry_point"
+    const-string v3, "feed_nudge"
 
     const/16 v4, 0x17
 
     aput-object v3, v2, v4
 
-    const-string v3, "grid_channel_shelf"
+    const-string v3, "fullscreen_related_videos_entry_point"
 
     const/16 v4, 0x18
 
     aput-object v3, v2, v4
 
-    const-string v3, "hero_carousel"
+    const-string v3, "grid_channel_shelf"
 
     const/16 v4, 0x19
 
     aput-object v3, v2, v4
 
-    const-string v3, "horizontal_gaming_shelf"
+    const-string v3, "hero_carousel"
 
     const/16 v4, 0x1a
 
     aput-object v3, v2, v4
 
-    const-string v3, "horizontal_tile_shelf"
+    const-string v3, "horizontal_gaming_shelf"
 
     const/16 v4, 0x1b
 
     aput-object v3, v2, v4
 
-    const-string v3, "image_shelf"
+    const-string v3, "horizontal_tile_shelf"
 
     const/16 v4, 0x1c
 
     aput-object v3, v2, v4
 
-    const-string v3, "images_post_root_slim"
+    const-string v3, "image_shelf"
 
     const/16 v4, 0x1d
 
     aput-object v3, v2, v4
 
-    const-string v3, "info_card_teaser_overlay"
+    const-string v3, "images_post_root_slim"
 
     const/16 v4, 0x1e
 
     aput-object v3, v2, v4
 
-    const-string v3, "infocards_section"
+    const-string v3, "info_card_teaser_overlay"
 
     const/16 v4, 0x1f
 
     aput-object v3, v2, v4
 
-    const-string v3, "live_chat_sponsorships_new_member_announcement"
+    const-string v3, "infocards_section"
 
     const/16 v4, 0x20
 
     aput-object v3, v2, v4
 
-    const-string v3, "live_chat_text_message_banner"
+    const-string v3, "live_chat_sponsorships_new_member_announcement"
 
     const/16 v4, 0x21
 
     aput-object v3, v2, v4
 
-    const-string v3, "live_chat_ticker_creator_goal_view_model"
+    const-string v3, "live_chat_text_message_banner"
 
     const/16 v4, 0x22
 
     aput-object v3, v2, v4
 
-    const-string v3, "macro_markers_carousel"
+    const-string v3, "live_chat_ticker_creator_goal_view_model"
 
     const/16 v4, 0x23
 
     aput-object v3, v2, v4
 
-    const-string v3, "medical_panel"
+    const-string v3, "macro_markers_carousel"
 
     const/16 v4, 0x24
 
     aput-object v3, v2, v4
 
-    const-string v3, "member_recognition_shelf"
+    const-string v3, "medical_panel"
 
     const/16 v4, 0x25
 
     aput-object v3, v2, v4
 
-    const-string v3, "music_recap_banner"
+    const-string v3, "member_recognition_shelf"
 
     const/16 v4, 0x26
 
     aput-object v3, v2, v4
 
-    const-string v3, "offer_module_root"
+    const-string v3, "music_recap_banner"
 
     const/16 v4, 0x27
 
     aput-object v3, v2, v4
 
-    const-string v3, "paid_content_overlay"
+    const-string v3, "offer_module_root"
 
     const/16 v4, 0x28
 
     aput-object v3, v2, v4
 
-    const-string v3, "playlist_section"
+    const-string v3, "paid_content_overlay"
 
     const/16 v4, 0x29
 
     aput-object v3, v2, v4
 
-    const-string v3, "post_base_wrapper"
+    const-string v3, "playlist_section"
 
     const/16 v4, 0x2a
 
     aput-object v3, v2, v4
 
-    const-string v3, "post_base_wrapper_slim"
+    const-string v3, "post_base_wrapper"
 
     const/16 v4, 0x2b
 
     aput-object v3, v2, v4
 
-    const-string v3, "post_shelf"
+    const-string v3, "post_base_wrapper_slim"
 
     const/16 v4, 0x2c
 
     aput-object v3, v2, v4
 
-    const-string v3, "product_carousel"
+    const-string v3, "post_shelf"
 
     const/16 v4, 0x2d
 
     aput-object v3, v2, v4
 
-    const-string v3, "products_in_video_with_preview"
+    const-string v3, "product_carousel"
 
     const/16 v4, 0x2e
 
     aput-object v3, v2, v4
 
-    const-string v3, "publisher_transparency_panel"
+    const-string v3, "products_in_video_with_preview"
 
     const/16 v4, 0x2f
 
     aput-object v3, v2, v4
 
-    const-string v3, "reel_multi_format_link"
+    const-string v3, "publisher_transparency_panel"
 
     const/16 v4, 0x30
 
     aput-object v3, v2, v4
 
-    const-string v3, "reel_pivot_button"
+    const-string v3, "reel_multi_format_link"
 
     const/16 v4, 0x31
 
     aput-object v3, v2, v4
 
-    const-string v3, "reel_player_disclosure"
+    const-string v3, "reel_pivot_button"
 
     const/16 v4, 0x32
 
     aput-object v3, v2, v4
 
-    const-string v3, "reel_sound_metadata"
+    const-string v3, "reel_player_disclosure"
 
     const/16 v4, 0x33
 
     aput-object v3, v2, v4
 
-    const-string v3, "search_friction"
+    const-string v3, "reel_sound_metadata"
 
     const/16 v4, 0x34
 
     aput-object v3, v2, v4
 
-    const-string v3, "sfv_audio_item"
+    const-string v3, "search_friction"
 
     const/16 v4, 0x35
 
     aput-object v3, v2, v4
 
-    const-string v3, "shelf_header"
+    const-string v3, "sfv_audio_item"
 
     const/16 v4, 0x36
 
     aput-object v3, v2, v4
 
-    const-string v3, "shorts_info_panel_overview"
+    const-string v3, "shelf_header"
 
     const/16 v4, 0x37
 
     aput-object v3, v2, v4
 
-    const-string v3, "shorts_paused_state"
+    const-string v3, "shorts_info_panel_overview"
 
     const/16 v4, 0x38
 
     aput-object v3, v2, v4
 
-    const-string v3, "shorts_shelf"
+    const-string v3, "shorts_paused_state"
 
     const/16 v4, 0x39
 
     aput-object v3, v2, v4
 
-    const-string v3, "single_item_information_panel"
+    const-string v3, "shorts_shelf"
 
     const/16 v4, 0x3a
 
     aput-object v3, v2, v4
 
-    const-string v3, "statement_banner"
+    const-string v3, "single_item_information_panel"
 
     const/16 v4, 0x3b
 
     aput-object v3, v2, v4
 
-    const-string v3, "super_chat_item"
+    const-string v3, "statement_banner"
 
     const/16 v4, 0x3c
 
     aput-object v3, v2, v4
 
-    const-string v3, "text_post_root_slim"
+    const-string v3, "super_chat_item"
 
     const/16 v4, 0x3d
 
     aput-object v3, v2, v4
 
-    const-string v3, "timed_reaction"
+    const-string v3, "text_post_root_slim"
 
     const/16 v4, 0x3e
 
     aput-object v3, v2, v4
 
-    const-string v3, "topic_with_thumbnail_view_model"
+    const-string v3, "timed_reaction"
 
     const/16 v4, 0x3f
 
     aput-object v3, v2, v4
 
-    const-string v3, "transcript_section"
+    const-string v3, "topic_with_thumbnail_view_model"
 
     const/16 v4, 0x40
 
     aput-object v3, v2, v4
 
-    const-string v3, "video_attributes_section"
+    const-string v3, "transcript_section"
 
     const/16 v4, 0x41
 
     aput-object v3, v2, v4
 
-    const-string v3, "|suggested_action."
+    const-string v3, "video_attributes_section"
 
     const/16 v4, 0x42
+
+    aput-object v3, v2, v4
+
+    const-string v3, "|suggested_action."
+
+    const/16 v4, 0x43
 
     aput-object v3, v2, v4
 
@@ -1285,7 +1291,7 @@
 
     move-result-object v2
 
-    .line 284
+    .line 285
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -1321,7 +1327,7 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 301
+    .line 302
     invoke-virtual {p0}, Landroid/view/View;->getViewTreeObserver()Landroid/view/ViewTreeObserver;
 
     move-result-object v0
@@ -1332,7 +1338,7 @@
 
     invoke-virtual {v0, v1}, Landroid/view/ViewTreeObserver;->addOnGlobalLayoutListener(Landroid/view/ViewTreeObserver$OnGlobalLayoutListener;)V
 
-    .line 310
+    .line 311
     return-void
 .end method
 
@@ -1340,17 +1346,17 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 289
+    .line 290
     sget-boolean v0, LuTools/uBlocker;->hideWelcomeAndRules:Z
 
     if-eqz v0, :cond_0
 
-    .line 290
+    .line 291
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 293
+    .line 294
     .local v0, "viewParent":Landroid/view/ViewParent;
     :try_start_0
     move-object v1, v0
@@ -1359,7 +1365,7 @@
 
     invoke-static {v1}, LuTools/uUtils;->HideViewByLinearLayoutParams(Landroid/view/View;)V
 
-    .line 295
+    .line 296
     const/4 v1, 0x0
 
     sput-boolean v1, LuTools/uBlocker;->hideWelcomeAndRules:Z
@@ -1368,14 +1374,14 @@
 
     goto :goto_0
 
-    .line 296
+    .line 297
     :catch_0
     move-exception v1
 
     :goto_0
     nop
 
-    .line 298
+    .line 299
     .end local v0    # "viewParent":Landroid/view/ViewParent;
     :cond_0
     return-void
@@ -1385,7 +1391,7 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 329
+    .line 330
     :try_start_0
     const-string v0, "TAB_SHORTS"
 
@@ -1395,7 +1401,7 @@
 
     sget-object v1, LuTools/uBlocker;->navigationBarPivot:Ljava/lang/Enum;
 
-    .line 331
+    .line 332
     invoke-virtual {v1}, Ljava/lang/Enum;->name()Ljava/lang/String;
 
     move-result-object v1
@@ -1412,14 +1418,14 @@
 
     if-eqz v0, :cond_0
 
-    .line 332
+    .line 333
     invoke-static {p0}, LuTools/uUtils;->HideView(Landroid/view/View;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    .line 334
+    .line 335
     :catch_0
     move-exception v0
 
@@ -1427,7 +1433,7 @@
     :goto_0
     nop
 
-    .line 335
+    .line 336
     return-void
 .end method
 
@@ -1435,7 +1441,7 @@
     .locals 1
     .param p0, "str"    # Ljava/lang/String;
 
-    .line 338
+    .line 339
     invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
 
     move-result v0
@@ -1448,7 +1454,7 @@
     .param p0, "view"    # Landroid/view/View;
     .param p1, "charSequence"    # Ljava/lang/CharSequence;
 
-    .line 314
+    .line 315
     :try_start_0
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
@@ -1464,7 +1470,7 @@
 
     check-cast v0, Landroid/view/ViewGroup;
 
-    .line 315
+    .line 316
     .local v0, "viewGroup":Landroid/view/ViewGroup;
     invoke-interface {p1}, Ljava/lang/CharSequence;->toString()Ljava/lang/String;
 
@@ -1478,7 +1484,7 @@
 
     if-eqz v1, :cond_1
 
-    .line 316
+    .line 317
     invoke-virtual {v0}, Landroid/view/ViewGroup;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
     move-result-object v1
@@ -1487,12 +1493,12 @@
 
     if-eqz v1, :cond_0
 
-    .line 317
+    .line 318
     invoke-static {v0}, LuTools/uUtils;->HideViewGroupByMarginLayout(Landroid/view/ViewGroup;)V
 
     goto :goto_0
 
-    .line 319
+    .line 320
     :cond_0
     invoke-static {v0}, LuTools/uUtils;->HideViewGroupByLayoutParams(Landroid/view/ViewGroup;)V
     :try_end_0
@@ -1500,7 +1506,7 @@
 
     goto :goto_0
 
-    .line 323
+    .line 324
     .end local v0    # "viewGroup":Landroid/view/ViewGroup;
     :catch_0
     move-exception v0
@@ -1509,7 +1515,7 @@
     :goto_0
     nop
 
-    .line 324
+    .line 325
     return-void
 .end method
 
@@ -1517,7 +1523,7 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 344
+    .line 345
     const/4 v0, 0x2
 
     :try_start_0
@@ -1541,7 +1547,7 @@
 
     sget-object v1, LuTools/uBlocker;->topBarPivot:Ljava/lang/Enum;
 
-    .line 347
+    .line 348
     invoke-virtual {v1}, Ljava/lang/Enum;->name()Ljava/lang/String;
 
     move-result-object v1
@@ -1558,14 +1564,14 @@
 
     if-eqz v0, :cond_0
 
-    .line 348
+    .line 349
     invoke-static {p0}, LuTools/uUtils;->HideView(Landroid/view/View;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    .line 350
+    .line 351
     :catch_0
     move-exception v0
 
@@ -1573,7 +1579,7 @@
     :goto_0
     nop
 
-    .line 351
+    .line 352
     return-void
 .end method
 
@@ -1581,7 +1587,7 @@
     .locals 2
     .param p0, "recyclerView"    # Landroid/support/v7/widget/RecyclerView;
 
-    .line 358
+    .line 359
     invoke-virtual {p0}, Landroid/support/v7/widget/RecyclerView;->getViewTreeObserver()Landroid/view/ViewTreeObserver;
 
     move-result-object v0
@@ -1592,7 +1598,7 @@
 
     invoke-virtual {v0, v1}, Landroid/view/ViewTreeObserver;->addOnDrawListener(Landroid/view/ViewTreeObserver$OnDrawListener;)V
 
-    .line 368
+    .line 369
     return-void
 .end method
 
@@ -1600,7 +1606,7 @@
     .locals 2
     .param p0, "trackingUrl"    # Landroid/net/Uri;
 
-    .line 354
+    .line 355
     invoke-virtual {p0}, Landroid/net/Uri;->buildUpon()Landroid/net/Uri$Builder;
 
     move-result-object v0
@@ -1622,12 +1628,12 @@
     .locals 6
     .param p0, "shortsVideoID"    # Ljava/lang/String;
 
-    .line 371
+    .line 372
     invoke-static {}, LuTools/uUtils;->GetMainActivityContext()Landroid/content/Context;
 
     move-result-object v0
 
-    .line 373
+    .line 374
     .local v0, "context":Landroid/content/Context;
     sget v1, LuTools/uBlocker;->currentNavBarIndex:I
 
@@ -1635,7 +1641,7 @@
 
     if-eq v1, v2, :cond_0
 
-    .line 375
+    .line 376
     :try_start_0
     new-instance v1, Landroid/content/Intent;
 
@@ -1647,45 +1653,45 @@
 
     move-result-object v5
 
-    .line 379
+    .line 380
     invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v4
 
-    .line 378
+    .line 379
     invoke-static {v4}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v4
 
     invoke-direct {v1, v3, v4}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
 
-    .line 386
+    .line 387
     .local v1, "videoPlayerIntent":Landroid/content/Intent;
     const/high16 v3, 0x10000000
 
     invoke-virtual {v1, v3}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
 
-    .line 387
+    .line 388
     invoke-virtual {v0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
 
     move-result-object v3
 
     invoke-virtual {v1, v3}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
 
-    .line 389
+    .line 390
     invoke-virtual {v0, v1}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 391
+    .line 392
     return v2
 
-    .line 392
+    .line 393
     .end local v1    # "videoPlayerIntent":Landroid/content/Intent;
     :catch_0
     move-exception v1
 
-    .line 395
+    .line 396
     :cond_0
     const/4 v1, 0x0
 
@@ -1713,19 +1719,19 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 302
+    .line 303
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 305
+    .line 306
     .local v0, "parent":Landroid/view/ViewParent;
     :try_start_0
     instance-of v1, v0, Landroid/support/v7/widget/RecyclerView;
 
     if-eqz v1, :cond_0
 
-    .line 306
+    .line 307
     move-object v1, v0
 
     check-cast v1, Landroid/support/v7/widget/RecyclerView;
@@ -1738,7 +1744,7 @@
 
     goto :goto_0
 
-    .line 308
+    .line 309
     :catch_0
     move-exception v1
 
@@ -1746,7 +1752,7 @@
     :goto_0
     nop
 
-    .line 309
+    .line 310
     return-void
 .end method
 
@@ -1754,18 +1760,18 @@
     .locals 3
     .param p0, "recyclerView"    # Landroid/support/v7/widget/RecyclerView;
 
-    .line 360
+    .line 361
     :try_start_0
     sget-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
     if-eqz v0, :cond_0
 
-    .line 361
+    .line 362
     const/4 v0, 0x0
 
     sput-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
-    .line 363
+    .line 364
     invoke-virtual {p0}, Landroid/support/v7/widget/RecyclerView;->getParent()Landroid/view/ViewParent;
 
     move-result-object v1
@@ -1784,7 +1790,7 @@
 
     invoke-virtual {v1, v2}, Landroid/view/ViewGroup;->setVisibility(I)V
 
-    .line 364
+    .line 365
     invoke-virtual {p0, v0}, Landroid/support/v7/widget/RecyclerView;->getChildAt(I)Landroid/view/View;
 
     move-result-object v0
@@ -1803,7 +1809,7 @@
 
     goto :goto_0
 
-    .line 366
+    .line 367
     :catch_0
     move-exception v0
 
@@ -1811,6 +1817,6 @@
     :goto_0
     nop
 
-    .line 367
+    .line 368
     return-void
 .end method

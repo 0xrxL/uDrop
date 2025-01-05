@@ -5,6 +5,16 @@ package uTools.uStreamSpoofing;
 import android.support.annotation.Nullable;
 
 public enum uClientType {
+    ANDROID_CREATOR(
+        14,
+        "30",
+        "24.50.100",
+        "Pixel 5",
+        "Google",
+        "Android",
+        "11",
+        "com.google.android.apps.youtube.creator/%s (Linux; U; Android %s) gzip"
+    ),
     ANDROID_UNPLUGGED(
         29,
         "34",
@@ -13,17 +23,17 @@ public enum uClientType {
         "Google",
         "Android",
         "14",
-        "com.google.android.apps.youtube.unplugged/%s (Linux; U; Android %s; GB) gzip"
+        "com.google.android.apps.youtube.unplugged/%s (Linux; U; Android %s) gzip"
     ),
     ANDROID_VR(
         28,
         "34",
         "1.61.48",
         "Quest 3",
-        "Google",
+        "Oculus",
         "Android",
         "14",
-        "com.google.android.apps.youtube.vr.oculus/%s (Linux; U; Android %s; GB) gzip"
+        "com.google.android.apps.youtube.vr.oculus/%s (Linux; U; Android %s) gzip"
     ),
     IOS_UNPLUGGED(
         33,

@@ -39,16 +39,25 @@ public class uStreamingDataRequest {
         }
     );
 
-    private static final List<uClientType> CLIENT_TYPES_ORDER_TO_USE = new ArrayList<>();
+    private static final List<uClientType> CLIENT_TYPES_ORDER_TO_USE;
     static {
         uClientType[] clientTypes = uClientType.values();
-        uClientType preferredClientType = uClientType.IOS_UNPLUGGED;
 
-        CLIENT_TYPES_ORDER_TO_USE.add(preferredClientType);
+        CLIENT_TYPES_ORDER_TO_USE = new ArrayList<>(
+                                        Arrays.asList(
+                                            uClientType.IOS_UNPLUGGED,
+
+                                            uClientType.ANDROID_CREATOR
+                                        )
+                                    );
 
         for (uClientType clientType : clientTypes) {
-            if (clientType != preferredClientType) {
-                CLIENT_TYPES_ORDER_TO_USE.add(clientType);
+            if (CLIENT_TYPES_ORDER_TO_USE.stream().noneMatch(clientType::equals)) {
+                CLIENT_TYPES_ORDER_TO_USE.add(
+                    CLIENT_TYPES_ORDER_TO_USE.size() - 1,
+
+                    clientType
+                );
             }
         }
     }
@@ -82,6 +91,8 @@ public class uStreamingDataRequest {
                 } catch (Exception ignore) {}
             }
         }
+
+        statsForNerdsClientName = " (Unknown)";
 
         return null;
     }

@@ -234,6 +234,7 @@ public class uBlocker {
                 "compact_tvfilm_item",
                 "emergency_onebox",
                 "expandable_list",
+                "expandable_section",
                 "featured_channel_watermark_overlay",
                 "feed_nudge",
                 "fullscreen_related_videos_entry_point",

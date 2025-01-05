@@ -16,6 +16,8 @@
 # static fields
 .field private static final synthetic $VALUES:[LuTools/uStreamSpoofing/uClientType;
 
+.field public static final enum ANDROID_CREATOR:LuTools/uStreamSpoofing/uClientType;
+
 .field public static final enum ANDROID_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
 
 .field public static final enum ANDROID_VR:LuTools/uStreamSpoofing/uClientType;
@@ -43,16 +45,18 @@
 
 # direct methods
 .method private static synthetic $values()[LuTools/uStreamSpoofing/uClientType;
-    .locals 3
+    .locals 4
 
     .line 7
-    sget-object v0, LuTools/uStreamSpoofing/uClientType;->ANDROID_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
+    sget-object v0, LuTools/uStreamSpoofing/uClientType;->ANDROID_CREATOR:LuTools/uStreamSpoofing/uClientType;
 
-    sget-object v1, LuTools/uStreamSpoofing/uClientType;->ANDROID_VR:LuTools/uStreamSpoofing/uClientType;
+    sget-object v1, LuTools/uStreamSpoofing/uClientType;->ANDROID_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
 
-    sget-object v2, LuTools/uStreamSpoofing/uClientType;->IOS_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
+    sget-object v2, LuTools/uStreamSpoofing/uClientType;->ANDROID_VR:LuTools/uStreamSpoofing/uClientType;
 
-    filled-new-array {v0, v1, v2}, [LuTools/uStreamSpoofing/uClientType;
+    sget-object v3, LuTools/uStreamSpoofing/uClientType;->IOS_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
+
+    filled-new-array {v0, v1, v2, v3}, [LuTools/uStreamSpoofing/uClientType;
 
     move-result-object v0
 
@@ -65,21 +69,21 @@
     .line 8
     new-instance v11, LuTools/uStreamSpoofing/uClientType;
 
-    const-string v9, "14"
+    const-string v9, "11"
 
-    const-string v10, "com.google.android.apps.youtube.unplugged/%s (Linux; U; Android %s; GB) gzip"
+    const-string v10, "com.google.android.apps.youtube.creator/%s (Linux; U; Android %s) gzip"
 
-    const-string v1, "ANDROID_UNPLUGGED"
+    const-string v1, "ANDROID_CREATOR"
 
     const/4 v2, 0x0
 
-    const/16 v3, 0x1d
+    const/16 v3, 0xe
 
-    const-string v4, "34"
+    const-string v4, "30"
 
-    const-string v5, "8.49.0"
+    const-string v5, "24.50.100"
 
-    const-string v6, "Google TV Streamer"
+    const-string v6, "Pixel 5"
 
     const-string v7, "Google"
 
@@ -89,26 +93,26 @@
 
     invoke-direct/range {v0 .. v10}, LuTools/uStreamSpoofing/uClientType;-><init>(Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 
-    sput-object v11, LuTools/uStreamSpoofing/uClientType;->ANDROID_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
+    sput-object v11, LuTools/uStreamSpoofing/uClientType;->ANDROID_CREATOR:LuTools/uStreamSpoofing/uClientType;
 
     .line 18
     new-instance v0, LuTools/uStreamSpoofing/uClientType;
 
     const-string v21, "14"
 
-    const-string v22, "com.google.android.apps.youtube.vr.oculus/%s (Linux; U; Android %s; GB) gzip"
+    const-string v22, "com.google.android.apps.youtube.unplugged/%s (Linux; U; Android %s) gzip"
 
-    const-string v13, "ANDROID_VR"
+    const-string v13, "ANDROID_UNPLUGGED"
 
     const/4 v14, 0x1
 
-    const/16 v15, 0x1c
+    const/16 v15, 0x1d
 
     const-string v16, "34"
 
-    const-string v17, "1.61.48"
+    const-string v17, "8.49.0"
 
-    const-string v18, "Quest 3"
+    const-string v18, "Google TV Streamer"
 
     const-string v19, "Google"
 
@@ -118,34 +122,63 @@
 
     invoke-direct/range {v12 .. v22}, LuTools/uStreamSpoofing/uClientType;-><init>(Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 
-    sput-object v0, LuTools/uStreamSpoofing/uClientType;->ANDROID_VR:LuTools/uStreamSpoofing/uClientType;
+    sput-object v0, LuTools/uStreamSpoofing/uClientType;->ANDROID_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
 
     .line 28
     new-instance v0, LuTools/uStreamSpoofing/uClientType;
 
-    const-string v10, "18.2.22C152"
+    const-string v10, "14"
 
-    const-string v11, "com.google.ios.youtubeunplugged/%s (%s; U; CPU iOS %s like Mac OS X)"
+    const-string v11, "com.google.android.apps.youtube.vr.oculus/%s (Linux; U; Android %s) gzip"
 
-    const-string v2, "IOS_UNPLUGGED"
+    const-string v2, "ANDROID_VR"
 
     const/4 v3, 0x2
 
-    const/16 v4, 0x21
+    const/16 v4, 0x1c
 
-    const/4 v5, 0x0
+    const-string v5, "34"
 
-    const-string v6, "8.49"
+    const-string v6, "1.61.48"
 
-    const-string v7, "iPhone14,3"
+    const-string v7, "Quest 3"
 
-    const-string v8, "Apple"
+    const-string v8, "Oculus"
 
-    const-string v9, "iOS"
+    const-string v9, "Android"
 
     move-object v1, v0
 
     invoke-direct/range {v1 .. v11}, LuTools/uStreamSpoofing/uClientType;-><init>(Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
+
+    sput-object v0, LuTools/uStreamSpoofing/uClientType;->ANDROID_VR:LuTools/uStreamSpoofing/uClientType;
+
+    .line 38
+    new-instance v0, LuTools/uStreamSpoofing/uClientType;
+
+    const-string v21, "18.2.22C152"
+
+    const-string v22, "com.google.ios.youtubeunplugged/%s (%s; U; CPU iOS %s like Mac OS X)"
+
+    const-string v13, "IOS_UNPLUGGED"
+
+    const/4 v14, 0x3
+
+    const/16 v15, 0x21
+
+    const/16 v16, 0x0
+
+    const-string v17, "8.49"
+
+    const-string v18, "iPhone14,3"
+
+    const-string v19, "Apple"
+
+    const-string v20, "iOS"
+
+    move-object v12, v0
+
+    invoke-direct/range {v12 .. v22}, LuTools/uStreamSpoofing/uClientType;-><init>(Ljava/lang/String;IILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
 
     sput-object v0, LuTools/uStreamSpoofing/uClientType;->IOS_UNPLUGGED:LuTools/uStreamSpoofing/uClientType;
 
@@ -210,34 +243,34 @@
         }
     .end annotation
 
-    .line 50
+    .line 60
     invoke-direct {p0, p1, p2}, Ljava/lang/Enum;-><init>(Ljava/lang/String;I)V
 
-    .line 51
+    .line 61
     iput p3, p0, LuTools/uStreamSpoofing/uClientType;->id:I
 
-    .line 52
+    .line 62
     iput-object p4, p0, LuTools/uStreamSpoofing/uClientType;->androidSdkVersion:Ljava/lang/String;
 
-    .line 53
+    .line 63
     iput-object p5, p0, LuTools/uStreamSpoofing/uClientType;->appVersion:Ljava/lang/String;
 
-    .line 54
+    .line 64
     iput-object p6, p0, LuTools/uStreamSpoofing/uClientType;->model:Ljava/lang/String;
 
-    .line 55
+    .line 65
     iput-object p7, p0, LuTools/uStreamSpoofing/uClientType;->osBrand:Ljava/lang/String;
 
-    .line 56
+    .line 66
     iput-object p8, p0, LuTools/uStreamSpoofing/uClientType;->osName:Ljava/lang/String;
 
-    .line 57
+    .line 67
     iput-object p9, p0, LuTools/uStreamSpoofing/uClientType;->osVersion:Ljava/lang/String;
 
-    .line 59
+    .line 69
     const-string p1, ""
 
-    .line 60
+    .line 70
     .local p1, "formedUserAgent":Ljava/lang/String;
     const-string p2, "Linux"
 
@@ -247,7 +280,7 @@
 
     if-eqz p2, :cond_0
 
-    .line 61
+    .line 71
     filled-new-array {p5, p9}, [Ljava/lang/Object;
 
     move-result-object p2
@@ -258,7 +291,7 @@
 
     goto :goto_0
 
-    .line 67
+    .line 77
     :cond_0
     const-string p2, "like Mac OS X"
 
@@ -268,10 +301,10 @@
 
     if-eqz p2, :cond_1
 
-    .line 68
+    .line 78
     nop
 
-    .line 74
+    .line 84
     const-string p2, "(\\d+\\.\\d+\\.\\d+).*"
 
     const-string v0, "$1"
@@ -280,7 +313,7 @@
 
     move-result-object p2
 
-    .line 75
+    .line 85
     const-string v0, "."
 
     const-string v1, "_"
@@ -293,17 +326,17 @@
 
     move-result-object p2
 
-    .line 68
+    .line 78
     invoke-static {p10, p2}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object p1
 
-    .line 79
+    .line 89
     :cond_1
     :goto_0
     iput-object p1, p0, LuTools/uStreamSpoofing/uClientType;->userAgent:Ljava/lang/String;
 
-    .line 80
+    .line 90
     return-void
 .end method
 
