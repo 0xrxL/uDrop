@@ -2333,7 +2333,8 @@
                     [
                         SmaliUtils.GetResourceHex("layout", "fusion_account_item_layout"),
                         "Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V",
-                        "-><init>(Lamcv;Landroid/view/View$OnClickListener;I)V",
+                        "-><init>",
+                        "Landroid/view/View$OnClickListener;I)V",
                         " onClick("
                     ],
 
@@ -2368,7 +2369,8 @@
                                             for (int k = j; k >= scaleIndex.Lines(j, -6); k--)
                                             {
                                                 if (new[] {
-                                                    xmlSmaliSearchKeys[2]
+                                                    xmlSmaliSearchKeys[2],
+                                                    xmlSmaliSearchKeys[3]
                                                 }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
                                                     xmlSmaliProperties.ReadXMLSmaliNewLines(xmlSmaliProperties.Lines[k].GetInvokedSectionClass(1));
@@ -2376,7 +2378,7 @@
                                                     for (int l = 0; l < xmlSmaliProperties.NewLinesCount; l++)
                                                     {
                                                         if (new[] {
-                                                                xmlSmaliSearchKeys[3]
+                                                                xmlSmaliSearchKeys[4]
                                                             }.All(xmlSmaliProperties.NewLines[l].Contains))
                                                         {
                                                             codeInject.NewLines(
@@ -6652,69 +6654,10 @@
                 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(45401636),
-                        ".method",
-                        ")Z"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.Contains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[0]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[1],
-                                                xmlSmaliSearchKeys[2]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            codeInject.Lines(
-                                                [
-                                                    (("Startup Player Disabler", true),
-
-                                                    j + 2,
-
-                                                    [
-                                                        "const/4 v0, 0x0",
-                                                        "return v0"
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        "\"Failed to read user_was_in_shorts proto after successful warmup\"",
-                        "invoke-interface",
-                        "Lcom/google/common/util/concurrent/ListenableFuture;->isDone()Z",
+                        "\"SetUserWasInShortsListener\"",
+                        "\"userIsInShorts: \"",
+                        "invoke-virtual",
+                        "Ljava/lang/Boolean;->booleanValue()Z",
                         "move-result "
                     ],
 
@@ -6729,7 +6672,8 @@
                         xmlSmaliInfo
                     ) => {
                         if (new[] {
-                                xmlSmaliSearchKeys[0]
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -6740,26 +6684,42 @@
                                         xmlSmaliSearchKeys[0]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -52); j--)
+                                    for (int j = i; j >= scaleIndex.Lines(i, -23); j--)
                                     {
                                         if (new[] {
-                                                xmlSmaliSearchKeys[1],
-                                                xmlSmaliSearchKeys[2]
+                                                xmlSmaliSearchKeys[1]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            codeInject.Lines(
-                                                [
-                                                    (("Startup Player Disabler", true),
+                                            for (int k = j; k >= scaleIndex.Lines(j, -13); k--)
+                                            {
+                                                if (new[] {
+                                                        xmlSmaliSearchKeys[2],
+                                                        xmlSmaliSearchKeys[3]
+                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
+                                                {
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 6); l++)
+                                                    {
+                                                        if (new[] {
+                                                                xmlSmaliSearchKeys[4]
+                                                            }.All(xmlSmaliProperties.Lines[l].Contains))
+                                                        {
+                                                            codeInject.Lines(
+                                                                [
+                                                                    (("Startup Player Disabler", true),
 
-                                                    j,
+                                                                    j,
 
-                                                    [
-                                                        "return-void"
-                                                    ])
-                                                ]
-                                            ).Write();
+                                                                    [
+                                                                        $"const/4 {xmlSmaliProperties.Lines[l].GetRegister(1)}, 0x0"
+                                                                    ])
+                                                                ]
+                                                            ).Write();
 
-                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
