@@ -21,8 +21,13 @@ import android.view.ViewParent;
 
 import com.google.android.apps.youtube.app.watchwhile.MainActivity;
 
+import org.schabi.newpipe.extractor.NewPipe;
+import org.schabi.newpipe.extractor.stream.StreamInfo;
+
 import java.nio.ByteBuffer;
 import java.util.stream.Stream;
+
+import okhttp3.OkHttpClient;
 
 @SuppressWarnings({
     "ConstantConditions",
@@ -355,6 +360,62 @@ public class uBlocker {
         return trackingUrl.buildUpon().authority("www.youtube.com").build();
     }
 
+    static {
+        NewPipe.init(uDownloader.init(new OkHttpClient.Builder()));
+    }
+    public static boolean isLiveAvatarButton = false;
+    private static Thread bypassLiveAvatarThread = null;
+    public static void OpenChannelOfLiveAvatar(String videoID) {
+        if (bypassLiveAvatarThread == null) {
+            bypassLiveAvatarThread = new Thread(() -> {
+                try {
+                    boolean stopThread;
+
+                    while (!bypassLiveAvatarThread.isInterrupted()) {
+                        try {
+                            uUtils.ShowToastLong("Bypassing Live Avatar Intent...");
+
+                            Context context = GetMainActivityContext();
+
+                            Intent openLiveChannelIntent = new Intent(
+                                Intent.ACTION_VIEW,
+
+                                Uri.parse(
+                                    StreamInfo.getInfo(
+                                        String.format(
+                                            "https://www.youtube.com/watch?v=%s",
+
+                                            videoID
+                                        )
+                                    )
+                                    .getUploaderUrl()
+                                )
+                            );
+                            openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            openLiveChannelIntent.setPackage(context.getPackageName());
+
+                            context.startActivity(openLiveChannelIntent);
+
+                            stopThread = true;
+                        } catch (Exception ignore) {
+                            uUtils.ShowToastLong("Error: Failed to Bypass Live Avatar Intent");
+
+                            stopThread = true;
+                        }
+
+                        if (stopThread) {
+                            bypassLiveAvatarThread.interrupt();
+                        }
+                    }
+                } finally {
+                    bypassLiveAvatarThread = null;
+                }
+            });
+
+            bypassLiveAvatarThread.start();
+        }
+    }
+
     public static void OpenVideoResolutionsFlyout(RecyclerView recyclerView) {
         recyclerView.getViewTreeObserver().addOnDrawListener(() -> {
             try {
@@ -369,10 +430,10 @@ public class uBlocker {
     }
 
     public static boolean ShortsPlayerBypassing(String shortsVideoID) {
-        Context context = GetMainActivityContext();
-
         if (currentNavBarIndex != 1) {
             try {
+                Context context = GetMainActivityContext();
+
                 Intent videoPlayerIntent = new Intent(
                     Intent.ACTION_VIEW,
 

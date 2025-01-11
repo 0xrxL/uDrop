@@ -17,18 +17,18 @@
     .locals 3
     .param p0, "value"    # Landroid/view/View;
 
-    .line 271
+    .line 275
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 272
+    .line 276
     .local v0, "parent":Ljava/lang/Object;
     const-string v1, "uView"
 
     if-eqz v0, :cond_0
 
-    .line 273
+    .line 277
     move-object v2, v0
 
     check-cast v2, Landroid/view/View;
@@ -45,7 +45,7 @@
 
     goto :goto_0
 
-    .line 275
+    .line 279
     :cond_0
     const/4 v2, 0x0
 
@@ -55,7 +55,7 @@
 
     invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 277
+    .line 281
     :goto_0
     return-void
 .end method
@@ -64,18 +64,18 @@
     .locals 3
     .param p0, "value"    # Landroid/view/View;
 
-    .line 280
+    .line 284
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 281
+    .line 285
     .local v0, "parent":Landroid/view/ViewParent;
     const-string v1, "uView"
 
     if-eqz v0, :cond_0
 
-    .line 282
+    .line 286
     invoke-interface {v0}, Landroid/view/ViewParent;->toString()Ljava/lang/String;
 
     move-result-object v2
@@ -84,13 +84,13 @@
 
     goto :goto_0
 
-    .line 284
+    .line 288
     :cond_0
     const-string v2, "-- null --"
 
     invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 286
+    .line 290
     :goto_0
     return-void
 .end method
@@ -747,10 +747,10 @@
 .end method
 
 .method public static PrintStackTrace()V
-    .locals 8
+    .locals 7
 
     .line 257
-    const-string v0, "uStack"
+    const-string v0, "uStackTrace"
 
     .line 259
     .local v0, "message":Ljava/lang/String;
@@ -775,48 +775,31 @@
 
     .line 261
     .local v4, "stackTraceElement":Ljava/lang/StackTraceElement;
-    sget-object v5, Ljava/lang/System;->out:Ljava/io/PrintStream;
+    nop
 
-    new-instance v6, Ljava/lang/StringBuilder;
-
-    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
-
-    const-string v7, "Class name :: "
-
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    .line 263
+    .line 267
     invoke-virtual {v4}, Ljava/lang/StackTraceElement;->getClassName()Ljava/lang/String;
 
-    move-result-object v7
+    move-result-object v5
 
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    const-string v7, "  || method name :: "
-
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
-    move-result-object v6
-
-    .line 265
+    .line 268
     invoke-virtual {v4}, Ljava/lang/StackTraceElement;->getMethodName()Ljava/lang/String;
 
-    move-result-object v7
-
-    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
-
     move-result-object v6
 
-    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
+    filled-new-array {v5, v6}, [Ljava/lang/Object;
 
-    move-result-object v6
+    move-result-object v5
+
+    .line 264
+    const-string v6, "Class name: %s - Method name: %s"
+
+    invoke-static {v6, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v5
 
     .line 261
-    invoke-virtual {v5, v6}, Ljava/io/PrintStream;->println(Ljava/lang/String;)V
+    invoke-static {v0, v5}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     .line 260
     .end local v4    # "stackTraceElement":Ljava/lang/StackTraceElement;
@@ -824,7 +807,7 @@
 
     goto :goto_0
 
-    .line 268
+    .line 272
     :cond_0
     return-void
 .end method

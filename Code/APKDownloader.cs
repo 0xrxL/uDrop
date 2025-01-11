@@ -94,12 +94,11 @@ namespace uDrop.Code
 
             if (versionPackageNode.Count.Equals(0))
             {
-                "Error: APK package is not available yet"
-                    .QuitWithException();
+                "Error: APK package is not available yet".QuitWithException();
             }
             else if (!getLastVersion)
             {
-                "OK".SuccessLog(false);
+                "Succesfully Done".SuccessLog(false);
                 "".NormalLog(false);
                 "".NormalLog(false);
             }

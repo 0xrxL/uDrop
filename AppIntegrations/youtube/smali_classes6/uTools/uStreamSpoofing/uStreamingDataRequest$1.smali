@@ -32,7 +32,7 @@
     .locals 0
     .param p1, "arg0"    # I
 
-    .line 34
+    .line 33
     invoke-direct {p0, p1}, Ljava/util/LinkedHashMap;-><init>(I)V
 
     return-void
@@ -44,7 +44,7 @@
     .locals 2
     .param p1, "eldest"    # Ljava/util/Map$Entry;
 
-    .line 38
+    .line 37
     invoke-virtual {p0}, LuTools/uStreamSpoofing/uStreamingDataRequest$1;->size()I
 
     move-result v0

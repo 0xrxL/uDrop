@@ -254,15 +254,19 @@ public class uDebug {
     }
 
     public static void PrintStackTrace() {
-        String message = "uStack";
+        String message = "uStackTrace";
 
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         for (StackTraceElement stackTraceElement : stackTraceElements) {
-            System.out.println(
-                "Class name :: " +
-                    stackTraceElement.getClassName() +
-                "  || method name :: " +
+            Log.d(
+                message,
+
+                String.format(
+                    "Class name: %s - Method name: %s",
+
+                    stackTraceElement.getClassName(),
                     stackTraceElement.getMethodName()
+                )
             );
         }
     }

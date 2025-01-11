@@ -264,6 +264,7 @@ namespace uDrop.Code
             "Applying Integrations...".StartProcessLog();
 
             string integrationFileDestinationPath;
+            int integrationFilesCount = 0;
             foreach (var integrationFilePath in integrationFilesPath)
             {
                 integrationFileDestinationPath =
@@ -272,9 +273,11 @@ namespace uDrop.Code
                 Directory.CreateDirectory(Directory.GetParent(integrationFileDestinationPath)!.FullName);
                 File.Copy(integrationFilePath, integrationFileDestinationPath, true);
 
-                $"{integrationFileDestinationPath.GetSmaliFilePartialPath()} ---> Copied"
-                    .PatchLog(false);
+                integrationFilesCount++;
+                
             }
+
+            $"{integrationFilesCount} Files Copied".PatchLog(false);
 
             "Integrations succesfully applied".EndProcessLog(true);
         }

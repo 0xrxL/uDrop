@@ -289,7 +289,7 @@ namespace uDrop.Code
                                         .ToList();
                         break;
                     case 2:
-                        "Error: No smali file found in dedicated folders".QuitWithException();
+                        $"Error: {innerPathOrFileName} file not found".QuitWithException();
                         break;
                 }
 
@@ -316,7 +316,7 @@ namespace uDrop.Code
 
             if (smaliDirs.Count.Equals(0))
             {
-                "Error: No smali folder exists inside decompiled apk path".QuitWithException();
+                "Error: No smali folder exists in decompiled apk path".QuitWithException();
             }
 
             return smaliDirs;

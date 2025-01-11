@@ -30,7 +30,7 @@
     .line 0
     iget-object v0, p0, LuTools/uBlocker$$ExternalSyntheticLambda2;->f$0:Landroid/support/v7/widget/RecyclerView;
 
-    invoke-static {v0}, LuTools/uBlocker;->lambda$OpenVideoResolutionsFlyout$2(Landroid/support/v7/widget/RecyclerView;)V
+    invoke-static {v0}, LuTools/uBlocker;->lambda$OpenVideoResolutionsFlyout$3(Landroid/support/v7/widget/RecyclerView;)V
 
     return-void
 .end method

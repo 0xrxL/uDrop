@@ -6,7 +6,6 @@ import static uTools.uStreamSpoofing.uStreamingDataRequest.statsForNerdsClientNa
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -21,8 +20,6 @@ import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
-
-import uTools.uStreamSpoofing.uStreamingDataRequest;
 
 @SuppressLint("StaticFieldLeak")
 @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
@@ -197,3 +194,4 @@ public class uUtils {
         });
     }
 }
+

@@ -3,34 +3,34 @@
 .source "D8$$SyntheticClass"
 
 # interfaces
-.implements Landroid/view/ViewTreeObserver$OnGlobalLayoutListener;
+.implements Ljava/lang/Runnable;
 
 
 # instance fields
-.field public final synthetic f$0:Landroid/view/View;
+.field public final synthetic f$0:Ljava/lang/String;
 
 
 # direct methods
-.method public synthetic constructor <init>(Landroid/view/View;)V
+.method public synthetic constructor <init>(Ljava/lang/String;)V
     .locals 0
 
     .line 0
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
-    iput-object p1, p0, LuTools/uBlocker$$ExternalSyntheticLambda3;->f$0:Landroid/view/View;
+    iput-object p1, p0, LuTools/uBlocker$$ExternalSyntheticLambda3;->f$0:Ljava/lang/String;
 
     return-void
 .end method
 
 
 # virtual methods
-.method public final onGlobalLayout()V
+.method public final run()V
     .locals 1
 
     .line 0
-    iget-object v0, p0, LuTools/uBlocker$$ExternalSyntheticLambda3;->f$0:Landroid/view/View;
+    iget-object v0, p0, LuTools/uBlocker$$ExternalSyntheticLambda3;->f$0:Ljava/lang/String;
 
-    invoke-static {v0}, LuTools/uBlocker;->lambda$HideLiveChatSubscribersShelf$1(Landroid/view/View;)V
+    invoke-static {v0}, LuTools/uBlocker;->lambda$OpenChannelOfLiveAvatar$2(Ljava/lang/String;)V
 
     return-void
 .end method
