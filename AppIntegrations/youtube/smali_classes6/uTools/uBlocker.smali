@@ -6,8 +6,6 @@
 # static fields
 .field private static final WHITE_COLOR:I = 0xffffff
 
-.field private static bypassLiveAvatarThread:Ljava/lang/Thread; = null
-
 .field public static captionsButton:Z = false
 
 .field public static currentNavBarIndex:I = 0x0
@@ -15,8 +13,6 @@
 .field public static hideWelcomeAndRules:Z = false
 
 .field public static initVideoPanel:Z = false
-
-.field public static isLiveAvatarButton:Z = false
 
 .field public static isTopView:Z = false
 
@@ -34,6 +30,8 @@
         }
     .end annotation
 .end field
+
+.field private static openVideoChannelThread:Ljava/lang/Thread;
 
 .field public static protoBufferComponents:Ljava/nio/ByteBuffer;
 
@@ -73,59 +71,66 @@
 .method static constructor <clinit>()V
     .locals 3
 
-    .line 37
+    .line 40
     const/4 v0, 0x0
 
     sput-boolean v0, LuTools/uBlocker;->captionsButton:Z
 
-    .line 38
+    .line 41
     sput-boolean v0, LuTools/uBlocker;->initVideoPanel:Z
 
-    .line 82
+    .line 85
     sput-boolean v0, LuTools/uBlocker;->isTopView:Z
 
-    .line 83
+    .line 86
     const-wide/16 v1, 0x0
 
     sput-wide v1, LuTools/uBlocker;->lastTimeBackPressed:J
 
-    .line 110
+    .line 113
     sput v0, LuTools/uBlocker;->currentNavBarIndex:I
 
-    .line 112
+    .line 115
     sput-boolean v0, LuTools/uBlocker;->moreDrawerAppsAndInfo:Z
 
-    .line 113
+    .line 116
     sput-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
-    .line 114
+    .line 117
     invoke-static {v0}, Ljava/nio/ByteBuffer;->allocate(I)Ljava/nio/ByteBuffer;
 
     move-result-object v1
 
     sput-object v1, LuTools/uBlocker;->protoBufferComponents:Ljava/nio/ByteBuffer;
 
-    .line 293
+    .line 294
     sput-boolean v0, LuTools/uBlocker;->hideWelcomeAndRules:Z
 
-    .line 364
-    new-instance v1, Lokhttp3/OkHttpClient$Builder;
+    .line 333
+    sget-object v0, LuTools/uUtils$EnumInitialization;->NONE:LuTools/uUtils$EnumInitialization;
 
-    invoke-direct {v1}, Lokhttp3/OkHttpClient$Builder;-><init>()V
+    sput-object v0, LuTools/uBlocker;->navigationBarPivot:Ljava/lang/Enum;
 
-    invoke-static {v1}, LuTools/uDownloader;->init(Lokhttp3/OkHttpClient$Builder;)LuTools/uDownloader;
+    .line 348
+    sget-object v0, LuTools/uUtils$EnumInitialization;->NONE:LuTools/uUtils$EnumInitialization;
 
-    move-result-object v1
+    sput-object v0, LuTools/uBlocker;->topBarPivot:Ljava/lang/Enum;
 
-    invoke-static {v1}, Lorg/schabi/newpipe/extractor/NewPipe;->init(Lorg/schabi/newpipe/extractor/downloader/Downloader;)V
+    .line 361
+    new-instance v0, Lokhttp3/OkHttpClient$Builder;
 
-    .line 366
-    sput-boolean v0, LuTools/uBlocker;->isLiveAvatarButton:Z
+    invoke-direct {v0}, Lokhttp3/OkHttpClient$Builder;-><init>()V
 
-    .line 367
+    invoke-static {v0}, LuTools/uDownloader;->init(Lokhttp3/OkHttpClient$Builder;)LuTools/uDownloader;
+
+    move-result-object v0
+
+    invoke-static {v0}, Lorg/schabi/newpipe/extractor/NewPipe;->init(Lorg/schabi/newpipe/extractor/downloader/Downloader;)V
+
+    .line 363
     const/4 v0, 0x0
 
-    sput-object v0, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    sput-object v0, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
     return-void
 .end method
@@ -133,7 +138,7 @@
 .method public constructor <init>()V
     .locals 0
 
-    .line 36
+    .line 39
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     return-void
@@ -147,7 +152,7 @@
 
     monitor-enter v0
 
-    .line 42
+    .line 45
     :try_start_0
     invoke-static {}, LuTools/uUtils;->CheckDarkTheme()Z
 
@@ -163,12 +168,12 @@
 
     if-eqz v1, :cond_0
 
-    .line 44
+    .line 47
     const/4 v1, 0x5
 
     new-array v1, v1, [Ljava/lang/Integer;
 
-    .line 45
+    .line 48
     const v6, -0xd7d7d8
 
     invoke-static {v6}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -177,7 +182,7 @@
 
     aput-object v6, v1, v4
 
-    .line 46
+    .line 49
     const v4, -0xdededf
 
     invoke-static {v4}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -186,7 +191,7 @@
 
     aput-object v4, v1, v3
 
-    .line 47
+    .line 50
     const v3, -0xe7e7e8
 
     invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -195,7 +200,7 @@
 
     aput-object v3, v1, v2
 
-    .line 48
+    .line 51
     const v2, -0xf0f0f1
 
     invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -204,7 +209,7 @@
 
     aput-object v2, v1, v5
 
-    .line 49
+    .line 52
     const v2, -0x5dededf
 
     invoke-static {v2}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -215,18 +220,18 @@
 
     aput-object v2, v1, v3
 
-    .line 44
+    .line 47
     invoke-static {v1}, Ljava/util/stream/Stream;->of([Ljava/lang/Object;)Ljava/util/stream/Stream;
 
     move-result-object v1
 
     goto :goto_0
 
-    .line 52
+    .line 55
     :cond_0
     new-array v1, v5, [Ljava/lang/Integer;
 
-    .line 53
+    .line 56
     const/4 v5, -0x1
 
     invoke-static {v5}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -235,7 +240,7 @@
 
     aput-object v5, v1, v4
 
-    .line 54
+    .line 57
     const v4, -0x60607
 
     invoke-static {v4}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -244,7 +249,7 @@
 
     aput-object v4, v1, v3
 
-    .line 55
+    .line 58
     const v3, -0x5000001
 
     invoke-static {v3}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
@@ -253,24 +258,24 @@
 
     aput-object v3, v1, v2
 
-    .line 52
+    .line 55
     invoke-static {v1}, Ljava/util/stream/Stream;->of([Ljava/lang/Object;)Ljava/util/stream/Stream;
 
     move-result-object v1
 
     :goto_0
-    new-instance v2, LuTools/uBlocker$$ExternalSyntheticLambda1;
+    new-instance v2, LuTools/uBlocker$$ExternalSyntheticLambda2;
 
-    invoke-direct {v2, p0}, LuTools/uBlocker$$ExternalSyntheticLambda1;-><init>(I)V
+    invoke-direct {v2, p0}, LuTools/uBlocker$$ExternalSyntheticLambda2;-><init>(I)V
 
-    .line 58
+    .line 61
     invoke-interface {v1, v2}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
 
     move-result v1
 
     if-eqz v1, :cond_2
 
-    .line 60
+    .line 63
     invoke-static {}, LuTools/uUtils;->CheckDarkTheme()Z
 
     move-result v1
@@ -279,28 +284,28 @@
 
     if-eqz v1, :cond_1
 
-    .line 62
+    .line 65
     const v1, -0xffffff
 
     goto :goto_1
 
-    .line 64
+    .line 67
     :cond_1
     const v1, 0xffffff
 
     goto :goto_1
 
-    .line 66
+    .line 69
     :cond_2
     move v1, p0
 
-    .line 42
+    .line 45
     :goto_1
     monitor-exit v0
 
     return v1
 
-    .line 41
+    .line 44
     .end local p0    # "originalValue":I
     :catchall_0
     move-exception p0
@@ -317,13 +322,13 @@
     .locals 3
     .param p0, "activity"    # Landroid/app/Activity;
 
-    .line 71
+    .line 74
     :try_start_0
     invoke-virtual {p0}, Landroid/app/Activity;->getPackageManager()Landroid/content/pm/PackageManager;
 
     move-result-object v0
 
-    .line 72
+    .line 75
     .local v0, "manager":Landroid/content/pm/PackageManager;
     const-string v1, "app.revanced.android.gms"
 
@@ -333,23 +338,23 @@
     :try_end_0
     .catch Landroid/content/pm/PackageManager$NameNotFoundException; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 79
+    .line 82
     nop
 
     .end local v0    # "manager":Landroid/content/pm/PackageManager;
     goto :goto_0
 
-    .line 77
+    .line 80
     :catch_0
     move-exception v0
 
-    .line 78
+    .line 81
     .local v0, "exception":Landroid/content/pm/PackageManager$NameNotFoundException;
     const-string v1, "Error: No MicroG Installed"
 
     invoke-static {v1}, LuTools/uUtils;->ShowToastLong(Ljava/lang/String;)V
 
-    .line 80
+    .line 83
     .end local v0    # "exception":Landroid/content/pm/PackageManager$NameNotFoundException;
     :goto_0
     return-void
@@ -359,17 +364,17 @@
     .locals 6
     .param p0, "activity"    # Lcom/google/android/apps/youtube/app/watchwhile/MainActivity;
 
-    .line 85
+    .line 88
     sget-boolean v0, LuTools/uBlocker;->isTopView:Z
 
     if-eqz v0, :cond_1
 
-    .line 86
+    .line 89
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
     move-result-wide v0
 
-    .line 88
+    .line 91
     .local v0, "time":J
     sget-wide v2, LuTools/uBlocker;->lastTimeBackPressed:J
 
@@ -381,26 +386,26 @@
 
     if-ltz v2, :cond_0
 
-    .line 89
+    .line 92
     sput-wide v0, LuTools/uBlocker;->lastTimeBackPressed:J
 
     goto :goto_0
 
-    .line 91
+    .line 94
     :cond_0
     const/4 v2, 0x0
 
     sput-boolean v2, LuTools/uBlocker;->isTopView:Z
 
-    .line 93
+    .line 96
     const-wide/16 v2, 0x0
 
     sput-wide v2, LuTools/uBlocker;->lastTimeBackPressed:J
 
-    .line 95
+    .line 98
     invoke-virtual {p0}, Lcom/google/android/apps/youtube/app/watchwhile/MainActivity;->finish()V
 
-    .line 98
+    .line 101
     .end local v0    # "time":J
     :cond_1
     :goto_0
@@ -411,13 +416,13 @@
     .locals 1
     .param p0, "view"    # Landroid/view/View;
 
-    .line 102
+    .line 105
     :try_start_0
     invoke-virtual {p0}, Landroid/view/View;->callOnClick()Z
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 103
+    .line 106
     :goto_0
     goto :goto_1
 
@@ -426,7 +431,7 @@
 
     goto :goto_0
 
-    .line 104
+    .line 107
     :goto_1
     return-void
 .end method
@@ -435,7 +440,7 @@
     .locals 1
     .param p0, "originalValue"    # Ljava/lang/String;
 
-    .line 107
+    .line 110
     const-string v0, "Premium"
 
     invoke-virtual {p0, v0}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -453,13 +458,13 @@
 
     monitor-enter v0
 
-    .line 116
+    .line 119
     :try_start_0
     invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v1
 
-    .line 119
+    .line 122
     .local v1, "strTemplateTreeComponents":Ljava/lang/String;
     const-string v2, "comment"
 
@@ -479,7 +484,7 @@
 
     if-eqz v2, :cond_1
 
-    .line 120
+    .line 123
     const-string v2, "composer"
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -488,7 +493,7 @@
 
     if-eqz v2, :cond_0
 
-    .line 121
+    .line 124
     new-array v2, v4, [Ljava/lang/String;
 
     const-string v4, "composer_short_creation_button"
@@ -511,7 +516,7 @@
 
     move-result-object v2
 
-    .line 127
+    .line 130
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -524,12 +529,12 @@
     :try_end_0
     .catchall {:try_start_0 .. :try_end_0} :catchall_0
 
-    .line 121
+    .line 124
     monitor-exit v0
 
     return v2
 
-    .line 129
+    .line 132
     :cond_0
     :try_start_1
     const-string v2, "sponsorships_comments"
@@ -538,7 +543,7 @@
 
     move-result-object v2
 
-    .line 132
+    .line 135
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -551,12 +556,12 @@
     :try_end_1
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    .line 129
+    .line 132
     monitor-exit v0
 
     return v2
 
-    .line 137
+    .line 140
     :cond_1
     :try_start_2
     const-string v2, "account_header"
@@ -567,17 +572,17 @@
 
     if-eqz v2, :cond_2
 
-    .line 138
+    .line 141
     sput v4, LuTools/uBlocker;->currentNavBarIndex:I
     :try_end_2
     .catchall {:try_start_2 .. :try_end_2} :catchall_0
 
-    .line 140
+    .line 143
     monitor-exit v0
 
     return v7
 
-    .line 141
+    .line 144
     :cond_2
     :try_start_3
     new-array v2, v3, [Ljava/lang/String;
@@ -598,7 +603,7 @@
 
     move-result-object v2
 
-    .line 146
+    .line 149
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v8, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -608,13 +613,10 @@
     invoke-interface {v2, v8}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
 
     move-result v2
-    :try_end_3
-    .catchall {:try_start_3 .. :try_end_3} :catchall_0
 
     if-eqz v2, :cond_5
 
-    .line 148
-    :try_start_4
+    .line 150
     new-array v2, v5, [Ljava/lang/String;
 
     const-string v3, "WATCH_WHILE_FULLSCREEN"
@@ -629,7 +631,7 @@
 
     move-result-object v2
 
-    .line 152
+    .line 154
     invoke-static {}, LuTools/uUtils;->GetPlayerType()Ljava/lang/Enum;
 
     move-result-object v3
@@ -650,43 +652,30 @@
 
     if-eqz v2, :cond_3
 
-    .line 153
-    sput v7, LuTools/uBlocker;->currentNavBarIndex:I
-    :try_end_4
-    .catch Ljava/lang/Exception; {:try_start_4 .. :try_end_4} :catch_0
-    .catchall {:try_start_4 .. :try_end_4} :catchall_0
-
-    goto :goto_0
-
     .line 155
-    :catch_0
-    move-exception v2
+    sput v7, LuTools/uBlocker;->currentNavBarIndex:I
 
+    .line 158
     :cond_3
-    :goto_0
-    nop
-
-    .line 157
-    :try_start_5
     sget v2, LuTools/uBlocker;->currentNavBarIndex:I
-    :try_end_5
-    .catchall {:try_start_5 .. :try_end_5} :catchall_0
+    :try_end_3
+    .catchall {:try_start_3 .. :try_end_3} :catchall_0
 
     if-eq v2, v4, :cond_4
 
-    goto :goto_1
+    goto :goto_0
 
     :cond_4
     move v6, v7
 
-    :goto_1
+    :goto_0
     monitor-exit v0
 
     return v6
 
-    .line 161
+    .line 162
     :cond_5
-    :try_start_6
+    :try_start_4
     const-string v2, "more_drawer."
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -695,7 +684,7 @@
 
     if-eqz v2, :cond_7
 
-    .line 162
+    .line 163
     const-string v2, "divider"
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -704,25 +693,25 @@
 
     if-eqz v2, :cond_6
 
-    .line 163
+    .line 164
     sput-boolean v6, LuTools/uBlocker;->moreDrawerAppsAndInfo:Z
 
-    .line 166
+    .line 167
     :cond_6
     sget-boolean v2, LuTools/uBlocker;->moreDrawerAppsAndInfo:Z
-    :try_end_6
-    .catchall {:try_start_6 .. :try_end_6} :catchall_0
+    :try_end_4
+    .catchall {:try_start_4 .. :try_end_4} :catchall_0
 
     monitor-exit v0
 
     return v2
 
-    .line 168
+    .line 169
     :cond_7
-    :try_start_7
+    :try_start_5
     sput-boolean v7, LuTools/uBlocker;->moreDrawerAppsAndInfo:Z
 
-    .line 172
+    .line 173
     const-string v2, "video_metadata_carousel"
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -731,14 +720,14 @@
 
     if-eqz v2, :cond_a
 
-    .line 173
+    .line 174
     const-string v2, "|carousel_item."
 
     invoke-static {v2}, Ljava/util/stream/Stream;->of(Ljava/lang/Object;)Ljava/util/stream/Stream;
 
     move-result-object v2
 
-    .line 176
+    .line 177
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -761,12 +750,12 @@
 
     aput-object v3, v2, v6
 
-    .line 180
+    .line 181
     invoke-static {v2}, Ljava/util/stream/Stream;->of([Ljava/lang/Object;)Ljava/util/stream/Stream;
 
     move-result-object v2
 
-    .line 184
+    .line 185
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -776,31 +765,31 @@
     invoke-interface {v2, v3}, Ljava/util/stream/Stream;->allMatch(Ljava/util/function/Predicate;)Z
 
     move-result v2
-    :try_end_7
-    .catchall {:try_start_7 .. :try_end_7} :catchall_0
+    :try_end_5
+    .catchall {:try_start_5 .. :try_end_5} :catchall_0
 
     if-eqz v2, :cond_8
 
-    goto :goto_2
+    goto :goto_1
 
     :cond_8
     move v6, v7
 
-    goto :goto_3
+    goto :goto_2
 
     :cond_9
-    :goto_2
+    :goto_1
     nop
 
-    .line 173
-    :goto_3
+    .line 174
+    :goto_2
     monitor-exit v0
 
     return v6
 
-    .line 188
+    .line 189
     :cond_a
-    :try_start_8
+    :try_start_6
     const-string v2, "quick_quality_sheet_content"
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -809,19 +798,19 @@
 
     if-eqz v2, :cond_b
 
-    .line 189
+    .line 190
     sput-boolean v6, LuTools/uBlocker;->quickQualityBottomSheet:Z
-    :try_end_8
-    .catchall {:try_start_8 .. :try_end_8} :catchall_0
+    :try_end_6
+    .catchall {:try_start_6 .. :try_end_6} :catchall_0
 
-    .line 191
+    .line 192
     monitor-exit v0
 
     return v7
 
-    .line 195
+    .line 196
     :cond_b
-    :try_start_9
+    :try_start_7
     const-string v2, "overflow_menu_item"
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -830,7 +819,7 @@
 
     if-eqz v2, :cond_c
 
-    .line 196
+    .line 197
     sget-object v2, LuTools/uBlocker;->protoBufferComponents:Ljava/nio/ByteBuffer;
 
     const-string v3, "yt_outline_volume_stable"
@@ -838,16 +827,16 @@
     invoke-static {v2, v3}, LuTools/uUtils;->ByteBufferContainsString(Ljava/nio/ByteBuffer;Ljava/lang/String;)Z
 
     move-result v2
-    :try_end_9
-    .catchall {:try_start_9 .. :try_end_9} :catchall_0
+    :try_end_7
+    .catchall {:try_start_7 .. :try_end_7} :catchall_0
 
     monitor-exit v0
 
     return v2
 
-    .line 204
+    .line 205
     :cond_c
-    :try_start_a
+    :try_start_8
     const-string v2, "video_lockup_with_attachment"
 
     invoke-virtual {v1, v2}, Ljava/lang/String;->contains(Ljava/lang/CharSequence;)Z
@@ -860,7 +849,7 @@
 
     if-eqz v2, :cond_d
 
-    .line 205
+    .line 206
     new-array v2, v9, [Ljava/lang/String;
 
     const-string v9, "endorsement_header_footer"
@@ -891,7 +880,7 @@
 
     move-result-object v2
 
-    .line 213
+    .line 214
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -901,19 +890,19 @@
     invoke-interface {v2, v3}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
 
     move-result v2
-    :try_end_a
-    .catchall {:try_start_a .. :try_end_a} :catchall_0
+    :try_end_8
+    .catchall {:try_start_8 .. :try_end_8} :catchall_0
 
-    .line 205
+    .line 206
     monitor-exit v0
 
     return v2
 
-    .line 218
+    .line 219
     :cond_d
     const/16 v2, 0x44
 
-    :try_start_b
+    :try_start_9
     new-array v2, v2, [Ljava/lang/String;
 
     const-string v10, "carousel_footered_layout"
@@ -1314,7 +1303,7 @@
 
     move-result-object v2
 
-    .line 290
+    .line 291
     invoke-static {v1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
     new-instance v3, LuTools/uBlocker$$ExternalSyntheticLambda0;
@@ -1324,24 +1313,24 @@
     invoke-interface {v2, v3}, Ljava/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z
 
     move-result v2
-    :try_end_b
-    .catchall {:try_start_b .. :try_end_b} :catchall_0
+    :try_end_9
+    .catchall {:try_start_9 .. :try_end_9} :catchall_0
 
-    .line 218
+    .line 219
     monitor-exit v0
 
     return v2
 
-    .line 115
+    .line 118
     .end local v1    # "strTemplateTreeComponents":Ljava/lang/String;
     .end local p0    # "templateTreeComponents":Ljava/lang/StringBuilder;
     :catchall_0
     move-exception p0
 
-    :try_start_c
+    :try_start_a
     monitor-exit v0
-    :try_end_c
-    .catchall {:try_start_c .. :try_end_c} :catchall_0
+    :try_end_a
+    .catchall {:try_start_a .. :try_end_a} :catchall_0
 
     throw p0
 .end method
@@ -1350,7 +1339,7 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 307
+    .line 308
     invoke-virtual {p0}, Landroid/view/View;->getViewTreeObserver()Landroid/view/ViewTreeObserver;
 
     move-result-object v0
@@ -1361,7 +1350,7 @@
 
     invoke-virtual {v0, v1}, Landroid/view/ViewTreeObserver;->addOnGlobalLayoutListener(Landroid/view/ViewTreeObserver$OnGlobalLayoutListener;)V
 
-    .line 316
+    .line 317
     return-void
 .end method
 
@@ -1369,17 +1358,17 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 295
+    .line 296
     sget-boolean v0, LuTools/uBlocker;->hideWelcomeAndRules:Z
 
     if-eqz v0, :cond_0
 
-    .line 296
+    .line 297
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 299
+    .line 300
     .local v0, "viewParent":Landroid/view/ViewParent;
     :try_start_0
     move-object v1, v0
@@ -1388,7 +1377,7 @@
 
     invoke-static {v1}, LuTools/uUtils;->HideViewByLinearLayoutParams(Landroid/view/View;)V
 
-    .line 301
+    .line 302
     const/4 v1, 0x0
 
     sput-boolean v1, LuTools/uBlocker;->hideWelcomeAndRules:Z
@@ -1397,14 +1386,14 @@
 
     goto :goto_0
 
-    .line 302
+    .line 303
     :catch_0
     move-exception v1
 
     :goto_0
     nop
 
-    .line 304
+    .line 305
     .end local v0    # "viewParent":Landroid/view/ViewParent;
     :cond_0
     return-void
@@ -1414,7 +1403,7 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 335
+    .line 336
     :try_start_0
     const-string v0, "TAB_SHORTS"
 
@@ -1424,7 +1413,7 @@
 
     sget-object v1, LuTools/uBlocker;->navigationBarPivot:Ljava/lang/Enum;
 
-    .line 337
+    .line 338
     invoke-virtual {v1}, Ljava/lang/Enum;->name()Ljava/lang/String;
 
     move-result-object v1
@@ -1441,14 +1430,14 @@
 
     if-eqz v0, :cond_0
 
-    .line 338
+    .line 339
     invoke-static {p0}, LuTools/uUtils;->HideView(Landroid/view/View;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    .line 340
+    .line 341
     :catch_0
     move-exception v0
 
@@ -1456,7 +1445,7 @@
     :goto_0
     nop
 
-    .line 341
+    .line 342
     return-void
 .end method
 
@@ -1464,7 +1453,7 @@
     .locals 1
     .param p0, "str"    # Ljava/lang/String;
 
-    .line 344
+    .line 345
     invoke-virtual {p0}, Ljava/lang/String;->isEmpty()Z
 
     move-result v0
@@ -1477,7 +1466,7 @@
     .param p0, "view"    # Landroid/view/View;
     .param p1, "charSequence"    # Ljava/lang/CharSequence;
 
-    .line 320
+    .line 321
     :try_start_0
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
@@ -1493,7 +1482,7 @@
 
     check-cast v0, Landroid/view/ViewGroup;
 
-    .line 321
+    .line 322
     .local v0, "viewGroup":Landroid/view/ViewGroup;
     invoke-interface {p1}, Ljava/lang/CharSequence;->toString()Ljava/lang/String;
 
@@ -1507,7 +1496,7 @@
 
     if-eqz v1, :cond_1
 
-    .line 322
+    .line 323
     invoke-virtual {v0}, Landroid/view/ViewGroup;->getLayoutParams()Landroid/view/ViewGroup$LayoutParams;
 
     move-result-object v1
@@ -1516,12 +1505,12 @@
 
     if-eqz v1, :cond_0
 
-    .line 323
+    .line 324
     invoke-static {v0}, LuTools/uUtils;->HideViewGroupByMarginLayout(Landroid/view/ViewGroup;)V
 
     goto :goto_0
 
-    .line 325
+    .line 326
     :cond_0
     invoke-static {v0}, LuTools/uUtils;->HideViewGroupByLayoutParams(Landroid/view/ViewGroup;)V
     :try_end_0
@@ -1529,7 +1518,7 @@
 
     goto :goto_0
 
-    .line 329
+    .line 330
     .end local v0    # "viewGroup":Landroid/view/ViewGroup;
     :catch_0
     move-exception v0
@@ -1538,7 +1527,7 @@
     :goto_0
     nop
 
-    .line 330
+    .line 331
     return-void
 .end method
 
@@ -1546,7 +1535,7 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 350
+    .line 351
     const/4 v0, 0x2
 
     :try_start_0
@@ -1570,7 +1559,7 @@
 
     sget-object v1, LuTools/uBlocker;->topBarPivot:Ljava/lang/Enum;
 
-    .line 353
+    .line 354
     invoke-virtual {v1}, Ljava/lang/Enum;->name()Ljava/lang/String;
 
     move-result-object v1
@@ -1587,14 +1576,14 @@
 
     if-eqz v0, :cond_0
 
-    .line 354
+    .line 355
     invoke-static {p0}, LuTools/uUtils;->HideView(Landroid/view/View;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
     goto :goto_0
 
-    .line 356
+    .line 357
     :catch_0
     move-exception v0
 
@@ -1602,56 +1591,76 @@
     :goto_0
     nop
 
-    .line 357
+    .line 358
     return-void
 .end method
 
-.method public static OpenChannelOfLiveAvatar(Ljava/lang/String;)V
-    .locals 2
+.method public static OpenVideoChannel(Ljava/lang/String;)Z
+    .locals 4
     .param p0, "videoID"    # Ljava/lang/String;
 
-    .line 369
-    sget-object v0, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    .line 365
+    sget-object v0, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
     if-nez v0, :cond_0
 
-    .line 370
+    .line 366
+    sget-boolean v0, LuTools/uUtils;->isCommentsPanelOpen:Z
+
+    if-nez v0, :cond_0
+
+    sget-wide v0, LuTools/uUtils;->lithoActionDownDuration:J
+
+    const-wide/16 v2, 0x3e8
+
+    cmp-long v0, v0, v2
+
+    if-ltz v0, :cond_0
+
+    .line 367
     new-instance v0, Ljava/lang/Thread;
 
-    new-instance v1, LuTools/uBlocker$$ExternalSyntheticLambda3;
+    new-instance v1, LuTools/uBlocker$$ExternalSyntheticLambda1;
 
-    invoke-direct {v1, p0}, LuTools/uBlocker$$ExternalSyntheticLambda3;-><init>(Ljava/lang/String;)V
+    invoke-direct {v1, p0}, LuTools/uBlocker$$ExternalSyntheticLambda1;-><init>(Ljava/lang/String;)V
 
     invoke-direct {v0, v1}, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable;)V
 
-    sput-object v0, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    sput-object v0, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
-    .line 415
-    sget-object v0, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    .line 412
+    sget-object v0, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
     invoke-virtual {v0}, Ljava/lang/Thread;->start()V
 
-    .line 417
+    .line 414
+    const/4 v0, 0x1
+
+    return v0
+
+    .line 418
     :cond_0
-    return-void
+    const/4 v0, 0x0
+
+    return v0
 .end method
 
 .method public static OpenVideoResolutionsFlyout(Landroid/support/v7/widget/RecyclerView;)V
     .locals 2
     .param p0, "recyclerView"    # Landroid/support/v7/widget/RecyclerView;
 
-    .line 420
+    .line 422
     invoke-virtual {p0}, Landroid/support/v7/widget/RecyclerView;->getViewTreeObserver()Landroid/view/ViewTreeObserver;
 
     move-result-object v0
 
-    new-instance v1, LuTools/uBlocker$$ExternalSyntheticLambda2;
+    new-instance v1, LuTools/uBlocker$$ExternalSyntheticLambda3;
 
-    invoke-direct {v1, p0}, LuTools/uBlocker$$ExternalSyntheticLambda2;-><init>(Landroid/support/v7/widget/RecyclerView;)V
+    invoke-direct {v1, p0}, LuTools/uBlocker$$ExternalSyntheticLambda3;-><init>(Landroid/support/v7/widget/RecyclerView;)V
 
     invoke-virtual {v0, v1}, Landroid/view/ViewTreeObserver;->addOnDrawListener(Landroid/view/ViewTreeObserver$OnDrawListener;)V
 
-    .line 430
+    .line 432
     return-void
 .end method
 
@@ -1659,7 +1668,7 @@
     .locals 2
     .param p0, "trackingUrl"    # Landroid/net/Uri;
 
-    .line 360
+    .line 435
     invoke-virtual {p0}, Landroid/net/Uri;->buildUpon()Landroid/net/Uri$Builder;
 
     move-result-object v0
@@ -1681,20 +1690,20 @@
     .locals 6
     .param p0, "shortsVideoID"    # Ljava/lang/String;
 
-    .line 433
+    .line 439
     sget v0, LuTools/uBlocker;->currentNavBarIndex:I
 
     const/4 v1, 0x1
 
     if-eq v0, v1, :cond_0
 
-    .line 435
+    .line 441
     :try_start_0
     invoke-static {}, LuTools/uUtils;->GetMainActivityContext()Landroid/content/Context;
 
     move-result-object v0
 
-    .line 437
+    .line 443
     .local v0, "context":Landroid/content/Context;
     new-instance v2, Landroid/content/Intent;
 
@@ -1706,46 +1715,46 @@
 
     move-result-object v5
 
-    .line 441
+    .line 447
     invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v4
 
-    .line 440
+    .line 446
     invoke-static {v4}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v4
 
     invoke-direct {v2, v3, v4}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
 
-    .line 448
+    .line 454
     .local v2, "videoPlayerIntent":Landroid/content/Intent;
     const/high16 v3, 0x10000000
 
     invoke-virtual {v2, v3}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
 
-    .line 449
+    .line 455
     invoke-virtual {v0}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
 
     move-result-object v3
 
     invoke-virtual {v2, v3}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
 
-    .line 451
+    .line 457
     invoke-virtual {v0, v2}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 453
+    .line 459
     return v1
 
-    .line 454
+    .line 460
     .end local v0    # "context":Landroid/content/Context;
     .end local v2    # "videoPlayerIntent":Landroid/content/Intent;
     :catch_0
     move-exception v0
 
-    .line 457
+    .line 463
     :cond_0
     const/4 v0, 0x0
 
@@ -1757,7 +1766,7 @@
     .param p0, "originalValue"    # I
     .param p1, "val"    # Ljava/lang/Integer;
 
-    .line 58
+    .line 61
     invoke-static {p0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
 
     move-result-object v0
@@ -1773,19 +1782,19 @@
     .locals 3
     .param p0, "view"    # Landroid/view/View;
 
-    .line 308
+    .line 309
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 311
+    .line 312
     .local v0, "parent":Landroid/view/ViewParent;
     :try_start_0
     instance-of v1, v0, Landroid/support/v7/widget/RecyclerView;
 
     if-eqz v1, :cond_0
 
-    .line 312
+    .line 313
     move-object v1, v0
 
     check-cast v1, Landroid/support/v7/widget/RecyclerView;
@@ -1798,7 +1807,7 @@
 
     goto :goto_0
 
-    .line 314
+    .line 315
     :catch_0
     move-exception v1
 
@@ -1806,15 +1815,15 @@
     :goto_0
     nop
 
-    .line 315
+    .line 316
     return-void
 .end method
 
-.method static synthetic lambda$OpenChannelOfLiveAvatar$2(Ljava/lang/String;)V
+.method static synthetic lambda$OpenVideoChannel$2(Ljava/lang/String;)V
     .locals 6
     .param p0, "videoID"    # Ljava/lang/String;
 
-    .line 374
+    .line 371
     nop
 
     :cond_0
@@ -1822,7 +1831,7 @@
     const/4 v0, 0x0
 
     :try_start_0
-    sget-object v1, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    sget-object v1, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
     invoke-virtual {v1}, Ljava/lang/Thread;->isInterrupted()Z
 
@@ -1832,18 +1841,18 @@
 
     if-nez v1, :cond_1
 
-    .line 376
+    .line 373
     :try_start_1
-    const-string v1, "Bypassing Live Avatar Intent..."
+    const-string v1, "Opening video channel..."
 
     invoke-static {v1}, LuTools/uUtils;->ShowToastLong(Ljava/lang/String;)V
 
-    .line 378
+    .line 375
     invoke-static {}, LuTools/uUtils;->GetMainActivityContext()Landroid/content/Context;
 
     move-result-object v1
 
-    .line 380
+    .line 377
     .local v1, "context":Landroid/content/Context;
     new-instance v2, Landroid/content/Intent;
 
@@ -1855,79 +1864,79 @@
 
     move-result-object v5
 
-    .line 385
+    .line 382
     invoke-static {v4, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v4
 
-    .line 384
+    .line 381
     invoke-static {v4}, Lorg/schabi/newpipe/extractor/stream/StreamInfo;->getInfo(Ljava/lang/String;)Lorg/schabi/newpipe/extractor/stream/StreamInfo;
 
     move-result-object v4
 
-    .line 391
+    .line 388
     invoke-virtual {v4}, Lorg/schabi/newpipe/extractor/stream/StreamInfo;->getUploaderUrl()Ljava/lang/String;
 
     move-result-object v4
 
-    .line 383
+    .line 380
     invoke-static {v4}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
 
     move-result-object v4
 
     invoke-direct {v2, v3, v4}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
 
-    .line 394
+    .line 391
     .local v2, "openLiveChannelIntent":Landroid/content/Intent;
     const/high16 v3, 0x10000000
 
     invoke-virtual {v2, v3}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
 
-    .line 395
+    .line 392
     invoke-virtual {v1}, Landroid/content/Context;->getPackageName()Ljava/lang/String;
 
     move-result-object v3
 
     invoke-virtual {v2, v3}, Landroid/content/Intent;->setPackage(Ljava/lang/String;)Landroid/content/Intent;
 
-    .line 397
+    .line 394
     invoke-virtual {v1, v2}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
     :try_end_1
     .catch Ljava/lang/Exception; {:try_start_1 .. :try_end_1} :catch_0
     .catchall {:try_start_1 .. :try_end_1} :catchall_0
 
-    .line 399
+    .line 396
     const/4 v3, 0x1
 
-    .line 404
+    .line 401
     .end local v1    # "context":Landroid/content/Context;
     .end local v2    # "openLiveChannelIntent":Landroid/content/Intent;
-    .local v3, "stopThread":Z
+    .local v3, "stopVideoChannelThread":Z
     goto :goto_1
 
-    .line 400
-    .end local v3    # "stopThread":Z
+    .line 397
+    .end local v3    # "stopVideoChannelThread":Z
     :catch_0
     move-exception v1
 
-    .line 401
+    .line 398
     .local v1, "ignore":Ljava/lang/Exception;
     :try_start_2
-    const-string v2, "Error: Failed to Bypass Live Avatar Intent"
+    const-string v2, "Error: Failed to open video channel"
 
     invoke-static {v2}, LuTools/uUtils;->ShowToastLong(Ljava/lang/String;)V
 
-    .line 403
+    .line 400
     const/4 v3, 0x1
 
-    .line 406
+    .line 403
     .end local v1    # "ignore":Ljava/lang/Exception;
-    .restart local v3    # "stopThread":Z
+    .restart local v3    # "stopVideoChannelThread":Z
     :goto_1
     if-eqz v3, :cond_0
 
-    .line 407
-    sget-object v1, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    .line 404
+    sget-object v1, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
     invoke-virtual {v1}, Ljava/lang/Thread;->interrupt()V
     :try_end_2
@@ -1935,24 +1944,24 @@
 
     goto :goto_0
 
-    .line 411
-    .end local v3    # "stopThread":Z
+    .line 408
+    .end local v3    # "stopVideoChannelThread":Z
     :cond_1
-    sput-object v0, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    sput-object v0, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
-    .line 412
+    .line 409
     nop
 
-    .line 413
+    .line 410
     return-void
 
-    .line 411
+    .line 408
     :catchall_0
     move-exception v1
 
-    sput-object v0, LuTools/uBlocker;->bypassLiveAvatarThread:Ljava/lang/Thread;
+    sput-object v0, LuTools/uBlocker;->openVideoChannelThread:Ljava/lang/Thread;
 
-    .line 412
+    .line 409
     throw v1
 .end method
 
@@ -1960,18 +1969,18 @@
     .locals 3
     .param p0, "recyclerView"    # Landroid/support/v7/widget/RecyclerView;
 
-    .line 422
+    .line 424
     :try_start_0
     sget-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
     if-eqz v0, :cond_0
 
-    .line 423
+    .line 425
     const/4 v0, 0x0
 
     sput-boolean v0, LuTools/uBlocker;->quickQualityBottomSheet:Z
 
-    .line 425
+    .line 427
     invoke-virtual {p0}, Landroid/support/v7/widget/RecyclerView;->getParent()Landroid/view/ViewParent;
 
     move-result-object v1
@@ -1990,7 +1999,7 @@
 
     invoke-virtual {v1, v2}, Landroid/view/ViewGroup;->setVisibility(I)V
 
-    .line 426
+    .line 428
     invoke-virtual {p0, v0}, Landroid/support/v7/widget/RecyclerView;->getChildAt(I)Landroid/view/View;
 
     move-result-object v0
@@ -2009,7 +2018,7 @@
 
     goto :goto_0
 
-    .line 428
+    .line 430
     :catch_0
     move-exception v0
 
@@ -2017,6 +2026,6 @@
     :goto_0
     nop
 
-    .line 429
+    .line 431
     return-void
 .end method

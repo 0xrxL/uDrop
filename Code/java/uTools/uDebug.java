@@ -171,6 +171,7 @@ public class uDebug {
 
     public static void PrintLongWithMethod(long value) {
         String message = "uLong";
+        String strValue = String.valueOf(value);
 
         StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
         if (stackTraceElements.length > 3) {
@@ -186,7 +187,7 @@ public class uDebug {
             );
         }
 
-        Log.d(message, String.valueOf(value));
+        Log.d(message, strValue);
     }
 
     public static void PrintStringWithMethod(String value) {

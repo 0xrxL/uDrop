@@ -13,22 +13,22 @@
         public static List<bool> Debug()
         {
             return [
-                new SmaliUtils.SubPatchModule<(string, int)[]>(
+                new SmaliUtils.SubPatchModule<(string, int, bool)[]>(
                     [
-                        ("Landroid/content/Intent;", 1),
-                        ("Landroid/content/Intent;", 2),
-                        ("Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;", 2),
-                        ("Landroid/view/MotionEvent;->getAction()I", 1),
-                        (" onDoubleTap(", 2),
-                        (" onDoubleTapEvent(", 2),
-                        (" onClick(", 2),
-                        (" onCreate(", 2),
-                        (" onCreateLayout(", 2),
-                        (" onItemClick(", 2),
-                        (" onBackPressed(", 2),
-                        (" getOnBackPressedDispatcher(", 2),
-                        (" onTouch(", 2),
-                        (" onTouchEvent(", 2)
+                        ("Landroid/content/Intent;", 1, false),
+                        ("Landroid/content/Intent;", 2, false),
+                        ("Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;", 2, false),
+                        ("Landroid/view/MotionEvent;->getAction()I", 1, false),
+                        (" onDoubleTap(", 2, false),
+                        (" onDoubleTapEvent(", 2, false),
+                        (" onClick(", 2, false),
+                        (" onCreate(", 2, false),
+                        (" onCreateLayout(", 2, false),
+                        (" onItemClick(", 2, false),
+                        (" onBackPressed(", 2, false),
+                        (" getOnBackPressedDispatcher(", 2, false),
+                        (" onTouch(", 2, true),
+                        (" onTouchEvent(", 2, true)
                     ],
 
                     true,
@@ -41,56 +41,59 @@
                         patchInteractions,
                         xmlSmaliInfo
                     ) => {
-                        for (int i = 0; i <= 1; i++)
+                        foreach ((string, int, bool) xmlSmaliSearchKey in xmlSmaliSearchKeys)
                         {
-                            if (new[] {
-                                    xmlSmaliSearchKeys[i].Item1
-                                }.All(xmlSmaliProperties.Full.Contains))
+                            if (xmlSmaliSearchKey.Item3)
                             {
-                                xmlSmaliProperties.ReadXMLSmaliLines();    
-
-                                for (int j = 0; j < xmlSmaliProperties.LinesCount; j++)
+                                if (new[] {
+                                        xmlSmaliSearchKey.Item1
+                                    }.All(xmlSmaliProperties.Full.Contains))
                                 {
-                                    if (!xmlSmaliProperties.Lines[j].Contains("abstract") &&
-                                        xmlSmaliProperties.Lines[j].Contains(xmlSmaliSearchKeys[i].Item1))
+                                    xmlSmaliProperties.ReadXMLSmaliLines();
+
+                                    for (int j = 0; j < xmlSmaliProperties.LinesCount; j++)
                                     {
-                                        if ((xmlSmaliSearchKeys[i].Item2 == 2 && xmlSmaliProperties.Lines[j].Contains(".method")) ||
-                                            xmlSmaliSearchKeys[i].Item2 <= 1)
+                                        if (!xmlSmaliProperties.Lines[j].Contains("abstract") &&
+                                            xmlSmaliProperties.Lines[j].Contains(xmlSmaliSearchKey.Item1))
                                         {
-                                            (int, string[]) patch = (
-                                                j + xmlSmaliSearchKeys[i].Item2,
+                                            if ((xmlSmaliSearchKey.Item2 == 2 && xmlSmaliProperties.Lines[j].Contains(".method")) ||
+                                                xmlSmaliSearchKey.Item2 <= 1)
+                                            {
+                                                (int, string[]) patch = (
+                                                    j + xmlSmaliSearchKey.Item2,
 
-                                                [
-                                                    //invoke-static {}, LuTools/uDebug;->PrintMethod()V
-                                                    //invoke-static {}, LuTools/uDebug;->PrintStackTrace()V
-                                                    //invoke-static {v1}, LuTools/uDebug;->PrintStringWithMethod(Ljava/lang/String;)V
-                                                    //invoke-static {v1}, LuTools/uDebug;->PrintIntWithMethod(I)V
-                                                    //invoke-static {v1}, LuTools/uDebug;->PrintLongWithMethod(J)V
-                                                    //invoke-static {v1}, LuTools/uDebug;->PrintByteByfferWithMethod(Ljava/nio/ByteBuffer;)V
-                                                    //invoke-static {v1}, LuTools/uBlocker;->HideView(Landroid/view/View;)V
+                                                    [
+                                                        //invoke-static {}, LuTools/uDebug;->PrintMethod()V
+                                                        //invoke-static {}, LuTools/uDebug;->PrintStackTrace()V
+                                                        //invoke-static {v1}, LuTools/uDebug;->PrintStringWithMethod(Ljava/lang/String;)V
+                                                        //invoke-static {v1}, LuTools/uDebug;->PrintIntWithMethod(I)V
+                                                        //invoke-static {v1}, LuTools/uDebug;->PrintLongWithMethod(J)V
+                                                        //invoke-static {v1}, LuTools/uDebug;->PrintByteByfferWithMethod(Ljava/nio/ByteBuffer;)V
+                                                        //invoke-static {v1}, LuTools/uBlocker;->HideView(Landroid/view/View;)V
 
-                                                    "invoke-static {}, LuTools/uDebug;->PrintMethod()V"
-                                                ]
-                                            );
+                                                        "invoke-static {}, LuTools/uDebug;->PrintMethod()V"
+                                                    ]
+                                                );
 
-                                            codeInject.Lines(
-                                                [
-                                                    (("", false),
+                                                codeInject.Lines(
+                                                    [
+                                                        (("", false),
 
-                                                    patch.Item1,
+                                                        patch.Item1,
 
-                                                    patch.Item2)
-                                                ]
-                                            );
+                                                        patch.Item2)
+                                                    ]
+                                                );
 
-                                            j += patch.Item1.Equals(j) ? patch.Item2.Length + 1 : 0;
+                                                j += patch.Item1.Equals(j) ? patch.Item2.Length + 1 : 0;
+                                            }
                                         }
                                     }
+
+                                    codeInject.Write();
+
+                                    patchInteractions++;
                                 }
-
-                                codeInject.Write();
-
-                                patchInteractions++;
                             }
                         }
 
@@ -3231,189 +3234,6 @@
             ];
         }
 
-        public static List<bool> Live_Avatar_Intent_Bypasser()
-        {
-            return [
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex(45532131),
-                        SmaliUtils.GetResourceHex(45650902),
-                        SmaliUtils.GetResourceHex(45360801),
-                        SmaliUtils.GetResourceHex("id", "elements_image"),
-                        ".method"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1],
-                                xmlSmaliSearchKeys[2]
-                            }.All(xmlSmaliProperties.Full.Contains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[3]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -5); j--)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[4]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            codeInject.Lines(
-                                                [
-                                                    (("", true),
-
-                                                    j + 2,
-
-                                                    [
-                                                        "const/4 v0, 0x1",
-                                                        $"sput-boolean v0, L{uBlockerPath};->isLiveAvatarButton:Z",
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-                
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        "\"PLAYBACK_START_DESCRIPTOR_MUTATOR\"",
-                        "\"VideoPresenterConstants.VIDEO_THUMBNAIL_VIEW_KEY\"",
-                        "\"VideoPresenterConstants.VIDEO_THUMBNAIL_DETAILS_KEY\"",
-                        "\"VideoPresenterConstants.VIDEO_THUMBNAIL_BITMAP_KEY\"",
-                        "invoke-virtual",
-                        "Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;",
-                        "move-result-object",
-                        "\"PlaybackStartDescriptor:\\n  VideoId:%s\\n  PlaylistId:%s\\n  Index:%d\\n  VideoIds:%s\"",
-                        "invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;",
-                        "invoke-virtual",
-                        "()Ljava/lang/String;"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1],
-                                xmlSmaliSearchKeys[2],
-                                xmlSmaliSearchKeys[3]
-                            }.All(xmlSmaliProperties.Full.Contains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[0]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[4],
-                                                xmlSmaliSearchKeys[5]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
-                                            {
-                                                if (new[] {
-                                                        xmlSmaliSearchKeys[6]
-                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
-                                                {
-                                                    xmlSmaliProperties.ReadXMLSmaliNewLines("\\com\\google\\android\\libraries\\youtube\\player\\model\\PlaybackStartDescriptor");
-
-                                                    for (int l = 0; l < xmlSmaliProperties.NewLinesCount; l++)
-                                                    {
-                                                        if (new[] {
-                                                                xmlSmaliSearchKeys[7]
-                                                            }.All(xmlSmaliProperties.NewLines[l].Contains))
-                                                        {
-                                                            for (int m = l; m >= scaleIndex.NewLines(l, -97); m--)
-                                                            {
-                                                                if (new[] {
-                                                                        xmlSmaliSearchKeys[8]
-                                                                    }.All(xmlSmaliProperties.NewLines[m].Contains))
-                                                                {
-                                                                    for (int n = m; n <= scaleIndex.NewLines(m, 9); n++)
-                                                                    {
-                                                                        if (new[] {
-                                                                                xmlSmaliSearchKeys[9],
-                                                                                xmlSmaliSearchKeys[10]
-                                                                            }.All(xmlSmaliProperties.NewLines[n].Contains))
-                                                                        {
-                                                                            string freeConstStringRegister = xmlSmaliProperties.Lines[i].GetRegister(1);
-
-                                                                            codeInject.Lines(
-                                                                                [
-                                                                                    (("", true),
-
-                                                                                    i,
-
-                                                                                    [
-                                                                                        $"sget-boolean {freeConstStringRegister}, L{uBlockerPath};->isLiveAvatarButton:Z",
-                                                                                        $"if-eqz {freeConstStringRegister}, :live_avatar_button_check",
-                                                                                        $"invoke-virtual {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;->{xmlSmaliProperties.NewLines[n].GetMethodName<string>() as string}()Ljava/lang/String;",
-                                                                                        $"move-result-object {freeConstStringRegister}",
-                                                                                        $"invoke-static {{{freeConstStringRegister}}}, L{uBlockerPath};->OpenChannelOfLiveAvatar(Ljava/lang/String;)V",
-                                                                                        $"const/4 {freeConstStringRegister}, 0x0",
-                                                                                        $"sput-boolean {freeConstStringRegister}, L{uBlockerPath};->isLiveAvatarButton:Z",
-                                                                                        "return-void",
-                                                                                        ":live_avatar_button_check"
-                                                                                    ])
-                                                                                ]
-                                                                            ).Write();
-
-                                                                            return (patchInteractions, false, xmlSmaliInfo);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply
-            ];
-        }
-
         public static List<bool> Live_Chat_Elements_Removal()
         {
             return [
@@ -3812,7 +3632,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    (("Subscribers Shelf", true),
+                                                    (("Donators Shelf", true),
 
                                                     j,
 
@@ -3836,7 +3656,6 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex("layout", "engagement_panel_title_header"),
-                        "Lcom/google/protos/youtube/api/innertube/FilterChipBarElementRendererOuterClass$FilterChipBarElementRenderer;",
                         "Landroid/widget/ImageView;->setImageResource(I)V",
                         SmaliUtils.GetResourceHex("drawable", "yt_outline_adjust_black_24")
                     ],
@@ -3852,9 +3671,7 @@
                         xmlSmaliInfo
                     ) => {
                         if (new[] {
-                                xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1],
-                                xmlSmaliSearchKeys[2]
+                                xmlSmaliSearchKeys[0]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -3862,7 +3679,7 @@
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
                                 if (new[] {
-                                        xmlSmaliSearchKeys[2]
+                                        xmlSmaliSearchKeys[1]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
                                     codeInject.Lines(
@@ -3872,7 +3689,7 @@
                                             i + 1,
 
                                             [
-                                                $"const v0, {xmlSmaliSearchKeys[3]}",
+                                                $"const v0, {xmlSmaliSearchKeys[2]}",
                                                 $"if-eq {xmlSmaliProperties.Lines[i].GetRegister(2)}, v0, :leave_only_filtering_button",
                                                 $"invoke-static {{{xmlSmaliProperties.Lines[i].GetRegister(1)}}}, L{uUtilsPath};->HideImageView(Landroid/widget/ImageView;)V",
                                                 ":leave_only_filtering_button"
@@ -3948,6 +3765,194 @@
                                                     ).Write();
 
                                                     return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply
+            ];
+        }
+
+        public static List<bool> Long_Press_To_Open_Video_Channel()
+        {
+            return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("id", "component_touch_listener"),
+                        "iget-object",
+                        "Lcom/facebook/litho/ComponentHost;->",
+                        " onTouch("
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1],
+                                                xmlSmaliSearchKeys[2]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            xmlSmaliProperties.ReadXMLSmaliNewLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(2));
+
+                                            for (int k = 0; k < xmlSmaliProperties.NewLinesCount; k++)
+                                            {
+                                                if (new[] {
+                                                        xmlSmaliSearchKeys[3]
+                                                    }.All(xmlSmaliProperties.NewLines[k].Contains))
+                                                {
+                                                    codeInject.NewLines(
+                                                        [
+                                                            (("", true),
+
+                                                            k + 2,
+
+                                                            [
+                                                                $"invoke-static {{p2}}, L{uUtilsPath};->SetLithoActionDownDuration(Landroid/view/MotionEvent;)V",
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+                
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        "\"PLAYBACK_START_DESCRIPTOR_MUTATOR\"",
+                        "\"VideoPresenterConstants.VIDEO_THUMBNAIL_VIEW_KEY\"",
+                        "\"VideoPresenterConstants.VIDEO_THUMBNAIL_DETAILS_KEY\"",
+                        "\"VideoPresenterConstants.VIDEO_THUMBNAIL_BITMAP_KEY\"",
+                        "invoke-virtual",
+                        "Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;",
+                        "move-result-object",
+                        "\"PlaybackStartDescriptor:\\n  VideoId:%s\\n  PlaylistId:%s\\n  Index:%d\\n  VideoIds:%s\"",
+                        "invoke-static {}, Ljava/util/Locale;->getDefault()Ljava/util/Locale;",
+                        "invoke-virtual",
+                        "()Ljava/lang/String;"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1],
+                                xmlSmaliSearchKeys[2],
+                                xmlSmaliSearchKeys[3]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[4],
+                                                xmlSmaliSearchKeys[5]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
+                                            {
+                                                if (new[] {
+                                                        xmlSmaliSearchKeys[6]
+                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
+                                                {
+                                                    xmlSmaliProperties.ReadXMLSmaliNewLines("\\com\\google\\android\\libraries\\youtube\\player\\model\\PlaybackStartDescriptor");
+
+                                                    for (int l = 0; l < xmlSmaliProperties.NewLinesCount; l++)
+                                                    {
+                                                        if (new[] {
+                                                                xmlSmaliSearchKeys[7]
+                                                            }.All(xmlSmaliProperties.NewLines[l].Contains))
+                                                        {
+                                                            for (int m = l; m >= scaleIndex.NewLines(l, -97); m--)
+                                                            {
+                                                                if (new[] {
+                                                                        xmlSmaliSearchKeys[8]
+                                                                    }.All(xmlSmaliProperties.NewLines[m].Contains))
+                                                                {
+                                                                    for (int n = m; n <= scaleIndex.NewLines(m, 9); n++)
+                                                                    {
+                                                                        if (new[] {
+                                                                                xmlSmaliSearchKeys[9],
+                                                                                xmlSmaliSearchKeys[10]
+                                                                            }.All(xmlSmaliProperties.NewLines[n].Contains))
+                                                                        {
+                                                                            string freeConstStringRegister = xmlSmaliProperties.Lines[i].GetRegister(1);
+
+                                                                            codeInject.Lines(
+                                                                                [
+                                                                                    (("", true),
+
+                                                                                    i,
+
+                                                                                    [
+                                                                                        $"invoke-virtual {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;->{xmlSmaliProperties.NewLines[n].GetMethodName<string>() as string}()Ljava/lang/String;",
+                                                                                        $"move-result-object {freeConstStringRegister}",
+                                                                                        $"invoke-static {{{freeConstStringRegister}}}, L{uBlockerPath};->OpenVideoChannel(Ljava/lang/String;)Z",
+                                                                                        $"move-result {freeConstStringRegister}",
+                                                                                        $"if-eqz {freeConstStringRegister}, :open_video_channel",
+                                                                                        "return-void",
+                                                                                        ":open_video_channel"
+                                                                                    ])
+                                                                                ]
+                                                                            ).Write();
+
+                                                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -5747,6 +5752,142 @@
             ];
         }
 
+        public static List<bool> Open_Closed_Comments_Panel_Set()
+        {
+            return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("layout", "engagement_panel_title_header"),
+                        "Landroid/widget/ImageView;->setImageResource(I)V",
+                        ".method"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[1]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j >= 0; j--)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[2]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            if (patchInteractions < 3) {
+                                                patchInteractions++;
+                                            }
+                                            if (patchInteractions == 3) {
+                                                codeInject.Lines(
+                                                    [
+                                                        (("", true),
+
+                                                        j + 2,
+
+                                                        [
+                                                            "const/4 v0, 0x1",
+                                                            $"sput-boolean v0, L{uUtilsPath};->isCommentsPanelOpen:Z"
+                                                        ])
+                                                    ]
+                                                ).Write();
+
+                                                return (0, false, xmlSmaliInfo);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+                
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("layout", "engagement_panel_title_header"),
+                        "Ljava/util/Iterator;->hasNext()Z",
+                        ".method"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j <= xmlSmaliProperties.LinesCount; j++)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            for (int k = j; k >= 0; k--)
+                                            {
+                                                if (new[] {
+                                                        xmlSmaliSearchKeys[2]
+                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
+                                                {
+                                                    codeInject.Lines(
+                                                        [
+                                                            (("", true),
+
+                                                            k + 2,
+
+                                                            [
+                                                                "const/4 v0, 0x0",
+                                                                $"sput-boolean v0, L{uUtilsPath};->isCommentsPanelOpen:Z"
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply
+            ];
+        }
+        
         public static List<bool> Player_Type_Set()
         {
             return [

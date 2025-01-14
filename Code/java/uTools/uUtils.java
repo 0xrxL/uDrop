@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -50,6 +51,8 @@ public class uUtils {
         return currentPlayerID.startsWith("8AEB");
     }
 
+    enum EnumInitialization { NONE }
+
     public static Context appContext;
     public static Context GetAppContext() {
         if (appContext == null) {
@@ -63,6 +66,18 @@ public class uUtils {
 
     public static String GetCurrentStreamClientName() { return statsForNerdsClientName; }
 
+    private static long lithoActionDownStartTime = 0;
+    public static long lithoActionDownDuration = 0;
+    public static void SetLithoActionDownDuration(MotionEvent motionEvent) {
+        switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_DOWN ->
+                lithoActionDownStartTime = System.currentTimeMillis();
+
+            case MotionEvent.ACTION_UP ->
+                lithoActionDownDuration = System.currentTimeMillis() - lithoActionDownStartTime;
+        }
+    }
+
     private static Activity mainActivity;
     public static Activity GetMainActivity() {
         if (mainActivity == null) {
@@ -74,7 +89,7 @@ public class uUtils {
         }
     }
 
-    public static Enum<?> playerType;
+    public static Enum<?> playerType = EnumInitialization.NONE;
     public static Enum<?> GetPlayerType() {
         if (playerType == null) {
             Log.e("uPlayerType", "Player Type is null");
@@ -84,6 +99,8 @@ public class uUtils {
             return playerType;
         }
     }
+
+    public static boolean isCommentsPanelOpen = false;
 
     public static void SetNavBarIndexByMainActivity() {
         try {
@@ -176,8 +193,8 @@ public class uUtils {
         mainActivityRef = new WeakReference<>(activity);
     }
 
-    public static void SetSystemTheme(Enum<?> e) {
-        isDarkTheme = Integer.valueOf(e.ordinal()).equals(1);
+    public static void SetSystemTheme(Enum<?> value) {
+        isDarkTheme = Integer.valueOf(value.ordinal()).equals(1);
     }
     public static void SetAppTheme(boolean value) {
         isDarkTheme = value;

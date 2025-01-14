@@ -17,18 +17,18 @@
     .locals 3
     .param p0, "value"    # Landroid/view/View;
 
-    .line 275
+    .line 276
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 276
+    .line 277
     .local v0, "parent":Ljava/lang/Object;
     const-string v1, "uView"
 
     if-eqz v0, :cond_0
 
-    .line 277
+    .line 278
     move-object v2, v0
 
     check-cast v2, Landroid/view/View;
@@ -45,7 +45,7 @@
 
     goto :goto_0
 
-    .line 279
+    .line 280
     :cond_0
     const/4 v2, 0x0
 
@@ -55,7 +55,7 @@
 
     invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 281
+    .line 282
     :goto_0
     return-void
 .end method
@@ -64,18 +64,18 @@
     .locals 3
     .param p0, "value"    # Landroid/view/View;
 
-    .line 284
+    .line 285
     invoke-virtual {p0}, Landroid/view/View;->getParent()Landroid/view/ViewParent;
 
     move-result-object v0
 
-    .line 285
+    .line 286
     .local v0, "parent":Landroid/view/ViewParent;
     const-string v1, "uView"
 
     if-eqz v0, :cond_0
 
-    .line 286
+    .line 287
     invoke-interface {v0}, Landroid/view/ViewParent;->toString()Ljava/lang/String;
 
     move-result-object v2
@@ -84,13 +84,13 @@
 
     goto :goto_0
 
-    .line 288
+    .line 289
     :cond_0
     const-string v2, "-- null --"
 
     invoke-static {v1, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 290
+    .line 291
     :goto_0
     return-void
 .end method
@@ -635,70 +635,72 @@
 .end method
 
 .method public static PrintLongWithMethod(J)V
-    .locals 4
+    .locals 5
     .param p0, "value"    # J
 
     .line 173
     const-string v0, "uLong"
 
-    .line 175
+    .line 174
     .local v0, "message":Ljava/lang/String;
-    invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
-
-    move-result-object v1
-
-    invoke-virtual {v1}, Ljava/lang/Thread;->getStackTrace()[Ljava/lang/StackTraceElement;
+    invoke-static {p0, p1}, Ljava/lang/String;->valueOf(J)Ljava/lang/String;
 
     move-result-object v1
 
     .line 176
-    .local v1, "stackTraceElements":[Ljava/lang/StackTraceElement;
-    array-length v2, v1
-
-    const/4 v3, 0x3
-
-    if-le v2, v3, :cond_0
-
-    .line 177
-    aget-object v2, v1, v3
-
-    .line 183
-    invoke-virtual {v2}, Ljava/lang/StackTraceElement;->toString()Ljava/lang/String;
+    .local v1, "strValue":Ljava/lang/String;
+    invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 
     move-result-object v2
 
-    const-string v3, "\n"
-
-    filled-new-array {v2, v3}, [Ljava/lang/Object;
-
-    move-result-object v2
-
-    .line 180
-    const-string v3, "Called from method: %s%s"
-
-    invoke-static {v3, v2}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+    invoke-virtual {v2}, Ljava/lang/Thread;->getStackTrace()[Ljava/lang/StackTraceElement;
 
     move-result-object v2
 
     .line 177
-    invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+    .local v2, "stackTraceElements":[Ljava/lang/StackTraceElement;
+    array-length v3, v2
 
-    .line 189
-    :cond_0
-    invoke-static {p0, p1}, Ljava/lang/String;->valueOf(J)Ljava/lang/String;
+    const/4 v4, 0x3
 
-    move-result-object v2
+    if-le v3, v4, :cond_0
 
-    invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+    .line 178
+    aget-object v3, v2, v4
+
+    .line 184
+    invoke-virtual {v3}, Ljava/lang/StackTraceElement;->toString()Ljava/lang/String;
+
+    move-result-object v3
+
+    const-string v4, "\n"
+
+    filled-new-array {v3, v4}, [Ljava/lang/Object;
+
+    move-result-object v3
+
+    .line 181
+    const-string v4, "Called from method: %s%s"
+
+    invoke-static {v4, v3}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+
+    move-result-object v3
+
+    .line 178
+    invoke-static {v0, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     .line 190
+    :cond_0
+    invoke-static {v0, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
+
+    .line 191
     return-void
 .end method
 
 .method public static PrintMethod()V
     .locals 3
 
-    .line 241
+    .line 242
     invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 
     move-result-object v0
@@ -707,7 +709,7 @@
 
     move-result-object v0
 
-    .line 242
+    .line 243
     .local v0, "stackTraceElements":[Ljava/lang/StackTraceElement;
     array-length v1, v0
 
@@ -715,10 +717,10 @@
 
     if-le v1, v2, :cond_0
 
-    .line 243
+    .line 244
     aget-object v1, v0, v2
 
-    .line 249
+    .line 250
     invoke-virtual {v1}, Ljava/lang/StackTraceElement;->toString()Ljava/lang/String;
 
     move-result-object v1
@@ -729,19 +731,19 @@
 
     move-result-object v1
 
-    .line 246
+    .line 247
     const-string v2, "Called from method: %s%s"
 
     invoke-static {v2, v1}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v1
 
-    .line 243
+    .line 244
     const-string v2, "uMethod"
 
     invoke-static {v2, v1}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 254
+    .line 255
     :cond_0
     return-void
 .end method
@@ -749,10 +751,10 @@
 .method public static PrintStackTrace()V
     .locals 7
 
-    .line 257
+    .line 258
     const-string v0, "uStackTrace"
 
-    .line 259
+    .line 260
     .local v0, "message":Ljava/lang/String;
     invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 
@@ -762,7 +764,7 @@
 
     move-result-object v1
 
-    .line 260
+    .line 261
     .local v1, "stackTraceElements":[Ljava/lang/StackTraceElement;
     array-length v2, v1
 
@@ -773,16 +775,16 @@
 
     aget-object v4, v1, v3
 
-    .line 261
+    .line 262
     .local v4, "stackTraceElement":Ljava/lang/StackTraceElement;
     nop
 
-    .line 267
+    .line 268
     invoke-virtual {v4}, Ljava/lang/StackTraceElement;->getClassName()Ljava/lang/String;
 
     move-result-object v5
 
-    .line 268
+    .line 269
     invoke-virtual {v4}, Ljava/lang/StackTraceElement;->getMethodName()Ljava/lang/String;
 
     move-result-object v6
@@ -791,23 +793,23 @@
 
     move-result-object v5
 
-    .line 264
+    .line 265
     const-string v6, "Class name: %s - Method name: %s"
 
     invoke-static {v6, v5}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v5
 
-    .line 261
+    .line 262
     invoke-static {v0, v5}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 260
+    .line 261
     .end local v4    # "stackTraceElement":Ljava/lang/StackTraceElement;
     add-int/lit8 v3, v3, 0x1
 
     goto :goto_0
 
-    .line 272
+    .line 273
     :cond_0
     return-void
 .end method
@@ -816,10 +818,10 @@
     .locals 4
     .param p0, "value"    # Ljava/lang/StringBuilder;
 
-    .line 217
+    .line 218
     const-string v0, "uStringBuilder"
 
-    .line 219
+    .line 220
     .local v0, "message":Ljava/lang/String;
     invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 
@@ -829,7 +831,7 @@
 
     move-result-object v1
 
-    .line 220
+    .line 221
     .local v1, "stackTraceElements":[Ljava/lang/StackTraceElement;
     array-length v2, v1
 
@@ -837,10 +839,10 @@
 
     if-le v2, v3, :cond_0
 
-    .line 221
+    .line 222
     aget-object v2, v1, v3
 
-    .line 227
+    .line 228
     invoke-virtual {v2}, Ljava/lang/StackTraceElement;->toString()Ljava/lang/String;
 
     move-result-object v2
@@ -851,17 +853,17 @@
 
     move-result-object v2
 
-    .line 224
+    .line 225
     const-string v3, "Called from method: %s%s"
 
     invoke-static {v3, v2}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v2
 
-    .line 221
+    .line 222
     invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 233
+    .line 234
     :cond_0
     if-eqz p0, :cond_1
 
@@ -871,7 +873,7 @@
 
     if-lez v2, :cond_1
 
-    .line 234
+    .line 235
     invoke-virtual {p0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
 
     move-result-object v2
@@ -880,13 +882,13 @@
 
     goto :goto_0
 
-    .line 236
+    .line 237
     :cond_1
     const-string v2, "-- null --"
 
     invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 238
+    .line 239
     :goto_0
     return-void
 .end method
@@ -895,10 +897,10 @@
     .locals 4
     .param p0, "value"    # Ljava/lang/String;
 
-    .line 193
+    .line 194
     const-string v0, "uString"
 
-    .line 195
+    .line 196
     .local v0, "message":Ljava/lang/String;
     invoke-static {}, Ljava/lang/Thread;->currentThread()Ljava/lang/Thread;
 
@@ -908,7 +910,7 @@
 
     move-result-object v1
 
-    .line 196
+    .line 197
     .local v1, "stackTraceElements":[Ljava/lang/StackTraceElement;
     array-length v2, v1
 
@@ -916,10 +918,10 @@
 
     if-le v2, v3, :cond_0
 
-    .line 197
+    .line 198
     aget-object v2, v1, v3
 
-    .line 203
+    .line 204
     invoke-virtual {v2}, Ljava/lang/StackTraceElement;->toString()Ljava/lang/String;
 
     move-result-object v2
@@ -930,17 +932,17 @@
 
     move-result-object v2
 
-    .line 200
+    .line 201
     const-string v3, "Called from method: %s%s"
 
     invoke-static {v3, v2}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
 
     move-result-object v2
 
-    .line 197
+    .line 198
     invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 209
+    .line 210
     :cond_0
     if-eqz p0, :cond_1
 
@@ -950,18 +952,18 @@
 
     if-nez v2, :cond_1
 
-    .line 210
+    .line 211
     invoke-static {v0, p0}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
     goto :goto_0
 
-    .line 212
+    .line 213
     :cond_1
     const-string v2, "-- null --"
 
     invoke-static {v0, v2}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 214
+    .line 215
     :goto_0
     return-void
 .end method

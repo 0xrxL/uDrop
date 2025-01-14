@@ -2,12 +2,15 @@ package uTools;
 
 import static uTools.uUtils.ByteBufferContainsString;
 import static uTools.uUtils.CheckDarkTheme;
+import static uTools.uUtils.EnumInitialization;
 import static uTools.uUtils.GetMainActivityContext;
 import static uTools.uUtils.GetPlayerType;
 import static uTools.uUtils.HideView;
 import static uTools.uUtils.HideViewByLinearLayoutParams;
 import static uTools.uUtils.HideViewGroupByLayoutParams;
 import static uTools.uUtils.HideViewGroupByMarginLayout;
+import static uTools.uUtils.isCommentsPanelOpen;
+import static uTools.uUtils.lithoActionDownDuration;
 
 import android.app.Activity;
 import android.content.Context;
@@ -144,15 +147,13 @@ public class uBlocker {
                             "horizontal_shelf."
                         )
                         .anyMatch(strTemplateTreeComponents::contains)) {
-                            try {
-                                if (Stream.of(
-                                        "WATCH_WHILE_FULLSCREEN",
-                                        "WATCH_WHILE_MAXIMIZED"
-                                    )
-                                    .anyMatch(GetPlayerType().name()::equals)) {
-                                        currentNavBarIndex = 0;
-                                }
-                            } catch (Exception ignore) {}
+                            if (Stream.of(
+                                    "WATCH_WHILE_FULLSCREEN",
+                                    "WATCH_WHILE_MAXIMIZED"
+                                )
+                                .anyMatch(GetPlayerType().name()::equals)) {
+                                    currentNavBarIndex = 0;
+                            }
 
                             return currentNavBarIndex != libraryNavButtonIndex;
             }
@@ -329,7 +330,7 @@ public class uBlocker {
         } catch (Exception ignored) {}
     }
 
-    public static Enum<?> navigationBarPivot;
+    public static Enum<?> navigationBarPivot = EnumInitialization.NONE;
     public static void HideNavigationbarButtons(View view) {
         try {
             if (Stream.of(
@@ -344,7 +345,7 @@ public class uBlocker {
         return str.isEmpty();
     }
 
-    public static Enum<?> topBarPivot;
+    public static Enum<?> topBarPivot = EnumInitialization.NONE;
     public static void HideTopbarButtons(View view) {
         try {
             if (Stream.of(
@@ -356,64 +357,65 @@ public class uBlocker {
         } catch (Exception ignored) {}
     }
 
-    public static Uri OverrideTrackingUrl(Uri trackingUrl) {
-        return trackingUrl.buildUpon().authority("www.youtube.com").build();
-    }
-
     static {
         NewPipe.init(uDownloader.init(new OkHttpClient.Builder()));
     }
-    public static boolean isLiveAvatarButton = false;
-    private static Thread bypassLiveAvatarThread = null;
-    public static void OpenChannelOfLiveAvatar(String videoID) {
-        if (bypassLiveAvatarThread == null) {
-            bypassLiveAvatarThread = new Thread(() -> {
-                try {
-                    boolean stopThread;
+    private static Thread openVideoChannelThread = null;
+    public static boolean OpenVideoChannel(String videoID) {
+        if (openVideoChannelThread == null) {
+            if (!isCommentsPanelOpen && lithoActionDownDuration >= 1000) {
+                openVideoChannelThread = new Thread(() -> {
+                    try {
+                        boolean stopVideoChannelThread;
 
-                    while (!bypassLiveAvatarThread.isInterrupted()) {
-                        try {
-                            uUtils.ShowToastLong("Bypassing Live Avatar Intent...");
+                        while (!openVideoChannelThread.isInterrupted()) {
+                            try {
+                                uUtils.ShowToastLong("Opening video channel...");
 
-                            Context context = GetMainActivityContext();
+                                Context context = GetMainActivityContext();
 
-                            Intent openLiveChannelIntent = new Intent(
-                                Intent.ACTION_VIEW,
+                                Intent openLiveChannelIntent = new Intent(
+                                    Intent.ACTION_VIEW,
 
-                                Uri.parse(
-                                    StreamInfo.getInfo(
-                                        String.format(
-                                            "https://www.youtube.com/watch?v=%s",
+                                    Uri.parse(
+                                        StreamInfo.getInfo(
+                                            String.format(
+                                                "https://www.youtube.com/watch?v=%s",
 
-                                            videoID
+                                                videoID
+                                            )
                                         )
+                                        .getUploaderUrl()
                                     )
-                                    .getUploaderUrl()
-                                )
-                            );
-                            openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            openLiveChannelIntent.setPackage(context.getPackageName());
+                                );
+                                openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                openLiveChannelIntent.setPackage(context.getPackageName());
 
-                            context.startActivity(openLiveChannelIntent);
+                                context.startActivity(openLiveChannelIntent);
 
-                            stopThread = true;
-                        } catch (Exception ignore) {
-                            uUtils.ShowToastLong("Error: Failed to Bypass Live Avatar Intent");
+                                stopVideoChannelThread = true;
+                            } catch (Exception ignore) {
+                                uUtils.ShowToastLong("Error: Failed to open video channel");
 
-                            stopThread = true;
+                                stopVideoChannelThread = true;
+                            }
+
+                            if (stopVideoChannelThread) {
+                                openVideoChannelThread.interrupt();
+                            }
                         }
-
-                        if (stopThread) {
-                            bypassLiveAvatarThread.interrupt();
-                        }
+                    } finally {
+                        openVideoChannelThread = null;
                     }
-                } finally {
-                    bypassLiveAvatarThread = null;
-                }
-            });
+                });
 
-            bypassLiveAvatarThread.start();
+                openVideoChannelThread.start();
+
+                return true;
+            }
         }
+
+        return false;
     }
 
     public static void OpenVideoResolutionsFlyout(RecyclerView recyclerView) {
@@ -427,6 +429,10 @@ public class uBlocker {
                 }
             } catch (Exception ignored) {}
         });
+    }
+
+    public static Uri OverrideTrackingUrl(Uri trackingUrl) {
+        return trackingUrl.buildUpon().authority("www.youtube.com").build();
     }
 
     public static boolean ShortsPlayerBypassing(String shortsVideoID) {
