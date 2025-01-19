@@ -30,7 +30,7 @@
     .line 0
     iget-object v0, p0, LuTools/uUtils$$ExternalSyntheticLambda1;->f$0:Ljava/lang/Runnable;
 
-    invoke-static {v0}, LuTools/uUtils;->lambda$RunOnMainThreadDelayed$0(Ljava/lang/Runnable;)V
+    invoke-static {v0}, LuTools/uUtils;->lambda$RunOnMainThreadDelayed$1(Ljava/lang/Runnable;)V
 
     return-void
 .end method

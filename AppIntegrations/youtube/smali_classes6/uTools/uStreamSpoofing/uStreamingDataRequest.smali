@@ -73,12 +73,12 @@
 
     sput-object v0, LuTools/uStreamSpoofing/uStreamingDataRequest;->Cache:Ljava/util/Map;
 
-    .line 44
+    .line 43
     invoke-static {}, LuTools/uStreamSpoofing/uClientType;->values()[LuTools/uStreamSpoofing/uClientType;
 
     move-result-object v0
 
-    .line 46
+    .line 45
     .local v0, "clientTypes":[LuTools/uStreamSpoofing/uClientType;
     new-instance v1, Ljava/util/ArrayList;
 
@@ -98,7 +98,7 @@
 
     aput-object v3, v2, v5
 
-    .line 47
+    .line 46
     invoke-static {v2}, Ljava/util/Arrays;->asList([Ljava/lang/Object;)Ljava/util/List;
 
     move-result-object v2
@@ -107,7 +107,7 @@
 
     sput-object v1, LuTools/uStreamSpoofing/uStreamingDataRequest;->CLIENT_TYPES_ORDER_TO_USE:Ljava/util/List;
 
-    .line 54
+    .line 53
     array-length v1, v0
 
     :goto_0
@@ -115,7 +115,7 @@
 
     aget-object v2, v0, v4
 
-    .line 55
+    .line 54
     .local v2, "clientType":LuTools/uStreamSpoofing/uClientType;
     sget-object v3, LuTools/uStreamSpoofing/uStreamingDataRequest;->CLIENT_TYPES_ORDER_TO_USE:Ljava/util/List;
 
@@ -135,29 +135,29 @@
 
     if-eqz v3, :cond_0
 
-    .line 56
+    .line 55
     sget-object v3, LuTools/uStreamSpoofing/uStreamingDataRequest;->CLIENT_TYPES_ORDER_TO_USE:Ljava/util/List;
 
     sget-object v6, LuTools/uStreamSpoofing/uStreamingDataRequest;->CLIENT_TYPES_ORDER_TO_USE:Ljava/util/List;
 
-    .line 57
+    .line 56
     invoke-interface {v6}, Ljava/util/List;->size()I
 
     move-result v6
 
     sub-int/2addr v6, v5
 
-    .line 56
+    .line 55
     invoke-interface {v3, v6, v2}, Ljava/util/List;->add(ILjava/lang/Object;)V
 
-    .line 54
+    .line 53
     .end local v2    # "clientType":LuTools/uStreamSpoofing/uClientType;
     :cond_0
     add-int/lit8 v4, v4, 0x1
 
     goto :goto_0
 
-    .line 65
+    .line 64
     .end local v0    # "clientTypes":[LuTools/uStreamSpoofing/uClientType;
     :cond_1
     const-string v0, ""
@@ -221,7 +221,7 @@
         }
     .end annotation
 
-    .line 67
+    .line 66
     .local p1, "playerHeaders":Ljava/util/Map;, "Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;"
     sget-object v0, LuTools/uStreamSpoofing/uStreamingDataRequest;->CLIENT_TYPES_ORDER_TO_USE:Ljava/util/List;
 
@@ -242,7 +242,7 @@
 
     check-cast v1, LuTools/uStreamSpoofing/uClientType;
 
-    .line 68
+    .line 67
     .local v1, "clientType":LuTools/uStreamSpoofing/uClientType;
     const-string v2, "uStreamingDataRequest"
 
@@ -252,26 +252,26 @@
 
     invoke-static {v2, v3}, Landroid/util/Log;->d(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 70
+    .line 69
     invoke-static {v1, p0, p1}, LuTools/uStreamSpoofing/uStreamingDataRequest;->Send(LuTools/uStreamSpoofing/uClientType;Ljava/lang/String;Ljava/util/Map;)Ljava/net/HttpURLConnection;
 
     move-result-object v2
 
-    .line 71
+    .line 70
     .local v2, "connection":Ljava/net/HttpURLConnection;
     if-eqz v2, :cond_2
 
-    .line 73
+    .line 72
     :try_start_0
     invoke-virtual {v2}, Ljava/net/HttpURLConnection;->getContentLength()I
 
     move-result v3
 
-    .line 74
+    .line 73
     .local v3, "contentLength":I
     if-eqz v3, :cond_1
 
-    .line 76
+    .line 75
     new-instance v4, Ljava/io/BufferedInputStream;
 
     invoke-virtual {v2}, Ljava/net/HttpURLConnection;->getInputStream()Ljava/io/InputStream;
@@ -282,7 +282,7 @@
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 77
+    .line 76
     .local v4, "inputStream":Ljava/io/InputStream;
     :try_start_1
     new-instance v5, Ljava/io/ByteArrayOutputStream;
@@ -297,12 +297,12 @@
     :try_end_1
     .catchall {:try_start_1 .. :try_end_1} :catchall_2
 
-    .line 79
+    .line 78
     .local v5, "bAOS":Ljava/io/ByteArrayOutputStream;
     :try_start_2
     new-array v6, v6, [B
 
-    .line 82
+    .line 81
     .local v6, "buffer":[B
     :goto_1
     invoke-virtual {v4, v6}, Ljava/io/InputStream;->read([B)I
@@ -314,14 +314,14 @@
     .local v8, "bytesRead":I
     if-ltz v7, :cond_0
 
-    .line 83
+    .line 82
     const/4 v7, 0x0
 
     invoke-virtual {v5, v6, v7, v8}, Ljava/io/ByteArrayOutputStream;->write([BII)V
 
     goto :goto_1
 
-    .line 86
+    .line 85
     :cond_0
     const-string v7, " (%s)"
 
@@ -339,7 +339,7 @@
 
     sput-object v7, LuTools/uStreamSpoofing/uStreamingDataRequest;->statsForNerdsClientName:Ljava/lang/String;
 
-    .line 88
+    .line 87
     invoke-virtual {v5}, Ljava/io/ByteArrayOutputStream;->toByteArray()[B
 
     move-result-object v7
@@ -350,7 +350,7 @@
     :try_end_2
     .catchall {:try_start_2 .. :try_end_2} :catchall_0
 
-    .line 89
+    .line 88
     :try_start_3
     invoke-virtual {v5}, Ljava/io/ByteArrayOutputStream;->close()V
     :try_end_3
@@ -361,10 +361,10 @@
     :try_end_4
     .catch Ljava/lang/Exception; {:try_start_4 .. :try_end_4} :catch_0
 
-    .line 88
+    .line 87
     return-object v7
 
-    .line 75
+    .line 74
     .end local v6    # "buffer":[B
     .end local v8    # "bytesRead":I
     :catchall_0
@@ -426,7 +426,7 @@
     :try_end_8
     .catch Ljava/lang/Exception; {:try_start_8 .. :try_end_8} :catch_0
 
-    .line 74
+    .line 73
     .end local v3    # "contentLength":I
     .end local v4    # "inputStream":Ljava/io/InputStream;
     .restart local v1    # "clientType":LuTools/uStreamSpoofing/uClientType;
@@ -436,26 +436,26 @@
     :cond_1
     goto :goto_4
 
-    .line 91
+    .line 90
     :catch_0
     move-exception v3
 
     :goto_4
     nop
 
-    .line 93
+    .line 92
     .end local v1    # "clientType":LuTools/uStreamSpoofing/uClientType;
     .end local v2    # "connection":Ljava/net/HttpURLConnection;
     :cond_2
     goto :goto_0
 
-    .line 95
+    .line 94
     :cond_3
     const-string v0, " (Unknown)"
 
     sput-object v0, LuTools/uStreamSpoofing/uStreamingDataRequest;->statsForNerdsClientName:Ljava/lang/String;
 
-    .line 97
+    .line 96
     const/4 v0, 0x0
 
     return-object v0
@@ -475,7 +475,7 @@
         }
     .end annotation
 
-    .line 101
+    .line 100
     .local p1, "fetchHeaders":Ljava/util/Map;, "Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;"
     sget-object v0, LuTools/uStreamSpoofing/uStreamingDataRequest;->Cache:Ljava/util/Map;
 
@@ -485,7 +485,7 @@
 
     invoke-interface {v0, p0, v1}, Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 
-    .line 102
+    .line 101
     return-void
 .end method
 
@@ -493,7 +493,7 @@
     .locals 1
     .param p0, "videoId"    # Ljava/lang/String;
 
-    .line 106
+    .line 105
     sget-object v0, LuTools/uStreamSpoofing/uStreamingDataRequest;->Cache:Ljava/util/Map;
 
     invoke-interface {v0, p0}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
@@ -522,17 +522,17 @@
         }
     .end annotation
 
-    .line 121
+    .line 120
     .local p2, "playerHeaders":Ljava/util/Map;, "Ljava/util/Map<Ljava/lang/String;Ljava/lang/String;>;"
     invoke-static {p0}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
-    .line 122
+    .line 121
     invoke-static {p1}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
-    .line 123
+    .line 122
     invoke-static {p2}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
-    .line 126
+    .line 125
     :try_start_0
     sget-object v0, LuTools/uStreamSpoofing/uPlayerRoutes;->GET_STREAMING_DATA:LuTools/uStreamSpoofing/uRoute$CompiledRoute;
 
@@ -540,16 +540,16 @@
 
     move-result-object v0
 
-    .line 127
+    .line 129
     .local v0, "connection":Ljava/net/HttpURLConnection;
     const/16 v1, 0x2710
 
     invoke-virtual {v0, v1}, Ljava/net/HttpURLConnection;->setConnectTimeout(I)V
 
-    .line 128
+    .line 130
     invoke-virtual {v0, v1}, Ljava/net/HttpURLConnection;->setReadTimeout(I)V
 
-    .line 130
+    .line 132
     const-string v1, "Authorization"
 
     const-string v2, "X-GOOG-API-FORMAT-VERSION"
@@ -577,7 +577,7 @@
 
     check-cast v2, Ljava/lang/String;
 
-    .line 136
+    .line 138
     .local v2, "key":Ljava/lang/String;
     invoke-interface {p2, v2}, Ljava/util/Map;->get(Ljava/lang/Object;)Ljava/lang/Object;
 
@@ -585,34 +585,26 @@
 
     check-cast v3, Ljava/lang/String;
 
-    .line 137
+    .line 139
     .local v3, "value":Ljava/lang/String;
     if-eqz v3, :cond_0
 
-    .line 138
+    .line 140
     invoke-virtual {v0, v2, v3}, Ljava/net/HttpURLConnection;->setRequestProperty(Ljava/lang/String;Ljava/lang/String;)V
 
-    .line 140
+    .line 142
     .end local v2    # "key":Ljava/lang/String;
     .end local v3    # "value":Ljava/lang/String;
     :cond_0
     goto :goto_0
 
-    .line 142
+    .line 144
     :cond_1
-    invoke-static {p0}, LuTools/uStreamSpoofing/uPlayerRoutes;->CreateInnertubeBody(LuTools/uStreamSpoofing/uClientType;)Ljava/lang/String;
+    invoke-static {p0, p1}, LuTools/uStreamSpoofing/uPlayerRoutes;->CreateInnertubeBody(LuTools/uStreamSpoofing/uClientType;Ljava/lang/String;)Ljava/lang/String;
 
     move-result-object v1
 
-    filled-new-array {p1}, [Ljava/lang/Object;
-
-    move-result-object v2
-
-    invoke-static {v1, v2}, Ljava/lang/String;->format(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
-
-    move-result-object v1
-
-    .line 143
+    .line 145
     .local v1, "innerTubeBody":Ljava/lang/String;
     sget-object v2, Ljava/nio/charset/StandardCharsets;->UTF_8:Ljava/nio/charset/Charset;
 
@@ -620,36 +612,36 @@
 
     move-result-object v2
 
-    .line 144
+    .line 146
     .local v2, "requestBody":[B
     array-length v3, v2
 
     invoke-virtual {v0, v3}, Ljava/net/HttpURLConnection;->setFixedLengthStreamingMode(I)V
 
-    .line 145
+    .line 147
     invoke-virtual {v0}, Ljava/net/HttpURLConnection;->getOutputStream()Ljava/io/OutputStream;
 
     move-result-object v3
 
     invoke-virtual {v3, v2}, Ljava/io/OutputStream;->write([B)V
 
-    .line 147
+    .line 149
     invoke-virtual {v0}, Ljava/net/HttpURLConnection;->getResponseCode()I
 
     move-result v3
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 148
+    .line 150
     .local v3, "responseCode":I
     const/16 v4, 0xc8
 
     if-ne v3, v4, :cond_2
 
-    .line 149
+    .line 151
     return-object v0
 
-    .line 148
+    .line 150
     .end local v0    # "connection":Ljava/net/HttpURLConnection;
     .end local v1    # "innerTubeBody":Ljava/lang/String;
     .end local v2    # "requestBody":[B
@@ -657,14 +649,14 @@
     :cond_2
     goto :goto_1
 
-    .line 151
+    .line 153
     :catch_0
     move-exception v0
 
     :goto_1
     nop
 
-    .line 153
+    .line 155
     const/4 v0, 0x0
 
     return-object v0
@@ -693,7 +685,7 @@
 .method public GetStream()Ljava/nio/ByteBuffer;
     .locals 4
 
-    .line 112
+    .line 111
     :try_start_0
     iget-object v0, p0, LuTools/uStreamSpoofing/uStreamingDataRequest;->future:Ljava/util/concurrent/Future;
 
@@ -711,11 +703,11 @@
 
     return-object v0
 
-    .line 113
+    .line 112
     :catch_0
     move-exception v0
 
-    .line 115
+    .line 114
     const/4 v0, 0x0
 
     return-object v0
@@ -724,7 +716,7 @@
 .method public toString()Ljava/lang/String;
     .locals 2
 
-    .line 159
+    .line 161
     iget-object v0, p0, LuTools/uStreamSpoofing/uStreamingDataRequest;->videoId:Ljava/lang/String;
 
     filled-new-array {v0}, [Ljava/lang/Object;

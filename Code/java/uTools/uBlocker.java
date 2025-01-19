@@ -11,6 +11,8 @@ import static uTools.uUtils.HideViewGroupByLayoutParams;
 import static uTools.uUtils.HideViewGroupByMarginLayout;
 import static uTools.uUtils.isCommentsPanelOpen;
 import static uTools.uUtils.lithoActionDownDuration;
+import static uTools.VideoDetails.uVideoDetailsRequest.FetchRequestIfNeeded;
+import static uTools.VideoDetails.uVideoDetailsRequest.GetRequestForVideoId;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,13 +26,10 @@ import android.view.ViewParent;
 
 import com.google.android.apps.youtube.app.watchwhile.MainActivity;
 
-import org.schabi.newpipe.extractor.NewPipe;
-import org.schabi.newpipe.extractor.stream.StreamInfo;
-
 import java.nio.ByteBuffer;
 import java.util.stream.Stream;
 
-import okhttp3.OkHttpClient;
+import uTools.VideoDetails.uVideoDetailsRequest;
 
 @SuppressWarnings({
     "ConstantConditions",
@@ -357,16 +356,13 @@ public class uBlocker {
         } catch (Exception ignored) {}
     }
 
-    static {
-        NewPipe.init(uDownloader.init(new OkHttpClient.Builder()));
-    }
     private static Thread openVideoChannelThread = null;
     public static boolean OpenVideoChannel(String videoID) {
         if (openVideoChannelThread == null) {
             if (!isCommentsPanelOpen && lithoActionDownDuration >= 1000) {
                 openVideoChannelThread = new Thread(() -> {
                     try {
-                        boolean stopVideoChannelThread;
+                        boolean stopVideoChannelThread = false;
 
                         while (!openVideoChannelThread.isInterrupted()) {
                             try {
@@ -374,26 +370,37 @@ public class uBlocker {
 
                                 Context context = GetMainActivityContext();
 
-                                Intent openLiveChannelIntent = new Intent(
-                                    Intent.ACTION_VIEW,
+                                FetchRequestIfNeeded(videoID);
+                                uVideoDetailsRequest videoIDRequest = GetRequestForVideoId(videoID);
 
-                                    Uri.parse(
-                                        StreamInfo.getInfo(
-                                            String.format(
-                                                "https://www.youtube.com/watch?v=%s",
+                                if (videoIDRequest != null) {
+                                    String channelID = videoIDRequest.GetInfo();
 
-                                                videoID
+                                    if (channelID != null) {
+                                        Intent openLiveChannelIntent = new Intent(
+                                            Intent.ACTION_VIEW,
+
+                                            Uri.parse(
+                                                String.format(
+                                                    "%s%s",
+
+                                                    "https://www.youtube.com/channel/",
+                                                    channelID
+                                                )
                                             )
-                                        )
-                                        .getUploaderUrl()
-                                    )
-                                );
-                                openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                openLiveChannelIntent.setPackage(context.getPackageName());
+                                        );
+                                        openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        openLiveChannelIntent.setPackage(context.getPackageName());
 
-                                context.startActivity(openLiveChannelIntent);
+                                        context.startActivity(openLiveChannelIntent);
 
-                                stopVideoChannelThread = true;
+                                        stopVideoChannelThread = true;
+                                    } else {
+                                        throw new IllegalArgumentException();
+                                    }
+                                } else {
+                                    throw new IllegalArgumentException();
+                                }
                             } catch (Exception ignore) {
                                 uUtils.ShowToastLong("Error: Failed to open video channel");
 

@@ -14,6 +14,8 @@
 # static fields
 .field public static appContext:Landroid/content/Context;
 
+.field private static final backgroundThreadPool:Ljava/util/concurrent/ThreadPoolExecutor;
+
 .field public static currentPlayerID:Ljava/lang/String;
 
 .field public static isCommentsPanelOpen:Z
@@ -48,32 +50,57 @@
 
 # direct methods
 .method static constructor <clinit>()V
-    .locals 3
+    .locals 9
 
-    .line 44
+    .line 33
+    new-instance v8, Ljava/util/concurrent/ThreadPoolExecutor;
+
+    sget-object v5, Ljava/util/concurrent/TimeUnit;->SECONDS:Ljava/util/concurrent/TimeUnit;
+
+    new-instance v6, Ljava/util/concurrent/SynchronousQueue;
+
+    invoke-direct {v6}, Ljava/util/concurrent/SynchronousQueue;-><init>()V
+
+    new-instance v7, LuTools/uUtils$$ExternalSyntheticLambda2;
+
+    invoke-direct {v7}, LuTools/uUtils$$ExternalSyntheticLambda2;-><init>()V
+
+    const/4 v1, 0x3
+
+    const v2, 0x7fffffff
+
+    const-wide/16 v3, 0xa
+
+    move-object v0, v8
+
+    invoke-direct/range {v0 .. v7}, Ljava/util/concurrent/ThreadPoolExecutor;-><init>(IIJLjava/util/concurrent/TimeUnit;Ljava/util/concurrent/BlockingQueue;Ljava/util/concurrent/ThreadFactory;)V
+
+    sput-object v8, LuTools/uUtils;->backgroundThreadPool:Ljava/util/concurrent/ThreadPoolExecutor;
+
+    .line 61
     const/4 v0, 0x0
 
     sput-boolean v0, LuTools/uUtils;->isDarkTheme:Z
 
-    .line 49
+    .line 66
     const-string v1, ""
 
     sput-object v1, LuTools/uUtils;->currentPlayerID:Ljava/lang/String;
 
-    .line 69
+    .line 86
     const-wide/16 v1, 0x0
 
     sput-wide v1, LuTools/uUtils;->lithoActionDownStartTime:J
 
-    .line 70
+    .line 87
     sput-wide v1, LuTools/uUtils;->lithoActionDownDuration:J
 
-    .line 92
+    .line 109
     sget-object v1, LuTools/uUtils$EnumInitialization;->NONE:LuTools/uUtils$EnumInitialization;
 
     sput-object v1, LuTools/uUtils;->playerType:Ljava/lang/Enum;
 
-    .line 103
+    .line 120
     sput-boolean v0, LuTools/uUtils;->isCommentsPanelOpen:Z
 
     return-void
@@ -82,7 +109,7 @@
 .method public constructor <init>()V
     .locals 0
 
-    .line 27
+    .line 32
     invoke-direct {p0}, Ljava/lang/Object;-><init>()V
 
     return-void
@@ -93,18 +120,18 @@
     .param p0, "byteBuffer"    # Ljava/nio/ByteBuffer;
     .param p1, "str"    # Ljava/lang/String;
 
-    .line 29
+    .line 46
     invoke-virtual {p0}, Ljava/nio/ByteBuffer;->array()[B
 
     move-result-object v0
 
-    .line 30
+    .line 47
     .local v0, "bArrSource":[B
     invoke-virtual {p1}, Ljava/lang/String;->getBytes()[B
 
     move-result-object v1
 
-    .line 32
+    .line 49
     .local v1, "bArrTarget":[B
     const/4 v2, 0x0
 
@@ -118,35 +145,35 @@
 
     if-gt v2, v3, :cond_1
 
-    .line 33
+    .line 50
     array-length v3, v1
 
     add-int/2addr v3, v2
 
-    .line 34
+    .line 51
     invoke-static {v0, v2, v3}, Ljava/util/Arrays;->copyOfRange([BII)[B
 
     move-result-object v3
 
-    .line 33
+    .line 50
     invoke-static {v3, v1}, Ljava/util/Arrays;->equals([B[B)Z
 
     move-result v3
 
     if-eqz v3, :cond_0
 
-    .line 38
+    .line 55
     const/4 v3, 0x1
 
     return v3
 
-    .line 32
+    .line 49
     :cond_0
     add-int/lit8 v2, v2, 0x1
 
     goto :goto_0
 
-    .line 41
+    .line 58
     .end local v2    # "i":I
     :cond_1
     const/4 v2, 0x0
@@ -157,7 +184,7 @@
 .method public static CheckDarkTheme()Z
     .locals 1
 
-    .line 46
+    .line 63
     sget-boolean v0, LuTools/uUtils;->isDarkTheme:Z
 
     return v0
@@ -166,7 +193,7 @@
 .method public static CheckIsShortsPlayer()Z
     .locals 2
 
-    .line 51
+    .line 68
     sget-object v0, LuTools/uUtils;->currentPlayerID:Ljava/lang/String;
 
     const-string v1, "8AEB"
@@ -181,24 +208,24 @@
 .method public static GetAppContext()Landroid/content/Context;
     .locals 2
 
-    .line 58
+    .line 75
     sget-object v0, LuTools/uUtils;->appContext:Landroid/content/Context;
 
     if-nez v0, :cond_0
 
-    .line 59
+    .line 76
     const-string v0, "uContext"
 
     const-string v1, "App Context is null"
 
     invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 61
+    .line 78
     const/4 v0, 0x0
 
     return-object v0
 
-    .line 63
+    .line 80
     :cond_0
     sget-object v0, LuTools/uUtils;->appContext:Landroid/content/Context;
 
@@ -208,7 +235,7 @@
 .method public static GetCurrentStreamClientName()Ljava/lang/String;
     .locals 1
 
-    .line 67
+    .line 84
     sget-object v0, LuTools/uStreamSpoofing/uStreamingDataRequest;->statsForNerdsClientName:Ljava/lang/String;
 
     return-object v0
@@ -217,24 +244,24 @@
 .method public static GetMainActivity()Landroid/app/Activity;
     .locals 2
 
-    .line 83
+    .line 100
     sget-object v0, LuTools/uUtils;->mainActivity:Landroid/app/Activity;
 
     if-nez v0, :cond_0
 
-    .line 84
+    .line 101
     const-string v0, "uActivity"
 
     const-string v1, "Main Activity is null"
 
     invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 86
+    .line 103
     const/4 v0, 0x0
 
     return-object v0
 
-    .line 88
+    .line 105
     :cond_0
     sget-object v0, LuTools/uUtils;->mainActivity:Landroid/app/Activity;
 
@@ -244,7 +271,7 @@
 .method public static GetMainActivityContext()Landroid/content/Context;
     .locals 3
 
-    .line 128
+    .line 145
     sget-object v0, LuTools/uUtils;->mainActivityRef:Ljava/lang/ref/WeakReference;
 
     invoke-virtual {v0}, Ljava/lang/ref/WeakReference;->get()Ljava/lang/Object;
@@ -253,23 +280,23 @@
 
     check-cast v0, Landroid/content/Context;
 
-    .line 130
+    .line 147
     .local v0, "mainActivityContext":Landroid/content/Context;
     if-nez v0, :cond_0
 
-    .line 131
+    .line 148
     const-string v1, "uContext"
 
     const-string v2, "Main Activity Context is null"
 
     invoke-static {v1, v2}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 133
+    .line 150
     const/4 v1, 0x0
 
     return-object v1
 
-    .line 135
+    .line 152
     :cond_0
     return-object v0
 .end method
@@ -284,24 +311,24 @@
         }
     .end annotation
 
-    .line 94
+    .line 111
     sget-object v0, LuTools/uUtils;->playerType:Ljava/lang/Enum;
 
     if-nez v0, :cond_0
 
-    .line 95
+    .line 112
     const-string v0, "uPlayerType"
 
     const-string v1, "Player Type is null"
 
     invoke-static {v0, v1}, Landroid/util/Log;->e(Ljava/lang/String;Ljava/lang/String;)I
 
-    .line 97
+    .line 114
     const/4 v0, 0x0
 
     return-object v0
 
-    .line 99
+    .line 116
     :cond_0
     sget-object v0, LuTools/uUtils;->playerType:Ljava/lang/Enum;
 
@@ -312,12 +339,12 @@
     .locals 1
     .param p0, "imageView"    # Landroid/widget/ImageView;
 
-    .line 140
+    .line 157
     const/16 v0, 0x8
 
     invoke-virtual {p0, v0}, Landroid/widget/ImageView;->setVisibility(I)V
 
-    .line 141
+    .line 158
     return-void
 .end method
 
@@ -325,12 +352,12 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 144
+    .line 161
     instance-of v0, p0, Landroid/view/ViewGroup;
 
     if-eqz v0, :cond_0
 
-    .line 145
+    .line 162
     new-instance v0, Landroid/view/ViewGroup$LayoutParams;
 
     const/4 v1, 0x1
@@ -339,7 +366,7 @@
 
     invoke-virtual {p0, v0}, Landroid/view/View;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
 
-    .line 147
+    .line 164
     :cond_0
     return-void
 .end method
@@ -348,12 +375,12 @@
     .locals 1
     .param p0, "view"    # Landroid/view/View;
 
-    .line 150
+    .line 167
     const/16 v0, 0x8
 
     invoke-virtual {p0, v0}, Landroid/view/View;->setVisibility(I)V
 
-    .line 151
+    .line 168
     return-void
 .end method
 
@@ -361,7 +388,7 @@
     .locals 2
     .param p0, "view"    # Landroid/view/View;
 
-    .line 154
+    .line 171
     new-instance v0, Landroid/widget/LinearLayout$LayoutParams;
 
     const/4 v1, 0x0
@@ -370,7 +397,7 @@
 
     invoke-virtual {p0, v0}, Landroid/view/View;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
 
-    .line 155
+    .line 172
     return-void
 .end method
 
@@ -378,7 +405,7 @@
     .locals 2
     .param p0, "viewGroup"    # Landroid/view/ViewGroup;
 
-    .line 158
+    .line 175
     new-instance v0, Landroid/view/ViewGroup$LayoutParams;
 
     const/4 v1, 0x0
@@ -387,7 +414,7 @@
 
     invoke-virtual {p0, v0}, Landroid/view/ViewGroup;->setLayoutParams(Landroid/view/ViewGroup$LayoutParams;)V
 
-    .line 159
+    .line 176
     return-void
 .end method
 
@@ -395,19 +422,19 @@
     .locals 1
     .param p0, "viewGroup"    # Landroid/view/ViewGroup;
 
-    .line 162
+    .line 179
     const/16 v0, 0x8
 
     invoke-virtual {p0, v0}, Landroid/view/ViewGroup;->setVisibility(I)V
 
-    .line 163
+    .line 180
     return-void
 .end method
 
 .method public static IsCurrentlyOnMainThread()Z
     .locals 1
 
-    .line 166
+    .line 183
     invoke-static {}, Landroid/os/Looper;->getMainLooper()Landroid/os/Looper;
 
     move-result-object v0
@@ -423,12 +450,12 @@
     .locals 2
     .param p0, "runnable"    # Ljava/lang/Runnable;
 
-    .line 170
+    .line 187
     const-wide/16 v0, 0x0
 
     invoke-static {p0, v0, v1}, LuTools/uUtils;->RunOnMainThreadDelayed(Ljava/lang/Runnable;J)V
 
-    .line 171
+    .line 188
     return-void
 .end method
 
@@ -437,12 +464,12 @@
     .param p0, "runnable"    # Ljava/lang/Runnable;
     .param p1, "delayMillis"    # J
 
-    .line 174
+    .line 191
     new-instance v0, LuTools/uUtils$$ExternalSyntheticLambda1;
 
     invoke-direct {v0, p0}, LuTools/uUtils$$ExternalSyntheticLambda1;-><init>(Ljava/lang/Runnable;)V
 
-    .line 179
+    .line 196
     .local v0, "loggingRunnable":Ljava/lang/Runnable;
     new-instance v1, Landroid/os/Handler;
 
@@ -454,7 +481,7 @@
 
     invoke-virtual {v1, v0, p1, p2}, Landroid/os/Handler;->postDelayed(Ljava/lang/Runnable;J)Z
 
-    .line 180
+    .line 197
     return-void
 .end method
 
@@ -462,23 +489,23 @@
     .locals 1
     .param p0, "runnable"    # Ljava/lang/Runnable;
 
-    .line 183
+    .line 200
     invoke-static {}, LuTools/uUtils;->IsCurrentlyOnMainThread()Z
 
     move-result v0
 
     if-eqz v0, :cond_0
 
-    .line 184
+    .line 201
     invoke-interface {p0}, Ljava/lang/Runnable;->run()V
 
     goto :goto_0
 
-    .line 186
+    .line 203
     :cond_0
     invoke-static {p0}, LuTools/uUtils;->RunOnMainThread(Ljava/lang/Runnable;)V
 
-    .line 188
+    .line 205
     :goto_0
     return-void
 .end method
@@ -487,10 +514,10 @@
     .locals 0
     .param p0, "value"    # Z
 
-    .line 200
+    .line 217
     sput-boolean p0, LuTools/uUtils;->isDarkTheme:Z
 
-    .line 201
+    .line 218
     return-void
 .end method
 
@@ -498,7 +525,7 @@
     .locals 4
     .param p0, "motionEvent"    # Landroid/view/MotionEvent;
 
-    .line 72
+    .line 89
     invoke-virtual {p0}, Landroid/view/MotionEvent;->getAction()I
 
     move-result v0
@@ -507,7 +534,7 @@
 
     goto :goto_0
 
-    .line 77
+    .line 94
     :pswitch_0
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
@@ -521,7 +548,7 @@
 
     goto :goto_0
 
-    .line 74
+    .line 91
     :pswitch_1
     invoke-static {}, Ljava/lang/System;->currentTimeMillis()J
 
@@ -529,7 +556,7 @@
 
     sput-wide v0, LuTools/uUtils;->lithoActionDownStartTime:J
 
-    .line 79
+    .line 96
     :goto_0
     return-void
 
@@ -546,24 +573,24 @@
     .locals 1
     .param p0, "activity"    # Landroid/app/Activity;
 
-    .line 191
+    .line 208
     sput-object p0, LuTools/uUtils;->mainActivity:Landroid/app/Activity;
 
-    .line 193
+    .line 210
     new-instance v0, Ljava/lang/ref/WeakReference;
 
     invoke-direct {v0, p0}, Ljava/lang/ref/WeakReference;-><init>(Ljava/lang/Object;)V
 
     sput-object v0, LuTools/uUtils;->mainActivityRef:Ljava/lang/ref/WeakReference;
 
-    .line 194
+    .line 211
     return-void
 .end method
 
 .method public static SetNavBarIndexByMainActivity()V
     .locals 6
 
-    .line 107
+    .line 124
     :try_start_0
     invoke-static {}, LuTools/uUtils;->GetMainActivity()Landroid/app/Activity;
 
@@ -577,7 +604,7 @@
 
     move-result-object v0
 
-    .line 109
+    .line 126
     .local v0, "intentAction":Ljava/lang/String;
     invoke-virtual {v0}, Ljava/lang/String;->hashCode()I
 
@@ -656,36 +683,36 @@
 
     goto :goto_2
 
-    .line 120
+    .line 137
     :pswitch_0
     sput v2, LuTools/uBlocker;->currentNavBarIndex:I
 
     goto :goto_2
 
-    .line 117
+    .line 134
     :pswitch_1
     sput v3, LuTools/uBlocker;->currentNavBarIndex:I
 
-    .line 118
+    .line 135
     goto :goto_2
 
-    .line 114
+    .line 131
     :pswitch_2
     sput v4, LuTools/uBlocker;->currentNavBarIndex:I
 
-    .line 115
+    .line 132
     goto :goto_2
 
-    .line 111
+    .line 128
     :pswitch_3
     sput v5, LuTools/uBlocker;->currentNavBarIndex:I
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 112
+    .line 129
     goto :goto_2
 
-    .line 123
+    .line 140
     .end local v0    # "intentAction":Ljava/lang/String;
     :catch_0
     move-exception v0
@@ -693,7 +720,7 @@
     :goto_2
     nop
 
-    .line 124
+    .line 141
     return-void
 
     :sswitch_data_0
@@ -723,7 +750,7 @@
         }
     .end annotation
 
-    .line 197
+    .line 214
     .local p0, "value":Ljava/lang/Enum;, "Ljava/lang/Enum<*>;"
     invoke-virtual {p0}, Ljava/lang/Enum;->ordinal()I
 
@@ -745,7 +772,7 @@
 
     sput-boolean v0, LuTools/uUtils;->isDarkTheme:Z
 
-    .line 198
+    .line 215
     return-void
 .end method
 
@@ -754,17 +781,17 @@
     .param p0, "messageToToast"    # Ljava/lang/String;
     .param p1, "toastDuration"    # I
 
-    .line 208
+    .line 225
     invoke-static {p0}, Ljava/util/Objects;->requireNonNull(Ljava/lang/Object;)Ljava/lang/Object;
 
-    .line 209
+    .line 226
     new-instance v0, LuTools/uUtils$$ExternalSyntheticLambda0;
 
     invoke-direct {v0, p0, p1}, LuTools/uUtils$$ExternalSyntheticLambda0;-><init>(Ljava/lang/String;I)V
 
     invoke-static {v0}, LuTools/uUtils;->RunOnMainThreadNowOrLater(Ljava/lang/Runnable;)V
 
-    .line 212
+    .line 229
     return-void
 .end method
 
@@ -772,26 +799,51 @@
     .locals 1
     .param p0, "messageToToast"    # Ljava/lang/String;
 
-    .line 204
+    .line 221
     const/4 v0, 0x1
 
     invoke-static {p0, v0}, LuTools/uUtils;->ShowToast(Ljava/lang/String;I)V
 
-    .line 205
+    .line 222
     return-void
 .end method
 
-.method static synthetic lambda$RunOnMainThreadDelayed$0(Ljava/lang/Runnable;)V
+.method public static SubmitOnBackgroundThread(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/Future;
+    .locals 1
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "<T:",
+            "Ljava/lang/Object;",
+            ">(",
+            "Ljava/util/concurrent/Callable<",
+            "TT;>;)",
+            "Ljava/util/concurrent/Future<",
+            "TT;>;"
+        }
+    .end annotation
+
+    .line 233
+    .local p0, "call":Ljava/util/concurrent/Callable;, "Ljava/util/concurrent/Callable<TT;>;"
+    sget-object v0, LuTools/uUtils;->backgroundThreadPool:Ljava/util/concurrent/ThreadPoolExecutor;
+
+    invoke-virtual {v0, p0}, Ljava/util/concurrent/ThreadPoolExecutor;->submit(Ljava/util/concurrent/Callable;)Ljava/util/concurrent/Future;
+
+    move-result-object v0
+
+    return-object v0
+.end method
+
+.method static synthetic lambda$RunOnMainThreadDelayed$1(Ljava/lang/Runnable;)V
     .locals 1
     .param p0, "runnable"    # Ljava/lang/Runnable;
 
-    .line 176
+    .line 193
     :try_start_0
     invoke-interface {p0}, Ljava/lang/Runnable;->run()V
     :try_end_0
     .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
 
-    .line 177
+    .line 194
     :goto_0
     goto :goto_1
 
@@ -800,17 +852,17 @@
 
     goto :goto_0
 
-    .line 178
+    .line 195
     :goto_1
     return-void
 .end method
 
-.method static synthetic lambda$ShowToast$1(Ljava/lang/String;I)V
+.method static synthetic lambda$ShowToast$2(Ljava/lang/String;I)V
     .locals 1
     .param p0, "messageToToast"    # Ljava/lang/String;
     .param p1, "toastDuration"    # I
 
-    .line 210
+    .line 227
     invoke-static {}, LuTools/uUtils;->GetAppContext()Landroid/content/Context;
 
     move-result-object v0
@@ -821,6 +873,25 @@
 
     invoke-virtual {v0}, Landroid/widget/Toast;->show()V
 
-    .line 211
+    .line 228
     return-void
+.end method
+
+.method static synthetic lambda$static$0(Ljava/lang/Runnable;)Ljava/lang/Thread;
+    .locals 2
+    .param p0, "r"    # Ljava/lang/Runnable;
+
+    .line 40
+    new-instance v0, Ljava/lang/Thread;
+
+    invoke-direct {v0, p0}, Ljava/lang/Thread;-><init>(Ljava/lang/Runnable;)V
+
+    .line 41
+    .local v0, "t":Ljava/lang/Thread;
+    const/16 v1, 0xa
+
+    invoke-virtual {v0, v1}, Ljava/lang/Thread;->setPriority(I)V
+
+    .line 42
+    return-object v0
 .end method

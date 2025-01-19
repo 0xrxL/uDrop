@@ -21,10 +21,27 @@ import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @SuppressLint("StaticFieldLeak")
 @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
 public class uUtils {
+    private static final ThreadPoolExecutor backgroundThreadPool = new ThreadPoolExecutor(
+            3,
+            Integer.MAX_VALUE,
+            10,
+            TimeUnit.SECONDS,
+            new SynchronousQueue<>(),
+            r -> {
+                Thread t = new Thread(r);
+                t.setPriority(Thread.MAX_PRIORITY);
+                return t;
+            });
+
     public static boolean ByteBufferContainsString(ByteBuffer byteBuffer, String str) {
         byte[] bArrSource = byteBuffer.array();
         byte[] bArrTarget = str.getBytes();
@@ -209,6 +226,11 @@ public class uUtils {
         RunOnMainThreadNowOrLater(() -> {
             Toast.makeText(GetAppContext(), messageToToast, toastDuration).show();
         });
+    }
+
+    @NonNull
+    public static <T> Future<T> SubmitOnBackgroundThread(@NonNull Callable<T> call) {
+        return backgroundThreadPool.submit(call);
     }
 }
 

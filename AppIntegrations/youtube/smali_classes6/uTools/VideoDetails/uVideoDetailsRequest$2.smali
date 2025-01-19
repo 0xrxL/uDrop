@@ -1,11 +1,11 @@
-.class LuTools/uStreamSpoofing/uStreamingDataRequest$1;
+.class LuTools/VideoDetails/uVideoDetailsRequest$2;
 .super Ljava/util/LinkedHashMap;
-.source "uStreamingDataRequest.java"
+.source "uVideoDetailsRequest.java"
 
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingClass;
-    value = LuTools/uStreamSpoofing/uStreamingDataRequest;
+    value = LuTools/VideoDetails/uVideoDetailsRequest;
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -17,7 +17,7 @@
     value = {
         "Ljava/util/LinkedHashMap<",
         "Ljava/lang/String;",
-        "LuTools/uStreamSpoofing/uStreamingDataRequest;",
+        "LuTools/VideoDetails/uVideoDetailsRequest;",
         ">;"
     }
 .end annotation
@@ -28,7 +28,7 @@
     .locals 0
     .param p1, "arg0"    # I
 
-    .line 33
+    .line 42
     invoke-direct {p0, p1}, Ljava/util/LinkedHashMap;-><init>(I)V
 
     return-void
@@ -38,10 +38,19 @@
 # virtual methods
 .method protected removeEldestEntry(Ljava/util/Map$Entry;)Z
     .locals 2
-    .param p1, "eldest"    # Ljava/util/Map$Entry;
+    .annotation system Ldalvik/annotation/Signature;
+        value = {
+            "(",
+            "Ljava/util/Map$Entry<",
+            "Ljava/lang/String;",
+            "LuTools/VideoDetails/uVideoDetailsRequest;",
+            ">;)Z"
+        }
+    .end annotation
 
-    .line 36
-    invoke-virtual {p0}, LuTools/uStreamSpoofing/uStreamingDataRequest$1;->size()I
+    .line 45
+    .local p1, "eldest":Ljava/util/Map$Entry;, "Ljava/util/Map$Entry<Ljava/lang/String;LuTools/VideoDetails/uVideoDetailsRequest;>;"
+    invoke-virtual {p0}, LuTools/VideoDetails/uVideoDetailsRequest$2;->size()I
 
     move-result v0
 

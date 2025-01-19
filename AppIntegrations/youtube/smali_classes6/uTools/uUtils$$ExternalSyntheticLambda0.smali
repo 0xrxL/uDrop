@@ -36,7 +36,7 @@
 
     iget v1, p0, LuTools/uUtils$$ExternalSyntheticLambda0;->f$1:I
 
-    invoke-static {v0, v1}, LuTools/uUtils;->lambda$ShowToast$1(Ljava/lang/String;I)V
+    invoke-static {v0, v1}, LuTools/uUtils;->lambda$ShowToast$2(Ljava/lang/String;I)V
 
     return-void
 .end method

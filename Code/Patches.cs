@@ -2740,7 +2740,7 @@
                     ) => {
                         if (new[] {
                                 xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[9]
+                                xmlSmaliSearchKeys[7]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -2764,7 +2764,7 @@
                                                         xmlSmaliSearchKeys[4],
                                                     }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
-                                                    for (int l = k; l <= scaleIndex.Lines(k, 202); l++)
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 169); l++)
                                                     {
                                                         if (new[] {
                                                                 xmlSmaliSearchKeys[5],
@@ -2777,19 +2777,19 @@
                                                                         xmlSmaliSearchKeys[7]
                                                                     }.All(xmlSmaliProperties.Lines[m].Contains))
                                                                 {
-                                                                    for (int n = m; n <= scaleIndex.Lines(m, 32); n++)
+                                                                    for (int n = m; n <= scaleIndex.Lines(m, 29); n++)
                                                                     {
                                                                         if (new[] {
                                                                                 xmlSmaliSearchKeys[8]
                                                                             }.All(xmlSmaliProperties.Lines[n].Contains))
                                                                         {
-                                                                            for (int o = n; o <= scaleIndex.Lines(n, 8); o++)
+                                                                            for (int o = n; o <= scaleIndex.Lines(n, 9); o++)
                                                                             {
                                                                                 if (new[] {
                                                                                         xmlSmaliSearchKeys[9]
                                                                                     }.All(xmlSmaliProperties.Lines[o].Contains))
                                                                                 {
-                                                                                    for (int p = m; p >= scaleIndex.Lines(m, -12); p--)
+                                                                                    for (int p = m; p >= scaleIndex.Lines(m, -15); p--)
                                                                                     {
                                                                                         if (new[] {
                                                                                                 xmlSmaliSearchKeys[10]

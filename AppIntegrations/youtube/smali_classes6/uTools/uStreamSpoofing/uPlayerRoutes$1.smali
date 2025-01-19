@@ -5,7 +5,7 @@
 
 # annotations
 .annotation system Ldalvik/annotation/EnclosingMethod;
-    value = LuTools/uStreamSpoofing/uPlayerRoutes;->CreateInnertubeBody(LuTools/uStreamSpoofing/uClientType;)Ljava/lang/String;
+    value = LuTools/uStreamSpoofing/uPlayerRoutes;->CreateInnertubeBody(LuTools/uStreamSpoofing/uClientType;Ljava/lang/String;)Ljava/lang/String;
 .end annotation
 
 .annotation system Ldalvik/annotation/InnerClass;
@@ -27,18 +27,18 @@
         }
     .end annotation
 
-    .line 28
+    .line 35
     iput-object p1, p0, LuTools/uStreamSpoofing/uPlayerRoutes$1;->val$client:Lorg/json/JSONObject;
 
     invoke-direct {p0}, Lorg/json/JSONObject;-><init>()V
 
-    .line 29
+    .line 36
     const-string p1, "client"
 
     iget-object v0, p0, LuTools/uStreamSpoofing/uPlayerRoutes$1;->val$client:Lorg/json/JSONObject;
 
     invoke-virtual {p0, p1, v0}, LuTools/uStreamSpoofing/uPlayerRoutes$1;->put(Ljava/lang/String;Ljava/lang/Object;)Lorg/json/JSONObject;
 
-    .line 30
+    .line 37
     return-void
 .end method
