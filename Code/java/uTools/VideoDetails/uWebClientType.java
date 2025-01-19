@@ -3,7 +3,7 @@
 package uTools.VideoDetails;
 
 public enum uWebClientType {
-    MWEB(
+    M_WEB(
         2,
         "2.20241202.07.00"
     ),

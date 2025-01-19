@@ -2,7 +2,7 @@
 
 package uTools.uStreamSpoofing;
 
-import static uTools.uStreamSpoofing.uStreamingDataRequest.GetRequestForVideoId;
+import static uTools.uStreamSpoofing.uStreamingDataRequest.GetRequestForVideoID;
 
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -49,16 +49,16 @@ public class uSpoofing {
                                                 "heartbeat",
                                                 "refresh"
                                             ).noneMatch(path::contains)) {
-                String videoId = Objects.requireNonNull(uri.getQueryParameter("id"));
-                uStreamingDataRequest.FetchRequest(videoId, requestHeaders);
+                String videoID = Objects.requireNonNull(uri.getQueryParameter("id"));
+                uStreamingDataRequest.FetchRequest(videoID, requestHeaders);
             }
         } catch (Exception ignore) {}
     }
 
     @Nullable
-    public static ByteBuffer GetStreamingData(String videoId) {
+    public static ByteBuffer GetStreamingData(String videoID) {
         try {
-            uStreamingDataRequest request = GetRequestForVideoId(videoId);
+            uStreamingDataRequest request = GetRequestForVideoID(videoID);
             ByteBuffer stream = request.GetStream();
 
             if (stream != null) {

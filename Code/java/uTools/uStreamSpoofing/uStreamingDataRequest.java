@@ -3,6 +3,7 @@
 package uTools.uStreamSpoofing;
 
 import static uTools.uStreamSpoofing.uPlayerRoutes.GET_STREAMING_DATA;
+import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFromRoute;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,22 +20,21 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class uStreamingDataRequest {
-    private final String videoId;
+    private final String videoID;
     private final Future<ByteBuffer> future;
-    private uStreamingDataRequest(String videoId, Map<String, String> playerHeaders) {
+    private uStreamingDataRequest(String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(playerHeaders);
-        this.videoId = videoId;
+        this.videoID = videoID;
         this.future = uSpoofingUtils.SubmitOnBackgroundThread(
-                            () -> Fetch(videoId, playerHeaders)
+                            () -> Fetch(videoID, playerHeaders)
                         );
     }
 
     private static final Map<String, uStreamingDataRequest> Cache = Collections.synchronizedMap(
         new LinkedHashMap<>(100) {
-            private static final int CACHE_LIMIT = 50;
             @Override
             protected boolean removeEldestEntry(Entry eldest) {
-                return size() > CACHE_LIMIT;
+                return size() > 50;
             }
         }
     );
@@ -63,11 +63,11 @@ public class uStreamingDataRequest {
     }
     private static final int READ_BUFFER_SIZE = 8192;
     public static String statsForNerdsClientName = "";
-    private static ByteBuffer Fetch(String videoId, Map<String, String> playerHeaders) {
+    private static ByteBuffer Fetch(String videoID, Map<String, String> playerHeaders) {
         for (uClientType clientType : CLIENT_TYPES_ORDER_TO_USE) {
             Log.d("uStreamingDataRequest", clientType.name());
 
-            HttpURLConnection connection = Send(clientType, videoId, playerHeaders);
+            HttpURLConnection connection = Send(clientType, videoID, playerHeaders);
             if (connection != null) {
                 try {
                     int contentLength = connection.getContentLength();
@@ -97,13 +97,13 @@ public class uStreamingDataRequest {
         return null;
     }
 
-    public static void FetchRequest(String videoId, Map<String, String> fetchHeaders) {
-        Cache.put(videoId, new uStreamingDataRequest(videoId, fetchHeaders));
+    public static void FetchRequest(String videoID, Map<String, String> fetchHeaders) {
+        Cache.put(videoID, new uStreamingDataRequest(videoID, fetchHeaders));
     }
 
     @Nullable
-    public static uStreamingDataRequest GetRequestForVideoId(String videoId) {
-        return Cache.get(videoId);
+    public static uStreamingDataRequest GetRequestForVideoID(String videoID) {
+        return Cache.get(videoID);
     }
 
     @Nullable
@@ -115,15 +115,19 @@ public class uStreamingDataRequest {
         return null;
     }
 
-    private static final int HTTP_TIMEOUT_MILLISECONDS = 10 * 1000;
     @Nullable
-    private static HttpURLConnection Send(uClientType clientType, String videoId, Map<String, String> playerHeaders) {
+    private static HttpURLConnection Send(uClientType clientType, String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(clientType);
-        Objects.requireNonNull(videoId);
+        Objects.requireNonNull(videoID);
         Objects.requireNonNull(playerHeaders);
 
         try {
-            HttpURLConnection connection = uPlayerRoutes.GetPlayerResponseConnectionFromRoute(GET_STREAMING_DATA, clientType);
+            HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
+                                                GET_STREAMING_DATA,
+                                                clientType
+                                            );
+
+            int HTTP_TIMEOUT_MILLISECONDS = 10 * 1000;
             connection.setConnectTimeout(HTTP_TIMEOUT_MILLISECONDS);
             connection.setReadTimeout(HTTP_TIMEOUT_MILLISECONDS);
 
@@ -139,7 +143,7 @@ public class uStreamingDataRequest {
                 }
             }
 
-            String innerTubeBody = String.format(uPlayerRoutes.CreateInnertubeBody(clientType), videoId);
+            String innerTubeBody = uPlayerRoutes.CreateInnertubeBody(clientType, videoID);
             byte[] requestBody = innerTubeBody.getBytes(StandardCharsets.UTF_8);
             connection.setFixedLengthStreamingMode(requestBody.length);
             connection.getOutputStream().write(requestBody);
@@ -159,7 +163,7 @@ public class uStreamingDataRequest {
         return String.format(
                     "StreamingDataRequest{videoId='%s'}",
 
-                    videoId
+                    videoID
                 );
     }
 }

@@ -2,7 +2,12 @@
 
 package uTools.uStreamSpoofing;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -26,5 +31,22 @@ public class uRequester {
         connection.setRequestProperty("User-Agent", agentString);
 
         return connection;
+    }
+
+    public static JSONObject parseJSONObject(HttpURLConnection connection) throws JSONException, IOException {
+        try (BufferedReader reader = new BufferedReader(
+                                            new InputStreamReader(
+                                                connection.getInputStream()
+                                            )
+                                        )
+        ) {
+            StringBuilder jsonBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonBuilder.append(line);
+                jsonBuilder.append('\n');
+            }
+            return new JSONObject(jsonBuilder.toString());
+        }
     }
 }

@@ -217,15 +217,10 @@ public class uUtils {
         isDarkTheme = value;
     }
 
-    public static void ShowToastLong(@NonNull String messageToToast) {
-        ShowToast(messageToToast, Toast.LENGTH_LONG);
-    }
-
-    private static void ShowToast(@NonNull String messageToToast, int toastDuration) {
+    public static Toast GetNewToast(@NonNull String messageToToast) {
         Objects.requireNonNull(messageToToast);
-        RunOnMainThreadNowOrLater(() -> {
-            Toast.makeText(GetAppContext(), messageToToast, toastDuration).show();
-        });
+
+        return Toast.makeText(GetAppContext(), messageToToast, Toast.LENGTH_LONG);
     }
 
     @NonNull

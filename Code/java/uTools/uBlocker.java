@@ -1,5 +1,6 @@
 package uTools;
 
+import static uTools.VideoDetails.uVideoDetailsRequest.SetFetchRequest;
 import static uTools.uUtils.ByteBufferContainsString;
 import static uTools.uUtils.CheckDarkTheme;
 import static uTools.uUtils.EnumInitialization;
@@ -11,8 +12,7 @@ import static uTools.uUtils.HideViewGroupByLayoutParams;
 import static uTools.uUtils.HideViewGroupByMarginLayout;
 import static uTools.uUtils.isCommentsPanelOpen;
 import static uTools.uUtils.lithoActionDownDuration;
-import static uTools.VideoDetails.uVideoDetailsRequest.FetchRequestIfNeeded;
-import static uTools.VideoDetails.uVideoDetailsRequest.GetRequestForVideoId;
+import static uTools.VideoDetails.uVideoDetailsRequest.GetRequestForVideoID;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Toast;
 
 import com.google.android.apps.youtube.app.watchwhile.MainActivity;
 
@@ -68,16 +69,19 @@ public class uBlocker {
                     originalValue;
     }
 
+    private static final Toast checkMicroGPackageToastError =
+        uUtils.GetNewToast("Error: No MicroG Installed");
     public static void CheckMicroGPackage(Activity activity) {
         try {
-            PackageManager manager = activity.getPackageManager();
-            manager.getPackageInfo(
+            activity
+            .getPackageManager()
+            .getPackageInfo(
                 "app.revanced.android.gms",
 
                 PackageManager.GET_ACTIVITIES
             );
         } catch (PackageManager.NameNotFoundException exception) {
-            uUtils.ShowToastLong("Error: No MicroG Installed");
+            checkMicroGPackageToastError.show();
         }
     }
 
@@ -356,25 +360,32 @@ public class uBlocker {
         } catch (Exception ignored) {}
     }
 
+    private static final Toast openVideoChannelToastInProgress =
+        uUtils.GetNewToast("Opening video channel...");
+    private static final Toast openVideoChannelToastDone =
+        uUtils.GetNewToast("Channel opened");
+    private static final Toast openVideoChannelToastError =
+        uUtils.GetNewToast("Error: Failed to open video channel");
     private static Thread openVideoChannelThread = null;
     public static boolean OpenVideoChannel(String videoID) {
         if (openVideoChannelThread == null) {
             if (!isCommentsPanelOpen && lithoActionDownDuration >= 1000) {
+
                 openVideoChannelThread = new Thread(() -> {
                     try {
-                        boolean stopVideoChannelThread = false;
+                        boolean stopVideoChannelThread;
 
                         while (!openVideoChannelThread.isInterrupted()) {
                             try {
-                                uUtils.ShowToastLong("Opening video channel...");
+                                openVideoChannelToastInProgress.show();
 
                                 Context context = GetMainActivityContext();
 
-                                FetchRequestIfNeeded(videoID);
-                                uVideoDetailsRequest videoIDRequest = GetRequestForVideoId(videoID);
+                                SetFetchRequest(videoID);
+                                uVideoDetailsRequest videoIDRequest = GetRequestForVideoID(videoID);
 
                                 if (videoIDRequest != null) {
-                                    String channelID = videoIDRequest.GetInfo();
+                                    String channelID = videoIDRequest.GetChannelID();
 
                                     if (channelID != null) {
                                         Intent openLiveChannelIntent = new Intent(
@@ -394,6 +405,9 @@ public class uBlocker {
 
                                         context.startActivity(openLiveChannelIntent);
 
+                                        openVideoChannelToastInProgress.cancel();
+                                        openVideoChannelToastDone.show();
+
                                         stopVideoChannelThread = true;
                                     } else {
                                         throw new IllegalArgumentException();
@@ -402,7 +416,7 @@ public class uBlocker {
                                     throw new IllegalArgumentException();
                                 }
                             } catch (Exception ignore) {
-                                uUtils.ShowToastLong("Error: Failed to open video channel");
+                                openVideoChannelToastError.show();
 
                                 stopVideoChannelThread = true;
                             }

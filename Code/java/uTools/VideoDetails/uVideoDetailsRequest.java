@@ -4,9 +4,9 @@ package uTools.VideoDetails;
 
 import static uTools.uStreamSpoofing.uPlayerRoutes.CreateWebInnertubeBody;
 import static uTools.uStreamSpoofing.uPlayerRoutes.GET_VIDEO_DETAILS;
-import static uTools.uStreamSpoofing.uPlayerRoutes.GetWebPlayerResponseConnectionFromRoute;
+import static uTools.uStreamSpoofing.uPlayerRoutes.GetVideoDetailsResponseConnectionFromRoute;
 
-import android.annotation.SuppressLint;
+import android.support.annotation.Nullable;
 
 import org.json.JSONObject;
 
@@ -14,27 +14,25 @@ import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import uTools.uStreamSpoofing.uRequester;
 import uTools.uUtils;
 
 public class uVideoDetailsRequest {
-    private final String videoID;
+    private String videoID;
+
     public uVideoDetailsRequest(String videoID) {
         this.videoID = videoID;
     }
 
     private final Future<String> future = uUtils.SubmitOnBackgroundThread(
-        new Callable<>() {
-            @Override
-            public String call() {
-                return Fetch(videoID);
-            }
-        }
-    );
+                                                () -> Fetch(videoID)
+                                            );
 
     private static final Map<String, uVideoDetailsRequest> Cache = Collections.synchronizedMap(
         new LinkedHashMap<>(100) {
@@ -46,53 +44,55 @@ public class uVideoDetailsRequest {
     );
 
     private String Fetch(String videoID) {
-        JSONObject videoDetailsJson = SendRequest(videoID);
-        if (videoDetailsJson != null) {
-            return ParseResponse(videoDetailsJson);
+        for (uWebClientType webClientType : uWebClientType.values()) {
+            JSONObject videoDetailsJson = Send(webClientType, videoID);
+
+            if (videoDetailsJson != null) {
+                try {
+                    return videoDetailsJson
+                            .getJSONObject("videoDetails")
+                            .getString("channelId");
+                } catch (Exception ignored) {}
+            }
         }
 
         return null;
     }
 
-    @SuppressLint("ObsoleteSdkInt")
-    public static void FetchRequestIfNeeded(String videoID) {
+    public static void SetFetchRequest(String videoID) {
         Cache.put(videoID, new uVideoDetailsRequest(videoID));
     }
 
-    public String GetInfo() {
+    public String GetChannelID() {
         try {
             return future.get(20 * 1000L, TimeUnit.MILLISECONDS);
-        } catch (Exception ignore) {}
+        } catch (TimeoutException | ExecutionException | InterruptedException ignore) {}
 
         return null;
     }
 
-    public static uVideoDetailsRequest GetRequestForVideoId(String videoID) {
+    public static uVideoDetailsRequest GetRequestForVideoID(String videoID) {
         synchronized(Cache) {
             return Cache.get(videoID);
         }
     }
 
-    private String ParseResponse(JSONObject videoDetailsJson) {
-        try {
-            return videoDetailsJson
-                    .getJSONObject("videoDetails")
-                    .getString("channelId");
-        } catch (Exception ignore) {}
-
-        return null;
-    }
-
-    private JSONObject SendRequest(String videoID) {
-        uWebClientType webClientType = uWebClientType.MWEB;
+    @Nullable
+    private JSONObject Send(uWebClientType webClientType, String videoID) {
+        Objects.requireNonNull(webClientType);
+        Objects.requireNonNull(videoID);
 
         try {
-            HttpURLConnection connection = GetWebPlayerResponseConnectionFromRoute(
-                                                GET_VIDEO_DETAILS,
-                                                webClientType
-                                            );
+            HttpURLConnection connection = GetVideoDetailsResponseConnectionFromRoute(
+                GET_VIDEO_DETAILS,
+                webClientType
+            );
+
+            int HTTP_TIMEOUT_MILLISECONDS = 10 * 1000;
+            connection.setConnectTimeout(HTTP_TIMEOUT_MILLISECONDS);
+            connection.setReadTimeout(HTTP_TIMEOUT_MILLISECONDS);
+
             byte[] requestBody = CreateWebInnertubeBody(webClientType, videoID);
-
             connection.setFixedLengthStreamingMode(requestBody.length);
             connection.getOutputStream().write(requestBody);
 

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Dynamic;
+using System.IO.Compression;
 using System.Reflection;
 
 namespace uDrop.Code
@@ -15,8 +16,13 @@ namespace uDrop.Code
 
         private static readonly string libsPath =
             "Libs";
-        private static readonly string integrationsSourcePath =
-            $"AppIntegrations\\{Main_Class.apkInfo.Item2.ToLower()}";
+        private static readonly string integrationsRootPath =
+            "AppIntegrations";
+        private static readonly string integrationsPath =
+            $"{integrationsRootPath}\\{Main_Class.apkInfo.Item2.ToLower()}";
+        private static readonly string integrationsArchivePath =
+            $"{integrationsPath}.zip";
+
         public static readonly string logsDirName =
             "PatchingLogs";
 
@@ -245,33 +251,68 @@ namespace uDrop.Code
 
         public static void Integrations()
         {
-            if (!Directory.Exists(integrationsSourcePath))
+            if (!Directory.Exists(integrationsPath))
+            {
+                Directory.CreateDirectory(integrationsPath);
+            }
+
+            bool archivedIntegrations = false;
+
+            string[] integrationRootPathFiles() {
+                                                return Directory.GetFiles(
+                                                    integrationsRootPath,
+                                                    "*.*",
+                                                    SearchOption.AllDirectories
+                                                );
+                                            };
+            ;string[] integrationPathFiles() {
+                                                return Directory.GetFiles(
+                                                    integrationsPath,
+                                                    "*.*",
+                                                    SearchOption.AllDirectories
+                                                );
+                                            };
+
+            if (integrationRootPathFiles().Length.Equals(0) && integrationPathFiles().Length.Equals(0))
             {
                 return;
             }
-
-            string[] integrationFilesPath = Directory.GetFiles(
-                                                integrationsSourcePath,
-                                                "*.*",
-                                                SearchOption.AllDirectories
-                                            );
-
-            if (integrationFilesPath.Length.Equals(0))
+            else if (integrationPathFiles().Length.Equals(0))
             {
-                return;
+                if (File.Exists(integrationsArchivePath))
+                {
+                    archivedIntegrations = true;
+
+                    "Extracting Integrations...".StartProcessLog();
+
+                    ZipFile.ExtractToDirectory(integrationsArchivePath, integrationsRootPath);
+                }
             }
 
-            "Applying Integrations...".StartProcessLog();
+            if (File.Exists(integrationsArchivePath))
+            {
+                File.Delete(integrationsArchivePath);
+            }
+
+            string startMessage = "Applying Integrations...";
+            if (!archivedIntegrations)
+            {
+                startMessage.StartProcessLog();
+            }
+            else
+            {
+                startMessage.NormalLog(false);
+            }
 
             string integrationFileDestinationPath;
             int integrationFilesCount = 0;
-            foreach (var integrationFilePath in integrationFilesPath)
+            foreach (var integrationPathFile in integrationPathFiles())
             {
                 integrationFileDestinationPath =
-                    integrationFilePath.Replace(integrationsSourcePath, Main_Class.apkDecompiledPath);
+                    integrationPathFile.Replace(integrationsPath, Main_Class.apkDecompiledPath);
 
                 Directory.CreateDirectory(Directory.GetParent(integrationFileDestinationPath)!.FullName);
-                File.Copy(integrationFilePath, integrationFileDestinationPath, true);
+                File.Copy(integrationPathFile, integrationFileDestinationPath, true);
 
                 integrationFilesCount++;
                 
