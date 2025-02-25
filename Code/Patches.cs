@@ -7134,15 +7134,14 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "Ljava/util/concurrent/atomic/AtomicReference;",
-                        SmaliUtils.GetResourceHex("id", "engagement_panel_content"),
-                        SmaliUtils.GetResourceHex("dimen", "panel_header_non_content_height"),
-                        "new-instance",
-                        "check-cast",
-                        "Lcom/google/protos/youtube/api/innertube/ShowEngagementPanelEndpointOuterClass$ShowEngagementPanelEndpoint;",
-                        SmaliUtils.GetResourceHex(138681066),
-                        "(Lcom/google/protos/youtube/api/innertube/ShowEngagementPanelEndpointOuterClass$ShowEngagementPanelEndpoint;)Ljava/lang/String;",
-                        "move-result-object"
+                        "\"engagement_panel_close_listener_key\"",
+                        "\"triggered_on_ui_ready\"",
+                        SmaliUtils.GetResourceHex(449330433),
+                        "iget ",
+                        "Lcom/google/protos/youtube/api/innertube/ShowEngagementPanelEndpointOuterClass$ShowEngagementPanelEndpoint;->",
+                        ":I",
+                        "const/4",
+                        "0x1"
                     ],
 
                     true,
@@ -7157,8 +7156,7 @@
                     ) => {
                         if (new[] {
                                 xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1],
-                                xmlSmaliSearchKeys[2]
+                                xmlSmaliSearchKeys[1]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -7169,58 +7167,44 @@
                                         xmlSmaliSearchKeys[1]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 50); j++)
+                                    for (int j = i; j >= scaleIndex.Lines(i, -690); j--)
                                     {
                                         if (new[] {
-                                                xmlSmaliSearchKeys[3]
+                                                xmlSmaliSearchKeys[2]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            xmlSmaliProperties.ReadXMLSmaliNewLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(1));
-
-                                            for (int k = 0; k < xmlSmaliProperties.NewLinesCount; k++)
+                                            for (int k = j; k >= scaleIndex.Lines(j, -214); k--)
                                             {
                                                 if (new[] {
+                                                        xmlSmaliSearchKeys[3],
                                                         xmlSmaliSearchKeys[4],
-                                                        xmlSmaliSearchKeys[5]
-                                                    }.All(xmlSmaliProperties.NewLines[k].Contains))
+                                                        xmlSmaliSearchKeys[5],
+                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
-                                                    for (int l = k; l <= scaleIndex.NewLines(k, 119); l++)
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 6); l++)
                                                     {
                                                         if (new[] {
-                                                                xmlSmaliSearchKeys[6]
-                                                            }.All(xmlSmaliProperties.NewLines[l].Contains))
+                                                                xmlSmaliSearchKeys[6],
+                                                                xmlSmaliSearchKeys[7]
+                                                            }.All(xmlSmaliProperties.Lines[l].Contains))
                                                         {
-                                                            for (int m = l; m <= scaleIndex.NewLines(l, 281); m++)
-                                                            {
-                                                                if (new[] {
-                                                                        xmlSmaliSearchKeys[7]
-                                                                    }.All(xmlSmaliProperties.NewLines[m].Contains))
-                                                                {
-                                                                    for (int n = m; n <= scaleIndex.NewLines(m, 6); n++)
-                                                                    {
-                                                                        if (new[] {
-                                                                                xmlSmaliSearchKeys[8]
-                                                                            }.All(xmlSmaliProperties.NewLines[n].Contains))
-                                                                        {
-                                                                            codeInject.NewLines(
-                                                                                [
-                                                                                    (("Shop Items", true),
+                                                            string newIntConstFreeRegister = xmlSmaliProperties.Lines[l].GetRegister(1);
 
-                                                                                    n + 1,
+                                                            codeInject.Lines(
+                                                                [
+                                                                    (("Shop Items", true),
 
-                                                                                    [
-                                                                                        $"if-nez {xmlSmaliProperties.NewLines[n].GetRegister(1)}, :start_video_shop_panel",
-                                                                                        "return-void",
-                                                                                        ":start_video_shop_panel"
-                                                                                    ])
-                                                                                ]
-                                                                            ).Write();
+                                                                    l + 1,
 
-                                                                            return (patchInteractions, false, xmlSmaliInfo);
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
+                                                                    [
+                                                                        $"if-ne {xmlSmaliProperties.Lines[k].GetRegister(1)}, {newIntConstFreeRegister}, :start_video_shop_panel",
+                                                                        "return-void",
+                                                                        ":start_video_shop_panel"
+                                                                    ])
+                                                                ]
+                                                            ).Write();
+
+                                                            return (patchInteractions, false, xmlSmaliInfo);
                                                         }
                                                     }
                                                 }
