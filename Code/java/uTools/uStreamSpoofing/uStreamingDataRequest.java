@@ -45,7 +45,7 @@ public class uStreamingDataRequest {
 
         CLIENT_TYPES_ORDER_TO_USE = new ArrayList<>(
                                         Arrays.asList(
-                                            uClientType.ANDROID_UNPLUGGED,
+                                            uClientType.ANDROID_VR,
 
                                             uClientType.ANDROID_CREATOR
                                         )

@@ -30,6 +30,9 @@ public final class uPlayerRoutes {
             client.put("osVersion", clientType.osVersion);
             if (clientType.androidSDKVersion != null) {
                 client.put("androidSdkVersion", clientType.androidSDKVersion);
+                if (clientType.gmsCoreVersionCode != null) {
+                    client.put("gmscoreVersionCode", clientType.gmsCoreVersionCode);
+                }
             }
 
             innerTubeBody.put("context", new JSONObject() {{
