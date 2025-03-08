@@ -2068,8 +2068,7 @@
                         "invoke-static",
                         ")Z",
                         "\"psps\"",
-                        ".method",
-                        "(Ljava/lang/String;[BLjava/lang/String;Ljava/lang/String;II"
+                        ".method"
                     ],
 
                     true,
@@ -2119,8 +2118,7 @@
                                                             for (int m = l; m >= 0; m--)
                                                             {
                                                                 if (new[] {
-                                                                        xmlSmaliSearchKeys[6],
-                                                                        xmlSmaliSearchKeys[7],
+                                                                        xmlSmaliSearchKeys[6]
                                                                     }.All(xmlSmaliProperties.NewLines[m].Contains))
                                                                 {
                                                                     codeInject.NewLines(
@@ -7221,13 +7219,13 @@
                                         xmlSmaliSearchKeys[1]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -690); j--)
+                                    for (int j = i; j >= scaleIndex.Lines(i, -695); j--)
                                     {
                                         if (new[] {
                                                 xmlSmaliSearchKeys[2]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, -214); k--)
+                                            for (int k = j; k >= scaleIndex.Lines(j, -215); k--)
                                             {
                                                 if (new[] {
                                                         xmlSmaliSearchKeys[3],
@@ -7235,7 +7233,7 @@
                                                         xmlSmaliSearchKeys[5],
                                                     }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
-                                                    for (int l = k; l <= scaleIndex.Lines(k, 6); l++)
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 5); l++)
                                                     {
                                                         if (new[] {
                                                                 xmlSmaliSearchKeys[6],

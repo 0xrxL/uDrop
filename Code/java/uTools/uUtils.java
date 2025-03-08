@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
 public class uUtils {
     private static final ThreadPoolExecutor backgroundThreadPool = new ThreadPoolExecutor(
-            3,
+            1,
             Integer.MAX_VALUE,
             10,
             TimeUnit.SECONDS,
