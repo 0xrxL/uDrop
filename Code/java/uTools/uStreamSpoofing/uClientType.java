@@ -32,16 +32,16 @@ public enum uClientType {
         "14"
     ),
     ANDROID_VR(
-        "34",
+        "32",
         28,
-        "com.google.android.apps.youtube.vr.pico",
+        "com.google.android.apps.youtube.vr.oculus",
         "1.62.27",
         "136.0.7069.0",
-        "A9210",
-        "Pico",
-        "UKQ1.240321.001",
+        "Quest 3S",
+        "Oculus",
+        "SQ3A.220605.009.A1",
         "Android",
-        "14"
+        "12"
     );
 
     @Nullable

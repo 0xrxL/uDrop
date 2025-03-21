@@ -731,6 +731,72 @@
 
                         return (patchInteractions, true, xmlSmaliInfo);
                     }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        " onLayout(",
+                        "invoke-direct",
+                        "()Z",
+                        "move-result "
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (xmlSmaliProperties.Path.EndsWith("\\YouTubePlayerViewNotForReflection.smali"))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 13); j++)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1],
+                                                xmlSmaliSearchKeys[2]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
+                                            {
+                                                if (new[] {
+                                                        xmlSmaliSearchKeys[3]
+                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
+                                                {
+                                                    codeInject.Lines(
+                                                        [
+                                                            (("FullScreen Video Player Background", true),
+
+                                                            k + 1,
+
+                                                            [
+                                                                $"const/4 {xmlSmaliProperties.Lines[k].GetRegister(1)}, 0x0"
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
                 ).Apply
             ];
         }
@@ -2497,7 +2563,7 @@
                                     xmlSmaliSearchKeys[0]
                                 }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 223); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 253); j++)
                                     {
                                         if (new[] {
                                             xmlSmaliSearchKeys[1]
