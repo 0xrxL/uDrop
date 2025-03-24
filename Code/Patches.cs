@@ -5313,60 +5313,7 @@
                 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(45645570)
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.Contains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[0]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    string patchedLine =
-                                        xmlSmaliProperties.Lines[i].Replace(
-                                            xmlSmaliSearchKeys[0],
-
-                                            $"-{xmlSmaliSearchKeys[0]}"
-                                        );
-
-                                    codeInject.LinesReplace(
-                                        [
-                                            (("Playback Stream Spoof Flag Disabler", true),
-
-                                            i,
-
-                                            [
-                                               patchedLine
-                                            ])
-                                        ]
-                                    ).Write();
-
-                                    return (patchInteractions, false, xmlSmaliInfo);
-                                }
-                            }
-                        }
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-                
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
+                        SmaliUtils.GetResourceHex(45645570),
                         SmaliUtils.GetResourceHex(45683169)
                     ],
 
@@ -5381,6 +5328,144 @@
                         xmlSmaliInfo
                     ) => {
                         if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 25); j++)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            string[] patchedLines = [
+                                                xmlSmaliProperties.Lines[i].Replace(
+                                                    xmlSmaliSearchKeys[0],
+
+                                                    $"-{xmlSmaliSearchKeys[0]}"
+                                                ),
+
+                                                xmlSmaliProperties.Lines[j].Replace(
+                                                    xmlSmaliSearchKeys[1],
+
+                                                    $"-{xmlSmaliSearchKeys[1]}"
+                                                )
+                                            ];
+
+                                            codeInject.LinesReplace(
+                                                [
+                                                    (("Playback Stream Spoof Flag Disabler", true),
+
+                                                    i,
+
+                                                    [
+                                                       patchedLines[0]
+                                                    ]),
+
+                                                    (("Playback Stream Spoof Flag Disabler", true),
+
+                                                    j,
+
+                                                    [
+                                                       patchedLines[1]
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex(45665455),
+                        ".method",
+                        ")Z"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1],
+                                                xmlSmaliSearchKeys[2]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    (("From Beginning LiveStream Flag Disabler", true),
+
+                                                    j + 2,
+
+                                                    [
+                                                        "const/4 v0, 0x0",
+                                                        "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex(45355374)
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
                                 xmlSmaliSearchKeys[0]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
@@ -5401,12 +5486,12 @@
 
                                     codeInject.LinesReplace(
                                         [
-                                            (("Playback Stream Spoof Flag Disabler", true),
+                                            (("From Beginning LiveStream Flag Disabler", true),
 
                                             i,
 
                                             [
-                                               patchedLine
+                                                patchedLine
                                             ])
                                         ]
                                     ).Write();
@@ -5418,7 +5503,7 @@
                         return (patchInteractions, true, xmlSmaliInfo);
                     }
                 ).Apply,
-                
+
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"youtubei/v1\"",
