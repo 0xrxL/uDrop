@@ -26,10 +26,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.Toast;
 
-import com.google.android.apps.youtube.app.watchwhile.MainActivity;
-
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,24 +83,6 @@ public class uBlocker {
             );
         } catch (PackageManager.NameNotFoundException exception) {
             checkMicroGPackageToastError.show();
-        }
-    }
-
-    public static boolean isTopView = false;
-    private static long lastTimeBackPressed = 0;
-    public static void CloseActivityOnBackPressed(MainActivity activity) {
-        if (isTopView) {
-            long time = System.currentTimeMillis();
-
-            if ((time - lastTimeBackPressed) >= 1000) {
-                lastTimeBackPressed = time;
-            } else {
-                isTopView = false;
-
-                lastTimeBackPressed = 0;
-
-                activity.finish();
-            }
         }
     }
 

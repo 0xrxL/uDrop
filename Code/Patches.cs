@@ -3163,211 +3163,6 @@
 
                         return (patchInteractions, true, xmlSmaliInfo);
                     }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        "\"scroll_position\"",
-                        SmaliUtils.GetResourceHex("id", "elements_item_touch_helper"),
-                        ".method protected",
-                        "()V",
-                        "const/4",
-                        "Landroid/support/v7/widget/RecyclerView;->"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1]
-                            }.All(str => xmlSmaliProperties.Full.ReferenceEntriesCount(str, 2)))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = xmlSmaliProperties.LinesCount - 1; i >= 0; i--)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[2],
-                                        xmlSmaliSearchKeys[3]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 13); j++)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[4]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            for (int k = j; k <= scaleIndex.Lines(j, 20); k++)
-                                            {
-                                                if (new[] {
-                                                        xmlSmaliSearchKeys[5]
-                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
-                                                {
-                                                    codeInject.Lines(
-                                                        [
-                                                            (("Back To Exit Fix", true),
-
-                                                            k + 1,
-
-                                                            [
-                                                                "const/4 v1, 0x0",
-                                                                $"sput-boolean v1, L{uBlockerPath};->isTopView:Z"
-                                                            ])
-                                                        ]
-                                                    ).Write();
-
-                                                    return (patchInteractions, false, xmlSmaliInfo);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex("layout", "browse_fragment_tabs"),
-                        "new-instance",
-                        "}, Landroid/support/v7/widget/RecyclerView;->",
-                        ":cond_"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.Contains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[0]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(j, 86); j++)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[1]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            xmlSmaliProperties.ReadXMLSmaliNewLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(1));
-
-                                            for (int k = 0; k < xmlSmaliProperties.NewLinesCount; k++)
-                                            {
-                                                if (new[] {
-                                                        xmlSmaliSearchKeys[2]
-                                                    }.All(xmlSmaliProperties.NewLines[k].Contains))
-                                                {
-                                                    for (int l = k; l <= scaleIndex.NewLines(l, 5); l++)
-                                                    {
-                                                        if (new[] {
-                                                                xmlSmaliSearchKeys[3]
-                                                            }.All(xmlSmaliProperties.NewLines[l].Contains))
-                                                        {
-                                                            codeInject.NewLines(
-                                                                [
-                                                                    (("Back To Exit Fix", true),
-
-                                                                    l + 1,
-
-                                                                    [
-                                                                        "const/4 v2, 0x1",
-                                                                        $"sput-boolean v2, L{uBlockerPath};->isTopView:Z"
-                                                                    ])
-                                                                ]
-                                                            ).Write();
-
-                                                            return (patchInteractions, false, xmlSmaliInfo);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        " onBackPressed()V",
-                        "return-void"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (xmlSmaliProperties.Path.EndsWith("\\watchwhile\\MainActivity.smali"))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[0]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 32); j++)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[1]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            codeInject.Lines(
-                                                [
-                                                    (("Back To Exit Fix", true),
-
-                                                    j,
-
-                                                    [
-                                                        $"invoke-static {{p0}}, L{uBlockerPath};->CloseActivityOnBackPressed(Lcom/google/android/apps/youtube/app/watchwhile/MainActivity;)V"
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
                 ).Apply
             ];
         }
@@ -6381,7 +6176,6 @@
                         "\"Error casting %s\"",
                         "\"SafeLayoutParams\"",
                         ".method public static",
-                        "(Ljava/lang/Class;Landroid/view/ViewGroup$LayoutParams;)Landroid/view/ViewGroup$LayoutParams;",
                         "(Landroid/view/View;II)V",
                         "HideViewGroupByMarginLayout",
                         ".param"
@@ -6407,56 +6201,39 @@
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
                                 if (new[] {
-                                        xmlSmaliSearchKeys[1]
+                                        xmlSmaliSearchKeys[2],
+                                        xmlSmaliSearchKeys[3]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j >= 0; j--)
+                                    xmlSmaliProperties.ReadXMLSmaliNewLines(uUtilsPath);
+
+                                    for (int j = 0; j < xmlSmaliProperties.NewLinesCount; j++)
                                     {
                                         if (new[] {
                                                 xmlSmaliSearchKeys[2],
-                                                xmlSmaliSearchKeys[3]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                                xmlSmaliSearchKeys[4]
+                                            }.All(xmlSmaliProperties.NewLines[j].Contains))
                                         {
-                                            for (int k = j; k >= 0; k--)
+                                            for (int k = j; k <= scaleIndex.NewLines(j, 3); k++)
                                             {
                                                 if (new[] {
-                                                        xmlSmaliSearchKeys[2],
-                                                        xmlSmaliSearchKeys[4]
-                                                    }.All(xmlSmaliProperties.Lines[k].Contains))
+                                                        xmlSmaliSearchKeys[5]
+                                                    }.All(xmlSmaliProperties.NewLines[k].Contains))
                                                 {
-                                                    xmlSmaliProperties.ReadXMLSmaliNewLines(uUtilsPath);
+                                                    codeInject.NewLines(
+                                                        [
+                                                            (("My Tab Get Premium Button", true),
 
-                                                    for (int l = 0; l < xmlSmaliProperties.NewLinesCount; l++)
-                                                    {
-                                                        if (new[] {
-                                                                xmlSmaliSearchKeys[2],
-                                                                xmlSmaliSearchKeys[5]
-                                                            }.All(xmlSmaliProperties.NewLines[l].Contains))
-                                                        {
-                                                            for (int m = l; m <= scaleIndex.NewLines(l, 3); m++)
-                                                            {
-                                                                if (new[] {
-                                                                        xmlSmaliSearchKeys[6]
-                                                                    }.All(xmlSmaliProperties.NewLines[m].Contains))
-                                                                {
-                                                                    codeInject.NewLines(
-                                                                        [
-                                                                            (("My Tab Get Premium Button", true),
+                                                            k + 1,
 
-                                                                            m + 1,
+                                                            [
+                                                                $"const/4 v0, 0x0",
+                                                                $"invoke-static {{p0, v0, v0}}, L{Path.GetFileNameWithoutExtension(xmlSmaliProperties.Path)};->{(xmlSmaliProperties.Lines[i].GetMethodName<string>() as string)}(Landroid/view/View;II)V"
+                                                            ])
+                                                        ]
+                                                    ).Write();
 
-                                                                            [
-                                                                                $"const/4 v0, 0x0",
-                                                                                $"invoke-static {{p0, v0, v0}}, L{Path.GetFileNameWithoutExtension(xmlSmaliProperties.Path)};->{(xmlSmaliProperties.Lines[k].GetMethodName<string>() as string)}(Landroid/view/View;II)V"
-                                                                            ])
-                                                                        ]
-                                                                    ).Write();
-
-                                                                    return (patchInteractions, false, xmlSmaliInfo);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
+                                                    return (patchInteractions, false, xmlSmaliInfo);
                                                 }
                                             }
                                         }

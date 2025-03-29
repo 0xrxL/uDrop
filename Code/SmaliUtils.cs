@@ -513,6 +513,11 @@ namespace uDrop.Code
 
             string methodNameString = splitMethodName.ToString();
 
+            if (String.IsNullOrEmpty(methodNameString))
+            {
+                "Error: No method name found".QuitWithException();
+            }
+
             return (typeof(T).Equals(typeof(string[])))
                     ?
                     new string[] {
