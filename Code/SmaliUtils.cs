@@ -20,7 +20,7 @@ namespace uDrop.Code
         public class SubPatchModule<T>
         {
             public bool Apply = false;
-            public string[] smaliInfo = [];
+            public string[] xmlSmaliInfo = [];
             public SubPatchModule(
                 T smaliSearchKeys,
                 bool apply,
@@ -60,11 +60,11 @@ namespace uDrop.Code
                                         scaleIndex,
                                         codeInject,
                                         patchInteractions,
-                                        smaliInfo
+                                        xmlSmaliInfo
                                     );
                     patchInteractions = returnedValues.Item1;
                     Apply = returnedValues.Item2;
-                    smaliInfo = returnedValues.Item3;
+                    xmlSmaliInfo = returnedValues.Item3;
                 }
             }
 

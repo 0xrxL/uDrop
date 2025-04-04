@@ -26,9 +26,9 @@ namespace uDrop.Code
             $"{firstRootFolder}\\Modded";                                                         //
         public static string apkDecompiledPath =                                                  //
             $"{                                                                                   //
-                firstCombinedRootFolders                                                              //
+                firstCombinedRootFolders                                                          //
             }\\{                                                                                  //
-                apkInfo.Item2                                                                         //
+                apkInfo.Item2                                                                     //
             }";                                                                                   //
         public static readonly string apkPath =                                                   //
             $"{apkDecompiledPath}.apk";                                                           //
