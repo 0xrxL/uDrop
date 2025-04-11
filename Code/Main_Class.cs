@@ -117,11 +117,24 @@ namespace uDrop.Code
                     APKUtils.TemporaryResourceRemoval();
                     goto END_CASE;
 
-                case "test":
+                case "debug":
+                    APKUtils.Decompile();
+
+                    Log.Divider();
+
+                    YouTube.Debug();
+
+                    APKUtils.Compile();
+                    APKUtils.ZipAlign();
+                    APKUtils.Sign();
+                    APKUtils.TemporaryResourceRemoval();
+                    goto END_CASE;
+
+                case "test_p":
                     YouTube.Debug_Patch();
                     goto END_CASE;
 
-                case "debug":
+                case "test_p_p":
                     APKUtils.Decompile();
 
                     Log.Divider();

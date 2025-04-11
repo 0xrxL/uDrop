@@ -11,11 +11,11 @@ public enum uClientType {
         "35",
         14,
         "com.google.android.apps.youtube.creator",
-        "25.11.100",
-        "136.0.7069.0",
-        "Pixel 9 Pro Fold",
+        "25.14.100",
+        "137.0.7121.0",
+        "Pixel 9 Pro",
         "Google",
-        "BP1A.250305.020.A2",
+        "BP1A.250405.007",
         "Android",
         "15"
     ),
@@ -23,8 +23,8 @@ public enum uClientType {
         "34",
         29,
         "com.google.android.apps.youtube.unplugged",
-        "9.11.1",
-        "136.0.7069.0",
+        "9.14.1",
+        "137.0.7121.0",
         "Google TV Streamer",
         "Google",
         "UTTK.241210.003",
@@ -32,16 +32,16 @@ public enum uClientType {
         "14"
     ),
     ANDROID_VR(
-        "32",
+        "35",
         28,
         "com.google.android.apps.youtube.vr.oculus",
         "1.62.27",
-        "136.0.7069.0",
+        "137.0.7121.0",
         "Quest 3S",
         "Oculus",
-        "SQ3A.220605.009.A1",
+        "BP1A.250405.007",
         "Android",
-        "12"
+        "15"
     );
 
     @Nullable

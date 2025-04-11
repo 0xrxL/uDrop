@@ -558,7 +558,7 @@ public class uBlocker {
                         )
                     )
                 );
-                videoPlayerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                videoPlayerIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 videoPlayerIntent.setPackage(context.getPackageName());
 
                 context.startActivity(videoPlayerIntent);
