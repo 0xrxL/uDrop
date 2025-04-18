@@ -5330,9 +5330,11 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "setRequestFinishedListener(",
-                        ".method public static",
+                        "\"Content-Type\"",
+                        "\"application/x-protobuf\"",
                         ")Lorg/chromium/net/UrlRequest;",
+                        ".method public static",
+                        "Lorg/chromium/net/UrlRequest$Builder;",
                         "invoke-virtual",
                         "Lorg/chromium/net/CronetEngine;->newUrlRequestBuilder",
                         "new-instance"
@@ -5359,21 +5361,21 @@
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
                                 if (new[] {
-                                        xmlSmaliSearchKeys[1],
-                                        xmlSmaliSearchKeys[2]
+                                        xmlSmaliSearchKeys[3],
+                                        xmlSmaliSearchKeys[4]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 48); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 46); j++)
                                     {
                                         if (new[] {
-                                                xmlSmaliSearchKeys[3],
-                                                xmlSmaliSearchKeys[4]
+                                                xmlSmaliSearchKeys[5],
+                                                xmlSmaliSearchKeys[6]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
                                             for (int k = j; k >= scaleIndex.Lines(j, -10); k--)
                                             {
                                                 if (new[] {
-                                                        xmlSmaliSearchKeys[5]
+                                                        xmlSmaliSearchKeys[7]
                                                     }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
                                                     string buildRequestFirstRegister = xmlSmaliProperties.Lines[j].GetRegister(2);
