@@ -3739,7 +3739,7 @@
                                                     j + 1,
 
                                                     [
-                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x3"
+                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x1"
                                                     ])
                                                 ]
                                             ).Write();
@@ -3919,6 +3919,120 @@
                                                     [
                                                         "const/4 v0, 0x1",
                                                         "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+                
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex(45672269),
+                        "move-result "
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    (("Miniplayer Media Controls Transition", true),
+
+                                                    j + 1,
+
+                                                    [
+                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x1"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex(45671481),
+                        "move-result "
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.Contains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (new[] {
+                                        xmlSmaliSearchKeys[0]
+                                    }.All(xmlSmaliProperties.Lines[i].Contains))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (new[] {
+                                                xmlSmaliSearchKeys[1]
+                                            }.All(xmlSmaliProperties.Lines[j].Contains))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    (("Miniplayer Automatic Reposition Disabler", true),
+
+                                                    j + 1,
+
+                                                    [
+                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x0"
                                                     ])
                                                 ]
                                             ).Write();
@@ -4649,16 +4763,25 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"ScrollableContainerType\"",
-                        "\"Element missing type extension\"",
-                        "invoke-static/range",
-                        "iget-object",
-                        "move-result-object",
                         "\"Component was not found because it was removed due to duplicate converter bindings.\"",
-                        "new-array",
-                        "invoke-interface",
+                        ".method",
+                        "check-cast",
+                        "Ljava/nio/ByteBuffer;",
+                        "invoke-static",
+                        "Lcom/google/protobuf/ExtensionRegistryLite;->getGeneratedRegistry()Lcom/google/protobuf/ExtensionRegistryLite;",
+                        "iget-boolean",
+                        "const/4",
+                        "0x0",
+                        "move-object ",
+                        "invoke-static",
+                        "Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;",
+                        "move-result-object",
+                        "goto",
+                        "return-object",
+                        "iget-object",
+                        "invoke-static",
                         ".field public final",
-                        ":Ljava/lang/StringBuilder;",
-                        "return-object"
+                        ":Ljava/lang/StringBuilder;"
                     ],
 
                     true,
@@ -4673,7 +4796,7 @@
                     ) => {
                         if (new[] {
                                 xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[7]
+                                xmlSmaliSearchKeys[1]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -4684,94 +4807,137 @@
                                         xmlSmaliSearchKeys[1]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 29); j++)
+                                    for (int j = i; j >= 0; j--)
                                     {
                                         if (new[] {
                                                 xmlSmaliSearchKeys[2]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            for (int k = j; k <= scaleIndex.Lines(j, 9); k++)
+                                            for (int k = j; k < xmlSmaliProperties.LinesCount; k++)
                                             {
                                                 if (new[] {
-                                                        xmlSmaliSearchKeys[3]
+                                                        xmlSmaliSearchKeys[3],
+                                                        xmlSmaliSearchKeys[4]
                                                     }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
-                                                    for (int l = k; l >= scaleIndex.Lines(k, -15); l--)
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 5); l++)
                                                     {
                                                         if (new[] {
-                                                                xmlSmaliSearchKeys[4]
+                                                                xmlSmaliSearchKeys[5],
+                                                                xmlSmaliSearchKeys[6]
                                                             }.All(xmlSmaliProperties.Lines[l].Contains))
                                                         {
-                                                            for (int m = l; m < xmlSmaliProperties.LinesCount; m++)
+                                                            string stringBuilderClassName = xmlSmaliProperties.Lines[j].GetParameterClassName(2);
+
+                                                            for (int m = l; m <= scaleIndex.Lines(l, 17); m++)
                                                             {
                                                                 if (new[] {
-                                                                        xmlSmaliSearchKeys[5],
+                                                                        xmlSmaliSearchKeys[7],
+                                                                        $"L{stringBuilderClassName};"
                                                                     }.All(xmlSmaliProperties.Lines[m].Contains))
                                                                 {
-                                                                    for (int n = m; n <= scaleIndex.Lines(m, 8); n++)
+                                                                    for (int n = m; n < xmlSmaliProperties.LinesCount; n++)
                                                                     {
                                                                         if (new[] {
-                                                                                xmlSmaliSearchKeys[6],
+                                                                                xmlSmaliSearchKeys[8],
+                                                                                xmlSmaliSearchKeys[9]
                                                                             }.All(xmlSmaliProperties.Lines[n].Contains))
                                                                         {
-                                                                            for (int o = n; o <= scaleIndex.Lines(n, 5); o++)
+                                                                            for (int o = n; o <= scaleIndex.Lines(n, 20); o++)
                                                                             {
                                                                                 if (new[] {
-                                                                                        xmlSmaliSearchKeys[7]
+                                                                                        xmlSmaliSearchKeys[10],
+                                                                                        xmlSmaliProperties.Lines[m].GetRegister(2)
                                                                                     }.All(xmlSmaliProperties.Lines[o].Contains))
                                                                                 {
-                                                                                    string stringBuilderClassName = xmlSmaliProperties.Lines[o].GetParameterClassName(2);
-
-                                                                                    string stringBuilderFieldName = "";
-
-                                                                                    xmlSmaliProperties.ReadXMLSmaliNewLines(stringBuilderClassName);
-
-                                                                                    for (int p = 0; p < xmlSmaliProperties.NewLinesCount; p++)
+                                                                                    for (int p = o; p < xmlSmaliProperties.LinesCount; p++)
                                                                                     {
                                                                                         if (new[] {
-                                                                                                xmlSmaliSearchKeys[8],
-                                                                                                xmlSmaliSearchKeys[9]
-                                                                                            }.All(xmlSmaliProperties.NewLines[p].Contains))
+                                                                                                xmlSmaliSearchKeys[11],
+                                                                                                xmlSmaliSearchKeys[12]
+                                                                                            }.All(xmlSmaliProperties.Lines[p].Contains))
                                                                                         {
-                                                                                            stringBuilderFieldName = xmlSmaliProperties.NewLines[p].GetFieldName();
-
-                                                                                            break;
-                                                                                        }
-                                                                                    }
-
-                                                                                    if (!String.IsNullOrEmpty(stringBuilderFieldName))
-                                                                                    {
-                                                                                        for (int q = o; q >= scaleIndex.Lines(o, -114); q--)
-                                                                                        {
-                                                                                            if (new[] {
-                                                                                                    xmlSmaliSearchKeys[10]
-                                                                                                }.All(xmlSmaliProperties.Lines[q].Contains))
+                                                                                            for (int q = p; q <= scaleIndex.Lines(p, 6); q++)
                                                                                             {
-                                                                                                string returnedObjectRegister = xmlSmaliProperties.Lines[k].GetRegister(1);
+                                                                                                if (new[] {
+                                                                                                        xmlSmaliSearchKeys[13]
+                                                                                                    }.All(xmlSmaliProperties.Lines[q].Contains))
+                                                                                                {
+                                                                                                    for (int r = q; r >= scaleIndex.Lines(q, -15); r--)
+                                                                                                    {
+                                                                                                        if (new[] {
+                                                                                                                xmlSmaliSearchKeys[14]
+                                                                                                            }.All(xmlSmaliProperties.Lines[r].Trim().StartsWith))
+                                                                                                        {
+                                                                                                            for (int s = r; s < xmlSmaliProperties.LinesCount; s++)
+                                                                                                            {
+                                                                                                                if (new[] {
+                                                                                                                        xmlSmaliSearchKeys[15]
+                                                                                                                    }.All(xmlSmaliProperties.Lines[s].Contains))
+                                                                                                                {
+                                                                                                                    for (int t = s; t >= scaleIndex.Lines(s, -7); t--)
+                                                                                                                    {
+                                                                                                                        if (new[] {
+                                                                                                                                xmlSmaliSearchKeys[16]
+                                                                                                                            }.All(xmlSmaliProperties.Lines[t].Contains))
+                                                                                                                        {
+                                                                                                                            for (int u = t; u >= scaleIndex.Lines(t, -9); u--)
+                                                                                                                            {
+                                                                                                                                if (new[] {
+                                                                                                                                        xmlSmaliSearchKeys[17]
+                                                                                                                                    }.All(xmlSmaliProperties.Lines[u].Contains))
+                                                                                                                                {
+                                                                                                                                    string stringBuilderFieldName = "";
 
-                                                                                                codeInject.Lines(
-                                                                                                    [
-                                                                                                        (("Litho Tree", true),
+                                                                                                                                    xmlSmaliProperties.ReadXMLSmaliNewLines(stringBuilderClassName);
 
-                                                                                                        q,
+                                                                                                                                    for (int v = 0; v < xmlSmaliProperties.NewLinesCount; v++)
+                                                                                                                                    {
+                                                                                                                                        if (new[] {
+                                                                                                                                                xmlSmaliSearchKeys[18],
+                                                                                                                                                xmlSmaliSearchKeys[19]
+                                                                                                                                            }.All(xmlSmaliProperties.NewLines[v].Contains))
+                                                                                                                                        {
+                                                                                                                                            stringBuilderFieldName = xmlSmaliProperties.NewLines[v].GetFieldName();
+                                                                                                                                        }
+                                                                                                                                    }
 
-                                                                                                        [
-                                                                                                            $"iget-object v0, {xmlSmaliProperties.Lines[o].GetRegister(3)}, L{stringBuilderClassName};->{stringBuilderFieldName}:Ljava/lang/StringBuilder;",
-                                                                                                            "invoke-virtual {v0}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;",
-                                                                                                            "move-result-object v0",
-                                                                                                            $"invoke-static {{v0}}, L{uBlockerPath};->HideLithoTemplate(Ljava/lang/String;)Z",
-                                                                                                            "move-result v0",
-                                                                                                            "if-eqz v0, :litho_tree",
-                                                                                                            xmlSmaliProperties.Lines[j],
-                                                                                                            $"move-result-object {returnedObjectRegister}",
-                                                                                                            xmlSmaliProperties.Lines[k],
-                                                                                                            $"return-object {returnedObjectRegister}",
-                                                                                                            ":litho_tree"
-                                                                                                        ])
-                                                                                                    ]
-                                                                                                ).Write();
+                                                                                                                                    if (!String.IsNullOrEmpty(stringBuilderFieldName)) {
+                                                                                                                                        string checkLithoElementFreeRegister = xmlSmaliProperties.Lines[q].GetRegister(1);
 
-                                                                                                return (patchInteractions, false, xmlSmaliInfo);
+                                                                                                                                        codeInject.Lines(
+                                                                                                                                            [
+                                                                                                                                                (("Litho Tree", true),
+
+                                                                                                                                                r,
+
+                                                                                                                                                [
+                                                                                                                                                    $"move-object/from16 {checkLithoElementFreeRegister}, {xmlSmaliProperties.Lines[o].GetRegister(1)}",
+                                                                                                                                                    $"iget-object {checkLithoElementFreeRegister}, {checkLithoElementFreeRegister}, L{stringBuilderClassName};->m:Ljava/lang/StringBuilder;",
+                                                                                                                                                    $"invoke-virtual {{{checkLithoElementFreeRegister}}}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;",
+                                                                                                                                                    $"move-result-object {checkLithoElementFreeRegister}",
+                                                                                                                                                    $"invoke-static {{{checkLithoElementFreeRegister}}}, LuTools/uBlocker;->HideLithoTemplate(Ljava/lang/String;)Z",
+                                                                                                                                                    $"move-result {checkLithoElementFreeRegister}",
+                                                                                                                                                    $"if-eqz {checkLithoElementFreeRegister}, :litho_tree",
+                                                                                                                                                    $"invoke-static/range {{p1 .. p1}}, {xmlSmaliProperties.Lines[u].GetInvokedSection()}",
+                                                                                                                                                    $"move-result-object {checkLithoElementFreeRegister}",
+                                                                                                                                                    $"iget-object {xmlSmaliProperties.Lines[s].GetRegister(1)}, {checkLithoElementFreeRegister}, {xmlSmaliProperties.Lines[t].GetInvokedSection()}",
+                                                                                                                                                    ":litho_tree"
+                                                                                                                                                ])
+                                                                                                                                            ]
+                                                                                                                                        ).Write();
+
+                                                                                                                                        return (patchInteractions, false, xmlSmaliInfo);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
                                                                                             }
                                                                                         }
                                                                                     }
@@ -5788,7 +5954,7 @@
                                         xmlSmaliSearchKeys[5]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 389); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 427); j++)
                                     {
                                         if (new[] {
                                                 xmlSmaliSearchKeys[6],
@@ -5802,13 +5968,13 @@
                                                             xmlSmaliSearchKeys[8]
                                                         }.All(xmlSmaliProperties.Lines[k].Contains))
                                                     {
-                                                        for (int l = k; l <= scaleIndex.Lines(k, 31); l++)
+                                                        for (int l = k; l <= scaleIndex.Lines(k, 30); l++)
                                                         {
                                                             if (new[] {
                                                                     xmlSmaliSearchKeys[9]
                                                                 }.All(xmlSmaliProperties.Lines[l].Contains))
                                                             {
-                                                                for (int m = l; m >= scaleIndex.Lines(l, -6); m--)
+                                                                for (int m = l; m >= scaleIndex.Lines(l, -14); m--)
                                                                 {
                                                                     if (new[] {
                                                                             xmlSmaliSearchKeys[10]
