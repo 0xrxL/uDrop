@@ -54,7 +54,8 @@ namespace uDrop.Code
 
                     if (!versionNodeInner.Contains("APK Mirror"))
                     {
-                        Match match = Regex.Match(versionNodeInner, @"\d+\.\d+\.\d+");
+                        string pattern = @"\d+\.\d+\.\d+";
+                        Match match = Regex.Match(versionNodeInner, pattern);
 
                         if (match.Success)
                         {
@@ -85,12 +86,18 @@ namespace uDrop.Code
 
             string versionURL = $"{appSectionURL}{Main_Class.apkInfo.Item2.ToLower()}-{lastVersion}-release/";
 
-            List<HtmlNode> versionPackageNode = hw
-                                    .Load(versionURL)
-                                    .DocumentNode
-                                    .SelectNodes("//span[contains(@class, 'apkm-badge')]")
+            List<HtmlNode> versionPackageNode = [];
+
+            try
+            {
+                versionPackageNode = [..
+                                        hw
+                                        .Load(versionURL)
+                                        .DocumentNode
+                                        .SelectNodes("//span[contains(@class, 'apkm-badge')]")
                                         .Where(f => f.InnerHtml.Equals("APK"))
-                                        .ToList();
+                                    ];
+            } catch (Exception) {}
 
             if (versionPackageNode.Count.Equals(0))
             {
@@ -124,8 +131,7 @@ namespace uDrop.Code
 
             string safeDownloadNodeText = md5Node
                                             .InnerHtml
-                                            .Replace("\n", "")
-                                            .Replace(" ", "");
+                                            .Trim('\n', ' ');
 
             webMD5Value = safeDownloadNodeText[(safeDownloadNodeText.IndexOf("MD5:") + 4)..];
             webMD5Value = webMD5Value[(webMD5Value.IndexOf('>') + 1)..];
