@@ -479,7 +479,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"The Google Play services resources were not found. Check your project configuration to ensure that the resources are included.\"",
-                        ".locals"
+                        ".method"
                     ],
 
                     true,
@@ -514,7 +514,7 @@
                                                 [
                                                     (("Google Signature Check Disabler", true),
 
-                                                    j,
+                                                    j + 2,
 
                                                     [
                                                         "const/4 v0, 0x0",
@@ -537,7 +537,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"GooglePlayServices not available due to error \"",
-                        ".locals"
+                        ".method"
                     ],
 
                     true,
@@ -572,7 +572,7 @@
                                                 [
                                                     (("Google Signature Check Disabler", true),
 
-                                                    j,
+                                                    j + 2,
 
                                                     [
                                                         "return-void"
@@ -3481,7 +3481,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex("string", "accessibility_captions_unavailable"),
-                        ".locals"
+                        ".method"
                     ],
 
                     true,
@@ -3516,7 +3516,7 @@
                                                 [
                                                     (("", true),
 
-                                                    j + 1,
+                                                    j + 2,
 
                                                     [
                                                         "const/4 v0, 0x1",
@@ -4079,7 +4079,7 @@
                                          xmlSmaliSearchKeys[0]
                                      }.All(xmlSmaliProperties.Lines[i].Contains))
                                  {
-                                     for (int j = i; j <= scaleIndex.Lines(i, 170); j++)
+                                     for (int j = i; j <= scaleIndex.Lines(i, 186); j++)
                                      {
                                          if (new[] {
                                                  xmlSmaliSearchKeys[1]
@@ -6883,14 +6883,14 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex(318370164),
-                        SmaliUtils.GetResourceHex(16843518),
-                        "and-int",
-                        "invoke-static",
-                        "(I)L",
-                        "move-result-object",
+                        SmaliUtils.GetResourceHex("layout", "avatar_clipped_image_view_with_text_tab"),
                         "invoke-virtual/range",
                         "/pivotbar/PivotBar;->",
-                        ")Landroid/view/View;"
+                        ")Landroid/view/View;",
+                        "move-result-object",
+                        "and-int",
+                        "invoke-static",
+                        "(I)L"
                     ],
 
                     true,
@@ -6910,119 +6910,71 @@
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            next_reference:
+                            bool shouldBreak = false;
+                            for (int i = patchInteractions; i < xmlSmaliProperties.LinesCount && !shouldBreak; i++)
                             {
                                 if (new[] {
-                                        xmlSmaliSearchKeys[1]
+                                        xmlSmaliSearchKeys[2],
+                                        xmlSmaliSearchKeys[3],
+                                        xmlSmaliSearchKeys[4]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -159); j--)
+                                    for (int j = i; j < scaleIndex.Lines(i, 6); j++)
                                     {
                                         if (new[] {
-                                                xmlSmaliSearchKeys[2]
+                                                xmlSmaliSearchKeys[5]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, -30); k--)
+                                            for (int k = j; k >= scaleIndex.Lines(j, -160); k--)
                                             {
                                                 if (new[] {
-                                                        xmlSmaliSearchKeys[3],
-                                                        xmlSmaliSearchKeys[4]
+                                                        xmlSmaliSearchKeys[6]
                                                     }.All(xmlSmaliProperties.Lines[k].Contains))
                                                 {
-                                                    for (int l = k; l <= scaleIndex.Lines(k, 6); l++)
+                                                    for (int l = k; l >= scaleIndex.Lines(k, -30); l--)
                                                     {
                                                         if (new[] {
-                                                                xmlSmaliSearchKeys[5]
+                                                                xmlSmaliSearchKeys[7],
+                                                                xmlSmaliSearchKeys[8]
                                                             }.All(xmlSmaliProperties.Lines[l].Contains))
                                                         {
-                                                            for (int m = i; m <= scaleIndex.Lines(i, 250); m++)
+                                                            for (int m = l; m <= scaleIndex.Lines(l, 6); m++)
                                                             {
                                                                 if (new[] {
-                                                                        xmlSmaliSearchKeys[6],
-                                                                        xmlSmaliSearchKeys[7],
-                                                                        xmlSmaliSearchKeys[8],
+                                                                        xmlSmaliSearchKeys[5]
                                                                     }.All(xmlSmaliProperties.Lines[m].Contains))
                                                                 {
-                                                                    for (int n = m; n <= scaleIndex.Lines(m, 6); n++)
+                                                                    codeInject.Lines(
+                                                                        [
+                                                                            (("Navigation Bar", true),
+
+                                                                            j + 1,
+
+                                                                            [
+                                                                                $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uBlockerPath};->HideNavigationbarButtons(Landroid/view/View;)V"
+                                                                            ]),
+
+                                                                            (("Navigation Bar", true),
+
+                                                                            m + 1,
+
+                                                                            [
+                                                                                $"sput-object {xmlSmaliProperties.Lines[m].GetRegister(1)}, L{uBlockerPath};->navigationBarPivot:Ljava/lang/Enum;"
+                                                                            ])
+                                                                        ]
+                                                                    );
+
+                                                                    if (patchInteractions > 0)
                                                                     {
-                                                                        if (new[] {
-                                                                                xmlSmaliSearchKeys[5]
-                                                                            }.All(xmlSmaliProperties.Lines[n].Contains))
-                                                                        {
-                                                                            for (int o = n; o <= scaleIndex.Lines(n, 38); o++)
-                                                                            {
-                                                                                if (new[] {
-                                                                                        xmlSmaliSearchKeys[3],
-                                                                                        xmlSmaliSearchKeys[4]
-                                                                                    }.All(xmlSmaliProperties.Lines[o].Contains))
-                                                                                {
-                                                                                    for (int p = o; p <= scaleIndex.Lines(o, 6); p++)
-                                                                                    {
-                                                                                        if (new[] {
-                                                                                                xmlSmaliSearchKeys[5]
-                                                                                            }.All(xmlSmaliProperties.Lines[p].Contains))
-                                                                                        {
-                                                                                            for (int q = p; q <= scaleIndex.Lines(p, 191); q++)
-                                                                                            {
-                                                                                                if (new[] {
-                                                                                                        xmlSmaliSearchKeys[6],
-                                                                                                        xmlSmaliSearchKeys[7],
-                                                                                                        xmlSmaliSearchKeys[8]
-                                                                                                    }.All(xmlSmaliProperties.Lines[q].Contains))
-                                                                                                {
-                                                                                                    for (int r = q; r <= scaleIndex.Lines(q, 6); r++)
-                                                                                                    {
-                                                                                                        if (new[] {
-                                                                                                                xmlSmaliSearchKeys[5]
-                                                                                                            }.All(xmlSmaliProperties.Lines[r].Contains))
-                                                                                                        {
-                                                                                                            codeInject.Lines(
-                                                                                                                [
-                                                                                                                    (("Navigation Bar", true),
+                                                                        codeInject.Write();
 
-                                                                                                                    r + 1,
-
-                                                                                                                    [
-                                                                                                                        $"invoke-static {{{xmlSmaliProperties.Lines[r].GetRegister(1)}}}, L{uBlockerPath};->HideNavigationbarButtons(Landroid/view/View;)V"
-                                                                                                                    ]),
-
-                                                                                                                    (("Navigation Bar", true),
-
-                                                                                                                    p + 1,
-
-                                                                                                                    [
-                                                                                                                        $"sput-object {xmlSmaliProperties.Lines[p].GetRegister(1)}, L{uBlockerPath};->navigationBarPivot:Ljava/lang/Enum;"
-                                                                                                                    ]),
-
-                                                                                                                    (("Navigation Bar", true),
-
-                                                                                                                    n + 1,
-
-                                                                                                                    [
-                                                                                                                        $"invoke-static {{{xmlSmaliProperties.Lines[n].GetRegister(1)}}}, L{uBlockerPath};->HideNavigationbarButtons(Landroid/view/View;)V"
-                                                                                                                    ]),
-
-                                                                                                                    (("Navigation Bar", true),
-
-                                                                                                                    l + 1,
-
-                                                                                                                    [
-                                                                                                                        $"sput-object {xmlSmaliProperties.Lines[l].GetRegister(1)}, L{uBlockerPath};->navigationBarPivot:Ljava/lang/Enum;"
-                                                                                                                    ])
-                                                                                                                ]
-                                                                                                            ).Write();
-
-                                                                                                            return (patchInteractions, false, xmlSmaliInfo);
-                                                                                                        }
-                                                                                                    }
-                                                                                                }
-                                                                                            }
-                                                                                        }
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
+                                                                        return (0, false, xmlSmaliInfo);
                                                                     }
+
+                                                                    patchInteractions = j;
+                                                                    shouldBreak = true;
+                                                                    goto next_reference;
                                                                 }
                                                             }
                                                         }
