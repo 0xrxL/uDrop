@@ -6,7 +6,7 @@
         private static List<bool> Debug_Patch()
         {
             return [
-                
+
             ];
         }
 
@@ -6661,14 +6661,14 @@
                                         xmlSmaliSearchKeys[1]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 70); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 61); j++)
                                     {
                                         if (new[] {
                                                 xmlSmaliSearchKeys[2],
                                                 xmlSmaliSearchKeys[3]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, -5); k--)
+                                            for (int k = j; k >= scaleIndex.Lines(j, -8); k--)
                                             {
                                                 if (new[] {
                                                         xmlSmaliSearchKeys[4]
@@ -6920,13 +6920,13 @@
                                         xmlSmaliSearchKeys[4]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
-                                    for (int j = i; j < scaleIndex.Lines(i, 6); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 6); j++)
                                     {
                                         if (new[] {
                                                 xmlSmaliSearchKeys[5]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, -160); k--)
+                                            for (int k = j; k >= scaleIndex.Lines(j, (patchInteractions == 0 ? -168 : -183)); k--)
                                             {
                                                 if (new[] {
                                                         xmlSmaliSearchKeys[6]
