@@ -4229,63 +4229,6 @@
                 ).Apply,
 
                 new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex(45671481),
-                        "move-result "
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.Contains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (new[] {
-                                        xmlSmaliSearchKeys[0]
-                                    }.All(xmlSmaliProperties.Lines[i].Contains))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
-                                    {
-                                        if (new[] {
-                                                xmlSmaliSearchKeys[1]
-                                            }.All(xmlSmaliProperties.Lines[j].Contains))
-                                        {
-                                            codeInject.Lines(
-                                                [
-                                                    (("Miniplayer Automatic Reposition Disabler", true),
-
-                                                    j + 1,
-
-                                                    [
-                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x0"
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
                      [
                          SmaliUtils.GetResourceHex("id", "mdx_drawer_layout"),
                          ";->finish()V",
@@ -4974,26 +4917,7 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(17),
-                        SmaliUtils.GetResourceHex(16),
-                        SmaliUtils.GetResourceHex(15),
-                        SmaliUtils.GetResourceHex(14),
-                        SmaliUtils.GetResourceHex(13),
-                        SmaliUtils.GetResourceHex(12),
-                        SmaliUtils.GetResourceHex(11),
-                        SmaliUtils.GetResourceHex(10),
-                        SmaliUtils.GetResourceHex(9),
-                        SmaliUtils.GetResourceHex(8),
-                        SmaliUtils.GetResourceHex(7),
-                        SmaliUtils.GetResourceHex(6),
-                        SmaliUtils.GetResourceHex(5),
-                        SmaliUtils.GetResourceHex(4),
-                        SmaliUtils.GetResourceHex(3),
-                        SmaliUtils.GetResourceHex(2),
-                        SmaliUtils.GetResourceHex(1),
-                        SmaliUtils.GetResourceHex(0),
-                        ".method public final",
-                        "(ILjava/nio/ByteBuffer;)V"
+                        "invoke-virtual/range {v0 .. v9}, Lcom/google/android/libraries/elements/adl/UpbMessage;->jniDecode(JJJ[BII)V"
                     ],
 
                     true,
@@ -5007,24 +4931,7 @@
                         xmlSmaliInfo
                     ) => {
                         if (new[] {
-                                xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1],
-                                xmlSmaliSearchKeys[2],
-                                xmlSmaliSearchKeys[3],
-                                xmlSmaliSearchKeys[4],
-                                xmlSmaliSearchKeys[5],
-                                xmlSmaliSearchKeys[6],
-                                xmlSmaliSearchKeys[7],
-                                xmlSmaliSearchKeys[8],
-                                xmlSmaliSearchKeys[9],
-                                xmlSmaliSearchKeys[10],
-                                xmlSmaliSearchKeys[11],
-                                xmlSmaliSearchKeys[12],
-                                xmlSmaliSearchKeys[13],
-                                xmlSmaliSearchKeys[14],
-                                xmlSmaliSearchKeys[15],
-                                xmlSmaliSearchKeys[16],
-                                xmlSmaliSearchKeys[17]
+                                xmlSmaliSearchKeys[0]
                             }.All(xmlSmaliProperties.Full.Contains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -5032,18 +4939,19 @@
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
                                 if (new[] {
-                                        xmlSmaliSearchKeys[18],
-                                        xmlSmaliSearchKeys[19]
+                                        xmlSmaliSearchKeys[0]
                                     }.All(xmlSmaliProperties.Lines[i].Contains))
                                 {
                                     codeInject.Lines(
                                         [
                                             (("Litho ProtoBuffer", true),
 
-                                            i + 2,
+                                            i + 1,
 
                                             [
-                                                $"sput-object p2, L{uBlockerPath};->protoBufferComponents:Ljava/nio/ByteBuffer;"
+                                                "invoke-static {v7}, Ljava/nio/ByteBuffer;->wrap([B)Ljava/nio/ByteBuffer;",
+                                                "move-result-object v7",
+                                                $"sput-object v7, L{uBlockerPath};->protoBufferComponents:Ljava/nio/ByteBuffer;"
                                             ])
                                         ]
                                     ).Write();
@@ -6866,7 +6774,7 @@
                                                 xmlSmaliSearchKeys[1]
                                             }.All(xmlSmaliProperties.Lines[j].Contains))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, -308); k--)
+                                            for (int k = j; k >= 0; k--)
                                             {
                                                 if (new[] {
                                                         xmlSmaliSearchKeys[2]
