@@ -194,6 +194,12 @@ public class uBlocker {
                 "videoLookupComponents"
             )
         );
+    private static final Set<String> videoOtherSettingsPanelComponent =
+        Set.of(
+            "yt_outline_question_circle",
+            "yt_outline_volume_stable",
+            "yt_outline_youtube_music"
+        );
     private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> generalComponents =
         InitializeNewBlockList(
             new AbstractMap.SimpleEntry<> (
@@ -266,19 +272,6 @@ public class uBlocker {
     private static boolean quickQualityBottomSheet = false;
     public static ByteBuffer protoBufferComponents;
     public static boolean HideLithoTemplate(String templateTreeComponent) {
-        //-------------------------------Channel Header Components-------------------------------//
-            if (templateTreeComponent.contains("page_header") &&
-                ByteBufferContainsString(
-                    protoBufferComponents,
-                    Set.of(
-                        "header_community_button",
-                        "header_store_button"
-                    ),
-                    entries.ANY
-                )) {
-                    return true;
-            }
-        //---------------------------------------------------------------------------------------//
         //-----------------------------------Channel Watermark-----------------------------------//
             if (templateTreeComponent.contains("featured_channel_watermark_overlay")) {
                 return true;
@@ -380,9 +373,7 @@ public class uBlocker {
             if (templateTreeComponent.contains("overflow_menu_item") &&
                 ByteBufferContainsString(
                     protoBufferComponents,
-                    Set.of(
-                        "yt_outline_volume_stable"
-                    ),
+                    videoOtherSettingsPanelComponent,
                     entries.ANY
                 )) {
                     return true;

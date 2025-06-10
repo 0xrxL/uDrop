@@ -76,9 +76,9 @@ namespace uDrop.Code
                 public string PatchedFull = "";
                 public List<string> Lines = [];
                 public int LinesCount = 0;
-                public string NewPath = "";
-                public List<string> NewLines = [];
-                public int NewLinesCount = 0;
+                public string ProxiedPath = "";
+                public List<string> ProxiedLines = [];
+                public int ProxiedLinesCount = 0;
 
                 public void ReadXMLSmaliLines()
                 {
@@ -88,14 +88,14 @@ namespace uDrop.Code
                         Lines.Count;
                 }
                 
-                public void ReadXMLSmaliNewLines(string partialPath)
+                public void ReadXMLSmaliProxiedLines(string partialPath)
                 {
-                    NewPath =
+                    ProxiedPath =
                         uDropUtils.GetOSSpecificFullPath(partialPath).GetSmaliFileFullPath();
-                    NewLines =
-                        [.. File.ReadAllLines(NewPath)];
-                    NewLinesCount =
-                        NewLines.Count;
+                    ProxiedLines =
+                        [.. File.ReadAllLines(ProxiedPath)];
+                    ProxiedLinesCount =
+                        ProxiedLines.Count;
                 }
             }
             private static readonly XMLSmaliProperties xmlSmaliProperties = new();
@@ -107,9 +107,9 @@ namespace uDrop.Code
                     return Compute(currentIndex, indexSteps, xmlSmaliProperties.LinesCount);
                 }
 
-                public int NewLines(int currentIndex, int indexSteps)
+                public int ProxiedLines(int currentIndex, int indexSteps)
                 {
-                    return Compute(currentIndex, indexSteps, xmlSmaliProperties.NewLinesCount);
+                    return Compute(currentIndex, indexSteps, xmlSmaliProperties.ProxiedLinesCount);
                 }
 
                 private int Compute(int currentIndex, int indexSteps, int LinesCount)
@@ -130,7 +130,7 @@ namespace uDrop.Code
                 private int InjectionType;
                 private StringTransform[] SmaliSearchKeys = [];
 
-                public CodeInject FullReplace(((string, bool), int, string[])[] injectionsInfo, StringTransform[] smaliSearchKeys)
+                public CodeInject FullReplace((string, int, string[])[] injectionsInfo, StringTransform[] smaliSearchKeys)
                 {
                     InjectionType = 4;
 
@@ -139,37 +139,36 @@ namespace uDrop.Code
                     return Compute(injectionsInfo);
                 }
 
-                public CodeInject Lines(((string, bool), int, string[])[] injectionsInfo)
+                public CodeInject Lines((string, int, string[])[] injectionsInfo)
                 {
                     InjectionType = 0;
 
                     return Compute(injectionsInfo);
                 }
-                public CodeInject LinesReplace(((string, bool), int, string[])[] injectionsInfo)
+                public CodeInject LinesReplace((string, int, string[])[] injectionsInfo)
                 {
                     InjectionType = 1;
 
                     return Compute(injectionsInfo);
                 }
 
-                public CodeInject NewLines(((string, bool), int, string[])[] injectionsInfo)
+                public CodeInject ProxiedLines((string, int, string[])[] injectionsInfo)
                 {
                     InjectionType = 2;
 
                     return Compute(injectionsInfo);
                 }
-                public CodeInject NewLinesReplace(((string, bool), int, string[])[] injectionsInfo)
+                public CodeInject ProxiedLinesReplace((string, int, string[])[] injectionsInfo)
                 {
                     InjectionType = 3;
 
                     return Compute(injectionsInfo);
                 }
                 
-                private CodeInject Compute(((string, bool), int, string[])[] injectionsInfo)
+                private CodeInject Compute((string, int, string[])[] injectionsInfo)
                 {
                     foreach (var injectionInfo in injectionsInfo)
                     {
-                        bool isNewLines = false;
                         string injectionTypeInfo = "";
 
                         if (InjectionType.Equals(0))
@@ -178,33 +177,25 @@ namespace uDrop.Code
 
                             xmlSmaliProperties.LinesCount += injectionInfo.Item3.Length;
 
-                            isNewLines = false;
-
                             injectionTypeInfo = $"Added At Line: {injectionInfo.Item2}";
                         }
                         else if (InjectionType.Equals(1))
                         {
                             xmlSmaliProperties.Lines[injectionInfo.Item2] = injectionInfo.Item3[0];
 
-                            isNewLines = false;
-
                             injectionTypeInfo = $"Replaced Line: {injectionInfo.Item2}";
                         }
                         else if (InjectionType.Equals(2))
                         {
-                            xmlSmaliProperties.NewLines.InsertRange(injectionInfo.Item2, injectionInfo.Item3);
+                            xmlSmaliProperties.ProxiedLines.InsertRange(injectionInfo.Item2, injectionInfo.Item3);
 
-                            xmlSmaliProperties.NewLinesCount += injectionInfo.Item3.Length;
-
-                            isNewLines = true;
+                            xmlSmaliProperties.ProxiedLinesCount += injectionInfo.Item3.Length;
 
                             injectionTypeInfo = $"Added At Line: {injectionInfo.Item2}";
                         }
                         else if (InjectionType.Equals(3))
                         {
-                            xmlSmaliProperties.NewLines[injectionInfo.Item2] = injectionInfo.Item3[0];
-
-                            isNewLines = true;
+                            xmlSmaliProperties.ProxiedLines[injectionInfo.Item2] = injectionInfo.Item3[0];
 
                             injectionTypeInfo = $"Replaced Line: {injectionInfo.Item2}";
                         }
@@ -220,16 +211,18 @@ namespace uDrop.Code
                                                                     SmaliSearchKey.Transformed
                                                                 );
                             }
-
-                            isNewLines = false;
                         }
 
                         Log.PatchLog(
-                            !isNewLines ? xmlSmaliProperties.Path : xmlSmaliProperties.NewPath,
+                            InjectionType.Equals(0) || InjectionType.Equals(1) || InjectionType.Equals(4)
+                            ?
+                                xmlSmaliProperties.Path
+                            :
+                                xmlSmaliProperties.ProxiedPath,
 
-                            injectionInfo.Item1.Item1,
+                            injectionInfo.Item1,
 
-                            injectionInfo.Item1.Item2 ? injectionTypeInfo : ""
+                            injectionTypeInfo
                         );
                     }
 
@@ -244,7 +237,7 @@ namespace uDrop.Code
                     }
                     else if (InjectionType.Equals(2) || InjectionType.Equals(3))
                     {
-                        File.WriteAllLines(xmlSmaliProperties.NewPath, xmlSmaliProperties.NewLines);
+                        File.WriteAllLines(xmlSmaliProperties.ProxiedPath, xmlSmaliProperties.ProxiedLines);
                     }
                     else if (InjectionType.Equals(4))
                     {
@@ -505,7 +498,7 @@ namespace uDrop.Code
             return !string.IsNullOrEmpty(output) ? output : "X";
         }
 
-        public static dynamic GetMethodName<T>(this string value)
+        public static string GetMethodName(this string value, bool returnNameOnly)
         {
             StringBuilder splitMethodName = new();
 
@@ -537,14 +530,7 @@ namespace uDrop.Code
                 "\nError: No method name found".QuitWithException();
             }
 
-            return typeof(T).Equals(typeof(string[]))
-                    ?
-                        new string[] {
-                            ".method",
-                            $" {methodNameString}("
-                        }
-                    :
-                        methodNameString;
+            return !returnNameOnly ? $".method {methodNameString}(" : methodNameString;
         }
 
         public static string GetFieldName(this string value)
@@ -646,20 +632,61 @@ namespace uDrop.Code
                         "X";
         }
 
-        public static int MethodParametersCount(this string value)
+        public static string IncreaseRegistersCount(this string input, int increaseAmount)
         {
-            int methodParamsCount = 0;
+            return Regex.Replace(
+                        input,
 
+                        @"\d+",
+
+                        match => 
+                        {
+                            return (int.Parse(match.Value) + increaseAmount).ToString();
+                        }
+                    );
+        }
+
+        public static bool MethodParametersCount(this string value, int targetParametersCount)
+        {
             try
             {
-                methodParamsCount = value.Split('(', ')')[1].Split(';').Length - 1;
+                int sourceParametersCount = value.Split('(', ')')[1].Split(';').Length - 1;
+
+                return sourceParametersCount == targetParametersCount;
             }
             catch
             {
-                "\nError: No method found".QuitWithException();
+                "\nError: No parameters found".QuitWithException();
             }
 
-            return methodParamsCount;
+            return false;
+        }
+
+        private static readonly char emptyChar = ' ';
+        public static bool PartialContains(this string source, string target)
+        {
+            string[] splittedTarget;
+
+            if (!target.TrimStart().TrimEnd().Contains(emptyChar))
+            {
+                splittedTarget = [target];
+            }
+            else
+            {
+                splittedTarget = target.Split(' ');
+            }
+
+            int occurrencesFoundInSource = 0;
+
+            foreach (string str in splittedTarget)
+            {
+                if (source.Contains(str))
+                {
+                    occurrencesFoundInSource++;
+                }
+            }
+
+            return occurrencesFoundInSource.Equals(splittedTarget.Length);
         }
 
         public static bool ReferenceEntriesCount(this string value, string reference, int count)

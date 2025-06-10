@@ -24,7 +24,6 @@ import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.AbstractMap;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,7 +34,6 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SuppressWarnings({"ConstantConditions", "SameParameterValue"})
 public class uUtils {
@@ -192,11 +190,24 @@ public class uUtils {
 
             ois.close();
 
-            Log.d(
-                GetuUtilsClassName(),
+            if (blockList
+                    .getKey()
+                    .stream()
+                    .filter(corasickObject::matches)
+                    .count()
+                    ==
+                blockList
+                    .getKey()
+                    .size())
+            {
+                Log.d(
+                    GetuUtilsClassName(),
 
-                String.format("%s Aho-Corasick file succesfully loaded!", file.getName())
-            );
+                    String.format("%s Aho-Corasick file succesfully loaded!", file.getName())
+                );
+            } else {
+                generateAutomatonData = true;
+            }
         } catch (ClassNotFoundException | IOException e) {
             Log.d(
                 GetuUtilsClassName(),
@@ -210,11 +221,17 @@ public class uUtils {
         if (generateAutomatonData) {
             corasickObject
             .build(
-                new HashMap<>() {{
-                    for (String filter : blockList.getKey()) {
-                        put(filter, filter);
-                    }
-                }}
+                blockList
+                    .getKey()
+                    .stream()
+                    .collect(
+                        Collectors
+                            .toMap(
+                                filter -> filter,
+
+                                filter -> filter
+                            )
+                    )
             );
 
             try (

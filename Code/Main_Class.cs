@@ -96,82 +96,73 @@ namespace uDrop.Code
 
 
 #pragma warning disable CS0162
-                //-------------------------------------Fast Operations------------------------------------//
+            //-------------------------------------Fast Operations------------------------------------//
             switch ("")
-                {
-                    case "recompile":
-                        APKUtils.Decompile();
+            {
+                case "recompile":
+                    APKUtils.Decompile();
 
-                        Log.Divider();
-                        "\nPress any key to recompile".WarningLog();
-                        Console.ReadKey();
-                        APKUtils.Compile();
-                        APKUtils.ZipAlign();
-                        APKUtils.Sign();
-                        APKUtils.TemporaryResourceRemoval();
-                    case "decompile":
-                        APKUtils.Decompile();
-                        goto END_CASE;
-                    case "compile":
-                        APKUtils.Compile();
-                        APKUtils.ZipAlign();
-                        APKUtils.Sign();
-                        goto END_CASE;
+                    Log.Divider();
+                    "\nPress any key to recompile".WarningLog();
+                    Console.ReadKey();
+                    APKUtils.Compile();
+                    APKUtils.ZipAlign();
+                    APKUtils.Sign();
+                    APKUtils.TemporaryResourceRemoval();
+                case "decompile":
+                    APKUtils.Decompile();
+                    goto END_CASE;
+                case "compile":
+                    APKUtils.Compile();
+                    APKUtils.ZipAlign();
+                    APKUtils.Sign();
+                    goto END_CASE;
 
-                    case "align":
-                        APKUtils.ZipAlign();
-                        goto case "sign";
-                    case "sign":
-                        APKUtils.Sign();
-                        goto END_CASE;
+                case "align":
+                    APKUtils.ZipAlign();
+                    goto case "sign";
+                case "sign":
+                    APKUtils.Sign();
+                    goto END_CASE;
 
-                    case "split":
-                        Console.WriteLine("".Split('L', ';')[1]);
-                        goto END_CASE;
+                case "split":
+                    Console.WriteLine("".Split('L', ';')[1]);
+                    goto END_CASE;
 
-                    case "debug":
-                        APKUtils.Decompile();
+                case "debug":
+                    APKUtils.Decompile();
 
-                        Log.Divider();
+                    Log.Divider();
 
-                        uDropUtils.PrivateAPKPatches("Debug");
+                    uDropUtils.PrivateAPKPatches("Debug");
 
-                        APKUtils.Compile();
-                        APKUtils.ZipAlign();
-                        APKUtils.Sign();
-                        APKUtils.TemporaryResourceRemoval();
-                        goto END_CASE;
+                    APKUtils.Compile();
+                    APKUtils.ZipAlign();
+                    APKUtils.Sign();
+                    APKUtils.TemporaryResourceRemoval();
+                    goto END_CASE;
 
-                    case "test_p":
-                        uDropUtils.PrivateAPKPatches("Debug_Patch");
-                        goto END_CASE;
+                case "test_p":
+                    uDropUtils.PrivateAPKPatches("Debug_Patch");
+                    goto END_CASE;
 
-                    case "test_p_p":
-                        APKUtils.Decompile();
-
-                        Log.Divider();
-
-                        YouTube.Start_Video_Panel_Disabler();
-
-                        APKUtils.Compile();
-                        APKUtils.ZipAlign();
-                        APKUtils.Sign();
-                        APKUtils.TemporaryResourceRemoval();
-                        goto END_CASE;
+                case "test_p_p":
+                    YouTube.Background_Video_Playback();
+                    goto END_CASE;
 
 
 
 
 
-                    END_CASE:
-                        Log.Divider();
+                END_CASE:
+                    Log.Divider();
 
-                        "\nDone!".WarningLog();
+                    "\nDone!".WarningLog();
 
-                        Console.ReadKey();
-                        Environment.Exit(0);
-                        break;
-                }
+                    Console.ReadKey();
+                    Environment.Exit(0);
+                    break;
+            }
             //----------------------------------------------------------------------------------------//
 #pragma warning restore CS0162
 
