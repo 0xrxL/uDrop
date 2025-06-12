@@ -3502,7 +3502,7 @@
                                                 {
                                                     codeInject.Lines(
                                                         [
-                                                            ("Test",
+                                                            ("Litho Component Layout Thread Low Priority",
 
                                                             k,
 
@@ -3510,7 +3510,7 @@
                                                                 $"const/4 {xmlSmaliProperties.Lines[k].GetRegister(2)}, 0x1"
                                                             ]),
 
-                                                            ("Test",
+                                                            ("Litho Component Layout Thread Low Priority",
 
                                                             j,
 
@@ -3626,7 +3626,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"Android Automotive\"",
-                        "if-"
+                        "if-eqz"
                     ],
 
                     true,
@@ -3649,7 +3649,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -5); j--)
+                                    for (int j = i; j >= scaleIndex.Lines(i, -3); j--)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
@@ -3733,6 +3733,60 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex(45680009),
+                        ".method )Z"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("UI Transistion Animations Enabler",
+
+                                                    j + 2,
+
+                                                    [
+                                                        "const/4 v0, 0x1",
+                                                        "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex(45371931),
                         ".method )Z"
                     ],
 
@@ -3934,6 +3988,69 @@
                                             ).Write();
 
                                             return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+                
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("id", "watch_while_layout_coordinator_layout"),
+                        "invoke-virtual Landroid/view/View;->onCheckIsTextEditor()Z",
+                        "invoke-virtual Landroid/view/View;->findFocus()Landroid/view/View;",
+                        "invoke-virtual ()Z"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1],
+                                xmlSmaliSearchKeys[2]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -13); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
+                                        {
+                                            for (int k = j; k >= scaleIndex.Lines(j, -16); k--)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[3]))
+                                                {
+                                                    codeInject.Lines(
+                                                        [
+                                                            ("Miniplayer Automatic Reposition Disabler",
+
+                                                            k,
+
+                                                            [
+                                                                "return-void"
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -5177,7 +5294,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 171); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 174); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
@@ -5661,7 +5778,7 @@
                         "invoke-virtual Lcom/google/android/libraries/youtube/innertube/model/media/FormatStreamModel;-> )Ljava/lang/String;",
                         "move-result-object",
                         "invoke-interface Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
-                        "if-"
+                        "if-eqz"
                     ],
 
                     true,
@@ -6665,9 +6782,6 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"TriggerBundle doesn\\'t have the required metadata specified by the trigger \"",
-                        "\"Ping migration no associated ping bindings for activated trigger: \"",
-                        "\"Tried to enter slot with no assigned slotAdapter\"",
-                        "\"Trying to enter a slot when a slot of same type and physical position is already active. Its status: \"",
                         ".method (Ljava/util/List;)V"
                     ],
 
@@ -6682,10 +6796,7 @@
                         xmlSmaliInfo
                     ) => {
                         if (new[] {
-                                xmlSmaliSearchKeys[0],
-                                xmlSmaliSearchKeys[1],
-                                xmlSmaliSearchKeys[2],
-                                xmlSmaliSearchKeys[3]
+                                xmlSmaliSearchKeys[0]
                             }.All(xmlSmaliProperties.Full.PartialContains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
@@ -6696,7 +6807,7 @@
                                 {
                                     for (int j = i; j >= 0; j--)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[4]))
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
                                             codeInject.Lines(
                                                 [
