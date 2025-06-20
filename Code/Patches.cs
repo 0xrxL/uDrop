@@ -741,8 +741,6 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        ".method public constructor <init>(Landroid/content/Context;Landroid/util/AttributeSet;I)V",
-                        "invoke-direct ;-><init>(Ljava/lang/Object;I[B)V",
                         "\"Failed to get advertising id\"",
                         ":pswitch_"
                     ],
@@ -757,7 +755,10 @@
                         patchInteractions,
                         xmlSmaliInfo
                     ) => {
-                        if (xmlSmaliProperties.Path.EndsWith(uDropUtils.GetOSSpecificFullPath("/LiveChatSwipeableContainerLayout.smali")))
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
@@ -765,44 +766,41 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 13); j++)
+                                    for (int j = i; j >= 0; j--)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
-                                            xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(1));
+                                            codeInject.Lines(
+                                                [
+                                                    ("Advertising ID Exception",
 
-                                            for (int k = 0; k < xmlSmaliProperties.ProxiedLinesCount; k++)
-                                            {
-                                                if (xmlSmaliProperties.ProxiedLines[k].PartialContains(xmlSmaliSearchKeys[2]))
-                                                {
-                                                    for (int l = k; l >= 0; l--)
-                                                    {
-                                                        if (xmlSmaliProperties.ProxiedLines[l].PartialContains(xmlSmaliSearchKeys[3]))
-                                                        {
-                                                            codeInject.ProxiedLines(
-                                                                [
-                                                                    ("Advertising ID Exception",
+                                                    j + 1,
 
-                                                                    l + 1,
+                                                    [
+                                                        "return-void"
+                                                    ])
+                                                ]
+                                            ).Write();
 
-                                                                    [
-                                                                        "return-void"
-                                                                    ])
-                                                                ]
-                                                            ).Write();
+                                            patchInteractions++;
 
-                                                            return (patchInteractions, false, xmlSmaliInfo);
-                                                        }
-                                                    }
-                                                }
-                                            }
+                                            goto patch_end;
                                         }
                                     }
                                 }
                             }
                         }
 
-                        return (patchInteractions, true, xmlSmaliInfo);
+
+                        patch_end:
+                        if (patchInteractions > 0 && xmlSmaliProperties.Path.Equals(xmlSmaliProperties.LastOfPath))
+                        {
+                            return (0, false, xmlSmaliInfo);
+                        }
+                        else
+                        {
+                            return (patchInteractions, true, xmlSmaliInfo);
+                        }
                     }
                 ).Apply,
 
@@ -2729,6 +2727,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"fab\"",
+                        "const/",
                         "\"pcc\""
                     ],
 
@@ -2750,26 +2749,26 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j < xmlSmaliProperties.LinesCount; j++)
+                                    for (int j = i; j < scaleIndex.Lines(i, 26); j++)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
                                         {
-                                            for (int k = i; k < j; k++)
-                                            {
-                                                codeInject.LinesReplace(
-                                                    [
-                                                        ("",
-
-                                                        k,
-
-                                                        [""])
-                                                    ]
-                                                );
-                                            }
-
                                             codeInject.Write();
 
                                             return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+
+                                        if (!xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.LinesReplace(
+                                                [
+                                                    ("",
+
+                                                    j,
+
+                                                    [""])
+                                                ]
+                                            );
                                         }
                                     }
                                 }
@@ -7165,7 +7164,6 @@
                         SmaliUtils.GetResourceHex("layout", "avatar_clipped_image_view_with_text_tab"),
                         "invoke-virtual/range Lcom/google/android/libraries/youtube/rendering/ui/pivotbar/PivotBar;-> )Landroid/view/View;",
                         "move-result-object",
-                        "and-int",
                         "invoke-static (I)L",
                         "move-result-object"
                     ],
@@ -7187,9 +7185,11 @@
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
+                            xmlSmaliInfo = ["0"];
+
                             next_reference:
                             bool shouldBreak = false;
-                            for (int i = patchInteractions; i < xmlSmaliProperties.LinesCount && !shouldBreak; i++)
+                            for (int i = int.Parse(xmlSmaliInfo[0]); i < xmlSmaliProperties.LinesCount && !shouldBreak; i++)
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[2]))
                                 {
@@ -7197,50 +7197,47 @@
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[3]))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, patchInteractions == 0 ? -168 : -183); k--)
+                                            for (int k = j; k >= 0; k--)
                                             {
                                                 if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[4]))
                                                 {
-                                                    for (int l = k; l >= scaleIndex.Lines(k, -30); l--)
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 6); l++)
                                                     {
                                                         if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[5]))
                                                         {
-                                                            for (int m = l; m <= scaleIndex.Lines(l, 6); m++)
+                                                            codeInject.Lines(
+                                                                [
+                                                                    ("Navigation Bar",
+
+                                                                    j + 1,
+
+                                                                    [
+                                                                        $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uBlockerPath};->HideNavigationBarButtons(Landroid/view/View;)V"
+                                                                    ]),
+
+                                                                    ("Navigation Bar",
+
+                                                                    l + 1,
+
+                                                                    [
+                                                                        $"invoke-static {{{xmlSmaliProperties.Lines[l].GetRegister(1)}}}, L{uUtilsPath};->SetNavigationBarPivot(Ljava/lang/Enum;)V"
+                                                                    ])
+                                                                ]
+                                                            );
+
+                                                            if (patchInteractions == 2)
                                                             {
-                                                                if (xmlSmaliProperties.Lines[m].PartialContains(xmlSmaliSearchKeys[6]))
-                                                                {
-                                                                    codeInject.Lines(
-                                                                        [
-                                                                            ("Navigation Bar",
+                                                                codeInject.Write();
 
-                                                                            j + 1,
-
-                                                                            [
-                                                                                $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uBlockerPath};->HideNavigationBarButtons(Landroid/view/View;)V"
-                                                                            ]),
-
-                                                                            ("Navigation Bar",
-
-                                                                            m + 1,
-
-                                                                            [
-                                                                                $"invoke-static {{{xmlSmaliProperties.Lines[m].GetRegister(1)}}}, L{uUtilsPath};->SetNavigationBarPivot(Ljava/lang/Enum;)V"
-                                                                            ])
-                                                                        ]
-                                                                    );
-
-                                                                    if (patchInteractions > 0)
-                                                                    {
-                                                                        codeInject.Write();
-
-                                                                        return (0, false, xmlSmaliInfo);
-                                                                    }
-
-                                                                    patchInteractions = j;
-                                                                    shouldBreak = true;
-                                                                    goto next_reference;
-                                                                }
+                                                                return (0, false, []);
                                                             }
+
+                                                            patchInteractions++;
+                                                            xmlSmaliInfo[0] = j.ToString();
+
+                                                            shouldBreak = true;
+
+                                                            goto next_reference;
                                                         }
                                                     }
                                                 }
