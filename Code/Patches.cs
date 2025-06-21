@@ -5398,7 +5398,7 @@
 
                                                             [
                                                                 "const/4 v0, 0x1",
-                                                                $"invoke-static {{v0}}, L{uBlockerPath};->SetHideWelcomeAndRules(Z)V"
+                                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetHideWelcomeAndRules(Z)V"
                                                             ])
                                                         ]
                                                     ).Write();
