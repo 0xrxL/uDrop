@@ -123,17 +123,29 @@ public class uBlocker {
                 "horizontalShelfSecond"
             )
         );
-    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> commentsComponents =
+    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> commentsComponentsFirst =
         InitializeNewBlockList(
             new AbstractMap.SimpleEntry<> (
                 Set.of(
                     "composer_short_creation_button",
                     "composer_timestamp_button",
+                    "sponsorships_comments",
                     "super_thanks_button",
                     "|CellType|ContainerType|ContainerType|ContainerType|ContainerType|ContainerType|"
                 ),
 
-                "commentsComponents"
+                "commentsComponentsFirst"
+            )
+        );
+    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> commentsComponentsSecond =
+        InitializeNewBlockList(
+            new AbstractMap.SimpleEntry<> (
+                Set.of(
+                    "leaderboard_item_action_content",
+                    "button"
+                ),
+
+                "commentsComponentsSecond"
             )
         );
     private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> horizontalShelfFirst =
@@ -292,16 +304,19 @@ public class uBlocker {
             }
         //---------------------------------------------------------------------------------------//
         //----------------------------------Comments Components----------------------------------//
-            if (templateTreeComponent.contains("comment")) {
-                if (templateTreeComponent.contains("composer")) {
-                    return SearchInSetCorasick(
-                        templateTreeComponent,
-                        commentsComponents,
-                        Entries.ANY
-                    );
-                } else {
-                    return templateTreeComponent.contains("sponsorships_comments");
-                }
+            if (SearchInSetCorasick(
+                    templateTreeComponent,
+                    commentsComponentsFirst,
+                    Entries.ANY
+                )
+                    ||
+                SearchInSetCorasick(
+                    templateTreeComponent,
+                    commentsComponentsSecond,
+                    Entries.ALL
+                )
+            ) {
+                    return true;
             }
         //---------------------------------------------------------------------------------------//
         //------------------------------------Horizontal Shelf-----------------------------------//
@@ -332,7 +347,8 @@ public class uBlocker {
         //-----------------------------------Live Chat Elements----------------------------------//
             if (GetCommentsPanelOpen()
                     &&
-                templateTreeComponent.contains("progress_bar")) {
+                templateTreeComponent.contains("progress_bar")
+            ) {
                     return true;
             }
         //---------------------------------------------------------------------------------------//
@@ -349,7 +365,8 @@ public class uBlocker {
         //---------------------------------------------------------------------------------------//
         //----------------------------Open Comments Button Components----------------------------//
             if (templateTreeComponent.contains("video_metadata_carousel")) {
-                return templateTreeComponent.contains("|carousel_item.") ||
+                return templateTreeComponent.contains("|carousel_item.")
+                            ||
                         SearchInSetCorasick(
                             templateTreeComponent,
                             openCommentsButtonComponents,
@@ -391,8 +408,9 @@ public class uBlocker {
                     GetProtoBufferComponents(),
                     videoOtherSettingsPanelComponent,
                     Entries.ANY
-                )) {
-                    return true;
+                )
+            ) {
+                return true;
             }
         //---------------------------------------------------------------------------------------//
         //---------------------------------Video Lockup Components-------------------------------//
