@@ -283,7 +283,6 @@ namespace uDrop.Code
 
         public static void Integrations()
         {
-            Console.WriteLine(File.Exists(integrationsArchivePath));
             if (!Directory.Exists(integrationsPath))
             {
                 Directory.CreateDirectory(integrationsPath);
@@ -322,7 +321,14 @@ namespace uDrop.Code
 
                     "\nExtracting Integrations...".StartProcessLog();
 
-                    ZipFile.ExtractToDirectory(integrationsArchivePath, integrationsRootPath, true);
+                    try
+                    {
+                        ZipFile.ExtractToDirectory(integrationsArchivePath, integrationsRootPath);
+                    }
+                    catch
+                    {
+                        "\nError: Integrations extraction failed".QuitWithException();
+                    }
 
                     File.Delete(integrationsArchivePath);
                 }
