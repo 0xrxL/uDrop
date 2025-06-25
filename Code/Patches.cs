@@ -4135,6 +4135,60 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
+                        SmaliUtils.GetResourceHex(45371931),
+                        ".method )Z"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("UI Transistion Animations Enabler",
+
+                                                    j + 2,
+
+                                                    [
+                                                        "const/4 v0, 0x1",
+                                                        "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
                         SmaliUtils.GetResourceHex(45680008),
                         ".method )Z"
                     ],
@@ -4243,7 +4297,60 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(45371931),
+                        SmaliUtils.GetResourceHex(45694309),
+                        "move-result "
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("UI Transistion Animations Enabler",
+
+                                                    j + 1,
+
+                                                    [
+                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x1"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex(45701806),
                         ".method )Z"
                     ],
 
