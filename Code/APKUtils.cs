@@ -323,7 +323,7 @@ namespace uDrop.Code
 
                     try
                     {
-                        ZipFile.ExtractToDirectory(integrationsArchivePath, integrationsRootPath);
+                        ZipFile.ExtractToDirectory(integrationsArchivePath, integrationsRootPath, true);
                     }
                     catch
                     {
