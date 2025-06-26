@@ -4071,7 +4071,8 @@
                     [
                         "invoke-direct Ljava/util/concurrent/LinkedBlockingQueue;-><init>()V",
                         "invoke-direct/range Ljava/util/concurrent/ThreadPoolExecutor;-><init>(IIJLjava/util/concurrent/TimeUnit;Ljava/util/concurrent/BlockingQueue;Ljava/util/concurrent/ThreadFactory;)V",
-                        "invoke-virtual ;->allowCoreThreadTimeOut(Z)V"
+                        "invoke-virtual ;->allowCoreThreadTimeOut(Z)V",
+                        "const/4 {0} 0x0"
                     ],
 
                     true,
@@ -4092,6 +4093,10 @@
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
+                            if (xmlSmaliProperties.LinesCount != 82) {
+                                goto skip_class;
+                            }
+
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
@@ -4100,34 +4105,42 @@
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
                                         {
-                                            codeInject.Lines(
-                                                [
-                                                    ("Litho UI Threads Timeout Enabler",
+                                            for (int k = j; k >= scaleIndex.Lines(j, -4); k--)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(string.Format(xmlSmaliSearchKeys[3], xmlSmaliProperties.Lines[j].GetRegister(2))))
+                                                {
+                                                    codeInject.Lines(
+                                                        [
+                                                            ("Litho UI PoolExecutor allowCoreThreadTimeout Enabler",
 
-                                                    j,
+                                                            k + 1,
 
-                                                    [
-                                                        $"const/4 {xmlSmaliProperties.Lines[j].GetRegister(2)}, 0x1"
-                                                    ]),
+                                                            [
+                                                                xmlSmaliProperties.Lines[k].Replace("0x0", "0x1")
+                                                            ]),
 
-                                                    ("Litho UI Threads Timeout Enabler",
+                                                            ("Litho UI Single Threaded PoolExecutor",
 
-                                                    i,
+                                                            i,
 
-                                                    [
-                                                        "const/4 v1, 0x0",
-                                                        "const/4 v2, 0x1",
-                                                        "const-wide/16 v3, 0x1"
-                                                    ])
-                                                ]
-                                            ).Write();
+                                                            [
+                                                                "const/4 v1, 0x0",
+                                                                "const/4 v2, 0x1",
+                                                                "const-wide/16 v3, 0x1"
+                                                            ])
+                                                        ]
+                                                    ).Write();
 
-                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+
+                        skip_class:
 
                         return (patchInteractions, true, xmlSmaliInfo);
                     }
@@ -4165,7 +4178,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("UI Transistion Animations Enabler",
+                                                    ("UI Transition Animations Enabler",
 
                                                     j + 2,
 
@@ -4219,7 +4232,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("UI Transistion Animations Enabler",
+                                                    ("UI Transition Animations Enabler",
 
                                                     j + 2,
 
@@ -4273,7 +4286,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("UI Transistion Animations Enabler",
+                                                    ("UI Transition Animations Enabler",
 
                                                     j + 2,
 
@@ -4327,7 +4340,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("UI Transistion Animations Enabler",
+                                                    ("UI Transition Animations Enabler",
 
                                                     j + 1,
 
@@ -4380,7 +4393,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("UI Transistion Animations Enabler",
+                                                    ("UI Transition Animations Enabler",
 
                                                     j + 2,
 
@@ -4434,7 +4447,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("UI Transistion Animations Enabler",
+                                                    ("UI Transition Animations Enabler",
 
                                                     j + 2,
 
@@ -4512,10 +4525,12 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "Landroidx/window/layout/WindowMetricsCalculator;->computeCurrentWindowMetrics(Landroid/app/Activity;)Landroidx/window/layout/WindowMetrics;",
-                        SmaliUtils.GetResourceHex(45705651),
+                        "(Landroid/content/res/Configuration;)V",
+                        "return-void",
                         "invoke-virtual Lj$/util/Optional;->ifPresent(Ljava/util/function/Consumer;)V",
                         "invoke-direct ;-><init>(Ljava/lang/Object;I)V",
-                        ".method private final ;)V"
+                        ".method private final ;)V",
+                        "iget-object {0} :Lj$/util/Optional"
                     ],
 
                     true,
@@ -4537,29 +4552,29 @@
 
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[2]))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -17); j--)
+                                    for (int j = i; j >= scaleIndex.Lines(j, -6); j--)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[3]))
                                         {
-                                            for (int k = j; k >= scaleIndex.Lines(j, -17); k--)
+                                            for (int k = j; k >= scaleIndex.Lines(j, -6); k--)
                                             {
-                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[3]))
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[4]))
                                                 {
                                                     for (int l = k; l >= 0; l--)
                                                     {
-                                                        if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[4]))
+                                                        if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[5]))
                                                         {
                                                             xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[k].GetInvokedSectionClass(1));
 
                                                             for (int m = 0; m < xmlSmaliProperties.ProxiedLinesCount; m++)
                                                             {
-                                                                if (xmlSmaliProperties.ProxiedLines[m].PartialContains($"iget-object {xmlSmaliProperties.Lines[l].GetParameterClassName(1)} :Lj$/util/Optional"))
+                                                                if (xmlSmaliProperties.ProxiedLines[m].PartialContains(string.Format(xmlSmaliSearchKeys[6], xmlSmaliProperties.Lines[l].GetParameterClassName(1))))
                                                                 {
                                                                     for (int n = m; n <= scaleIndex.ProxiedLines(m, 5); n++)
                                                                     {
-                                                                        if (xmlSmaliProperties.ProxiedLines[n].PartialContains(xmlSmaliSearchKeys[2]))
+                                                                        if (xmlSmaliProperties.ProxiedLines[n].PartialContains(xmlSmaliSearchKeys[3]))
                                                                         {
                                                                             codeInject.ProxiedLinesReplace(
                                                                                 [
@@ -5635,7 +5650,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex("layout", "expand_button_down"),
-                        "invoke-static Landroid/view/View;->inflate",
+                        "invoke-virtual Landroid/view/LayoutInflater;->inflate",
                         "move-result-object"
                     ],
 
@@ -5659,7 +5674,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 9); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 51); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
