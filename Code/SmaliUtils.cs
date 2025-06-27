@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using HtmlAgilityPack;
 
 namespace uDrop.Code
 {
@@ -42,7 +43,7 @@ namespace uDrop.Code
 
                 int patchInteractions = 0;
                 (int, bool, string[]) returnedValues;
-                
+
                 xmlSmaliProperties.LastOfPath = APKUtils.GetSmaliPaths().Last();
 
                 IEnumerator<string> SmaliPathsEnumerator = APKUtils.GetSmaliPaths().GetEnumerator();
@@ -87,7 +88,7 @@ namespace uDrop.Code
                     LinesCount =
                         Lines.Count;
                 }
-                
+
                 public void ReadXMLSmaliProxiedLines(string partialPath)
                 {
                     ProxiedPath =
@@ -164,7 +165,7 @@ namespace uDrop.Code
 
                     return Compute(injectionsInfo);
                 }
-                
+
                 private CodeInject Compute((string, int, string[])[] injectionsInfo)
                 {
                     foreach (var injectionInfo in injectionsInfo)
@@ -415,6 +416,29 @@ namespace uDrop.Code
                     "X";
         }
 
+        public static string GetIstructionByRegisterSize(this string value, string low, string wide)
+        {
+            string currentRegisterValueString = "";
+            try
+            {
+                Regex.Matches(value, @"\d+")
+                    .Cast<Match>()
+                    .Select(match => match.Value)
+                    .ToList()
+                    .ForEach(number => currentRegisterValueString += number);
+            }
+            catch
+            {
+                ("\nError: This string doesn't contain any integer value\n" +
+                "\nPress any key to close the patcher.")
+                    .QuitWithException();
+            }
+
+            int currentRegisterValue = !String.IsNullOrEmpty(currentRegisterValueString) ? int.Parse(currentRegisterValueString) : 0;
+
+            return currentRegisterValue <= 15 ? low : wide;
+        }
+
         public static string GetInvokedSectionClass(this string value, int index)
         {
             if (index == 0)
@@ -632,20 +656,6 @@ namespace uDrop.Code
                         "X";
         }
 
-        public static string IncreaseRegistersCount(this string input, int increaseAmount)
-        {
-            return Regex.Replace(
-                        input,
-
-                        @"\d+",
-
-                        match => 
-                        {
-                            return (int.Parse(match.Value) + increaseAmount).ToString();
-                        }
-                    );
-        }
-
         public static bool MethodParametersCount(this string value, int targetParametersCount)
         {
             try
@@ -692,6 +702,20 @@ namespace uDrop.Code
         public static bool ReferenceEntriesCount(this string value, string reference, int count)
         {
             return Regex.Matches(value, reference).Count == count;
+        }
+        
+        public static string ScaleRegisterSize(this string value, int steps)
+        {
+            return Regex.Replace(
+                        value,
+
+                        @"\d+",
+
+                        match => 
+                        {
+                            return (int.Parse(match.Value) + steps).ToString();
+                        }
+                    );
         }
     }
 }
