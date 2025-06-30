@@ -3,7 +3,6 @@ package uTools;
 import static uTools.uUtils.ByteBufferContainsString;
 import static uTools.uUtils.GetCommentsPanelOpen;
 import static uTools.uUtils.GetCommunityPostsAccessible;
-import static uTools.uUtils.GetCurrentNavBarIndex;
 import static uTools.uUtils.GetDarkTheme;
 import static uTools.uUtils.GetHideWelcomeAndRules;
 import static uTools.uUtils.GetLithoActionDownDuration;
@@ -22,7 +21,6 @@ import static uTools.uUtils.HideViewGroupByMarginLayout;
 import uTools.VideoDetails.uVideoDetailsRequest;
 import static uTools.VideoDetails.uVideoDetailsRequest.GetRequestForVideoID;
 import static uTools.VideoDetails.uVideoDetailsRequest.SetFetchRequest;
-import static uTools.uUtils.SetCurrentNavBarIndex;
 import static uTools.uUtils.SetHideWelcomeAndRules;
 
 import android.app.Activity;
@@ -148,7 +146,7 @@ public class uBlocker {
                 "commentsComponentsSecond"
             )
         );
-    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> horizontalShelfFirst =
+    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> horizontalShelf =
         InitializeNewBlockList(
             new AbstractMap.SimpleEntry<> (
                 Set.of(
@@ -157,7 +155,7 @@ public class uBlocker {
                     "horizontal_shelf."
                 ),
 
-                "horizontalShelfFirst"
+                "horizontalShelf"
             )
         );
     private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> openCommentsButtonComponents =
@@ -320,28 +318,19 @@ public class uBlocker {
             }
         //---------------------------------------------------------------------------------------//
         //------------------------------------Horizontal Shelf-----------------------------------//
-            if (templateTreeComponent.contains("account_header")) {
-                SetCurrentNavBarIndex(libraryNavButtonIndex);
-
-                return false;
-            } else {
-                if (SearchInSetCorasick(
-                        templateTreeComponent,
-                        horizontalShelfFirst,
-                        Entries.ANY
-                    )
-                ) {
-                    if (SearchInSetCorasick(
+            if (SearchInSetCorasick(
+                    templateTreeComponent,
+                    horizontalShelf,
+                    Entries.ANY
+                )
+            ) {
+                return !uUtils.GetAccountTabOpen()
+                            ||
+                        SearchInSetCorasick(
                             GetPlayerType().name(),
                             playerMaximized,
                             Entries.ANY
-                        )
-                    ) {
-                        SetCurrentNavBarIndex(0);
-                    }
-
-                    return GetCurrentNavBarIndex() != libraryNavButtonIndex;
-                }
+                        );
             }
         //---------------------------------------------------------------------------------------//
         //-----------------------------------Live Chat Elements----------------------------------//
@@ -349,7 +338,7 @@ public class uBlocker {
                     &&
                 templateTreeComponent.contains("progress_bar")
             ) {
-                    return true;
+                return true;
             }
         //---------------------------------------------------------------------------------------//
         //------------------------------------More Drawer Panel----------------------------------//

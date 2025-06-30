@@ -47,6 +47,17 @@ public class uUtils {
     enum EnumInitialization { NONE }
 
 
+
+
+
+    private static boolean accountTabOpen = false;
+    public static void SetAccountTabOpen(boolean value) {
+        accountTabOpen = value;
+    }
+    public static boolean GetAccountTabOpen() {
+        return accountTabOpen;
+    }
+
     private static Context appContext;
     public static void SetAppContext(Context value) {
         appContext = value;
@@ -128,14 +139,6 @@ public class uUtils {
     }
     public static boolean GetCommunityPostsAccessible() {
         return communityPostsAccessible;
-    }
-
-    private static int currentNavBarIndex = 0;
-    public static void SetCurrentNavBarIndex(int value) {
-        currentNavBarIndex = value;
-    }
-    public static int GetCurrentNavBarIndex() {
-        return currentNavBarIndex;
     }
 
     private static boolean darkTheme = false;
@@ -375,15 +378,6 @@ public class uUtils {
                 corasickObject.getValue();
             default ->
                 false;
-        };
-    }
-
-    public static void SetNavBarIndexByMainActivity() {
-        currentNavBarIndex = switch (GetMainActivity().getIntent().getAction()) {
-            case "com.google.android.youtube.action.open.search" -> -1;
-            case "com.google.android.youtube.action.open.shorts" -> 1;
-            case "com.google.android.youtube.action.open.subscriptions" -> 2;
-            default -> 0;
         };
     }
 
