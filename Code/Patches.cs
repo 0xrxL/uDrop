@@ -5816,8 +5816,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex("layout", "expand_button_down"),
-                        "invoke-virtual Landroid/view/LayoutInflater;->inflate",
-                        "move-result-object"
+                        ".method"
                     ],
 
                     true,
@@ -5840,29 +5839,23 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 51); j++)
+                                    for (int j = i; j >= 0; j--)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
-                                            for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
-                                            {
-                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[2]))
-                                                {
-                                                    codeInject.Lines(
-                                                        [
-                                                            ("",
+                                            codeInject.Lines(
+                                                [
+                                                    ("",
 
-                                                            k + 1,
+                                                    j + 2,
 
-                                                            [
-                                                                $"invoke-static {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, L{uUtilsPath};->HideInstanceViewByLayoutParams(Landroid/view/View;)V"
-                                                            ])
-                                                        ]
-                                                    ).Write();
+                                                    [
+                                                        "return-void"
+                                                    ])
+                                                ]
+                                            ).Write();
 
-                                                    return (patchInteractions, false, xmlSmaliInfo);
-                                                }
-                                            }
+                                            return (patchInteractions, false, xmlSmaliInfo);
                                         }
                                     }
                                 }
