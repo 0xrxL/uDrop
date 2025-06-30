@@ -4331,20 +4331,12 @@
                                                 {
                                                     codeInject.Lines(
                                                         [
-                                                            ("Litho UI PoolExecutor allowCoreThreadTimeout Enabler",
-
-                                                            k + 1,
-
-                                                            [
-                                                                xmlSmaliProperties.Lines[k].Replace("0x0", "0x1")
-                                                            ]),
-
                                                             ("Litho UI Single Threaded PoolExecutor",
 
                                                             i,
 
                                                             [
-                                                                "const/4 v1, 0x0",
+                                                                "const/4 v1, 0x1",
                                                                 "const/4 v2, 0x1",
                                                                 "const-wide/16 v3, 0x1"
                                                             ])
