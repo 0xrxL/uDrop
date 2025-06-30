@@ -329,9 +329,12 @@ namespace uDrop.Code
                     {
                         "\nError: Integrations extraction failed".QuitWithException();
                     }
-
-                    File.Delete(integrationsArchivePath);
                 }
+            }
+
+            if (File.Exists(integrationsArchivePath))
+            {
+                File.Delete(integrationsArchivePath);
             }
 
             string startMessage = "\nApplying Integrations...";
