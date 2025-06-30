@@ -4102,6 +4102,60 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
+                        SmaliUtils.GetResourceHex(45632194),
+                        ".method )Z"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("Navigation Bar Buttons Height Spacer Enabler",
+
+                                                    j + 2,
+
+                                                    [
+                                                        "const/4 v0, 0x1",
+                                                        "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
                         "\"ComponentLayoutThread\"",
                         "invoke-direct Landroid/os/HandlerThread;-><init>(Ljava/lang/String;I)V"
                     ],
