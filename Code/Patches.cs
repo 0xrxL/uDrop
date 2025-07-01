@@ -1888,54 +1888,6 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex("layout", "compact_link"),
-                        ".method public final ()Landroid/view/View"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.PartialContains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
-                                {
-                                    codeInject.Lines(
-                                        [
-                                            ("",
-
-                                            i + 2,
-
-                                            [
-                                                "const/4 v0, 0x1",
-                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetAccountTabOpen(Z)V"
-                                            ])
-                                        ]
-                                    ).Write();
-
-                                    return (patchInteractions, false, xmlSmaliInfo);
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex("layout", "compact_link"),
                         ".method protected final bridge synthetic (Ljava/lang/Object;)[B",
                         ".method public final ;)V"
                     ],
@@ -1971,13 +1923,205 @@
                                                     j + 2,
 
                                                     [
+                                                        $"invoke-static {{}}, L{uUtilsPath};->GetNavigationBarActionDown()Z",
+                                                        "move-result v0",
+                                                        "if-eqz v0, :account_tab_visibility_no",
                                                         "const/4 v0, 0x0",
-                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetAccountTabOpen(Z)V"
+                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetAccountTabOpen(Z)V",
+                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V",
+                                                        ":account_tab_visibility_no"
                                                     ])
                                                 ]
                                             ).Write();
 
                                             return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        ";->setFillViewport(Z)V",
+                        ";->setHorizontalScrollBarEnabled(Z)V",
+                        "invoke-direct ;-><init>",
+                        "invoke-virtual Ljava/util/ArrayList;->indexOf(Ljava/lang/Object;)I",
+                        "invoke-virtual (IZ)V",
+                        ":pswitch_"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 17); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
+                                        {
+                                            xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(1));
+
+                                            for (int k = 0; k < xmlSmaliProperties.ProxiedLinesCount; k++)
+                                            {
+                                                if (xmlSmaliProperties.ProxiedLines[k].PartialContains(xmlSmaliSearchKeys[3]))
+                                                {
+                                                    for (int l = k; l <= scaleIndex.ProxiedLines(k, 9); l++)
+                                                    {
+                                                        if (xmlSmaliProperties.ProxiedLines[l].PartialContains(xmlSmaliSearchKeys[4]))
+                                                        {
+                                                            for (int m = l; m >= 0; m--)
+                                                            {
+                                                                if (xmlSmaliProperties.ProxiedLines[m].PartialContains(xmlSmaliSearchKeys[5]))
+                                                                {
+                                                                    codeInject.ProxiedLines(
+                                                                        [
+                                                                            ("",
+
+                                                                            m + 1,
+
+                                                                            [
+                                                                                "const/4 v0, 0x1",
+                                                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
+                                                                            ])
+                                                                        ]
+                                                                    ).Write();
+
+                                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        ".method public final onBackPressed()V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (xmlSmaliProperties.Path.EndsWith(uDropUtils.GetOSSpecificFullPath("/watchwhile/MainActivity.smali")))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    codeInject.Lines(
+                                        [
+                                            ("",
+
+                                            i + 2,
+
+                                            [
+                                                "const/4 v0, 0x1",
+                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
+                                            ])
+                                        ]
+                                    ).Write();
+
+                                    return (patchInteractions, false, xmlSmaliInfo);
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("string", "abc_action_bar_up_description"),
+                        "invoke-direct ;-><init>",
+                        ".method public final onClick(Landroid/view/View;)V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 65); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(1));
+
+                                            for (int k = 0; k < xmlSmaliProperties.ProxiedLinesCount; k++)
+                                            {
+                                                if (xmlSmaliProperties.ProxiedLines[k].PartialContains(xmlSmaliSearchKeys[2]))
+                                                {
+                                                    codeInject.ProxiedLines(
+                                                        [
+                                                            ("",
+
+                                                            k + 2,
+
+                                                            [
+                                                                "const/4 v0, 0x1",
+                                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -2030,12 +2174,182 @@
 
                                                     [
                                                         "const/4 v0, 0x1",
-                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetAccountTabOpen(Z)V"
+                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
                                                     ])
                                                 ]
                                             ).Write();
 
                                             return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("layout", "mobile_topbar_button_item"),
+                        SmaliUtils.GetResourceHex("drawable", "yt_outline_new_search_black_24"),
+                        ".method public final onClick(Landroid/view/View;)V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[2]))
+                                {
+                                    codeInject.Lines(
+                                        [
+                                            ("",
+
+                                            i + 2,
+
+                                            [
+                                                "const/4 v0, 0x0",
+                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetAccountTabOpen(Z)V"
+                                            ])
+                                        ]
+                                    ).Write();
+
+                                    return (patchInteractions, false, xmlSmaliInfo);
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        "\"com.google.android.libraries.youtube.logging.interaction_logger\"",
+                        ".method public final onClick(Landroid/view/View;)V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains)
+                                &&
+                            xmlSmaliProperties.Full.ReferenceEntriesCount("const-string", 1))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
+                                {
+                                    codeInject.Lines(
+                                        [
+                                            ("",
+
+                                            i + 2,
+
+                                            [
+                                                "const/4 v0, 0x1",
+                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
+                                            ])
+                                        ]
+                                    ).Write();
+
+                                    return (patchInteractions, false, xmlSmaliInfo);
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+                
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHex("id", "component_long_click_listener"),
+                        "invoke-virtual Landroid/view/View;->setOnClickListener(Landroid/view/View$OnClickListener;)V",
+                        "invoke-direct ;-><init>( ;)V",
+                        ".method public final onClick(Landroid/view/View;)V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -74); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            for (int k = j; k >= scaleIndex.Lines(j, -6); k--)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[2]))
+                                                {
+                                                    xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[k].GetInvokedSectionClass(1));
+
+                                                    for (int l = 0; l < xmlSmaliProperties.ProxiedLinesCount; l++)
+                                                    {
+                                                        if (xmlSmaliProperties.ProxiedLines[l].PartialContains(xmlSmaliSearchKeys[3]))
+                                                        {
+                                                            codeInject.ProxiedLines(
+                                                                [
+                                                                    ("",
+
+                                                                    l + 2,
+
+                                                                    [
+                                                                        "const/4 v0, 0x1",
+                                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
+                                                                    ])
+                                                                ]
+                                                            ).Write();
+
+                                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }

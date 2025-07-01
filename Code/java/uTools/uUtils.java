@@ -313,6 +313,14 @@ public class uUtils {
         mainActivity = new WeakReference<>(activity);
     }
 
+    private static boolean navigationBarActionDown = false;
+    public static void SetNavigationBarActionDown(boolean value) {
+        navigationBarActionDown = value;
+    }
+    public static boolean GetNavigationBarActionDown() {
+        return navigationBarActionDown;
+    }
+
     private static Enum<?> navigationBarPivot = EnumInitialization.NONE;
     public static void SetNavigationBarPivot(Enum<?> value) {
         navigationBarPivot = value;

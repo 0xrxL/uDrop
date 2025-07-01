@@ -7,6 +7,7 @@ import static uTools.uUtils.GetDarkTheme;
 import static uTools.uUtils.GetHideWelcomeAndRules;
 import static uTools.uUtils.GetLithoActionDownDuration;
 import static uTools.uUtils.GetMainActivity;
+import static uTools.uUtils.GetNavigationBarActionDown;
 import static uTools.uUtils.GetNavigationBarPivot;
 import static uTools.uUtils.GetPlayerType;
 import static uTools.uUtils.GetProtoBufferComponents;
@@ -21,7 +22,9 @@ import static uTools.uUtils.HideViewGroupByMarginLayout;
 import uTools.VideoDetails.uVideoDetailsRequest;
 import static uTools.VideoDetails.uVideoDetailsRequest.GetRequestForVideoID;
 import static uTools.VideoDetails.uVideoDetailsRequest.SetFetchRequest;
+import static uTools.uUtils.SetAccountTabOpen;
 import static uTools.uUtils.SetHideWelcomeAndRules;
+import static uTools.uUtils.SetNavigationBarActionDown;
 
 import android.app.Activity;
 import android.content.Context;
@@ -318,6 +321,14 @@ public class uBlocker {
             }
         //---------------------------------------------------------------------------------------//
         //------------------------------------Horizontal Shelf-----------------------------------//
+            if (GetNavigationBarActionDown()
+                    &&
+                templateTreeComponent.contains("account_header")) {
+                    SetAccountTabOpen(true);
+
+                    SetNavigationBarActionDown(false);
+            }
+
             if (SearchInSetCorasick(
                     templateTreeComponent,
                     horizontalShelf,
