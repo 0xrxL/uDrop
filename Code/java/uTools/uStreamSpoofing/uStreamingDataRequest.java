@@ -3,6 +3,7 @@
 package uTools.uStreamSpoofing;
 
 import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFromRoute;
+import static uTools.uStreamSpoofing.uPlayerRoutes.requestKeys;
 import static uTools.uUtils.BackgroundThreadPool;
 import static uTools.uUtils.InitializeStreamCache;
 import static uTools.uUtils.SetStatsForNerdsClientName;
@@ -23,13 +24,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import uTools.VideoDetails.uVideoDetailsRequest;
 
 @SuppressWarnings({
     "ExtractMethodRecommender"
@@ -37,7 +41,7 @@ import java.util.concurrent.TimeoutException;
 public class uStreamingDataRequest {
     private final String videoID;
     private final Future<ByteBuffer> future;
-    private static final List<uClientType> CLIENT_TYPES_ORDER_TO_USE =
+    private final List<uClientType> CLIENT_TYPES_ORDER_TO_USE =
         new ArrayList<>(
             Arrays.asList(
                 uClientType.ANDROID_VR,
@@ -45,31 +49,24 @@ public class uStreamingDataRequest {
                 uClientType.ANDROID_CREATOR
             )
         );
-    private static final int READ_BUFFER_SIZE = 8192;
-    private static final Set<String> requestKeys = Set.of(
-        "Authorization",
-        "X-GOOG-API-FORMAT-VERSION",
-        "X-Goog-Visitor-Id"
-    );
+    private final int READ_BUFFER_SIZE = 8192;
     private uStreamingDataRequest(String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(playerHeaders);
+
+        AtomicBoolean videoRequireLogin = new AtomicBoolean(false);
 
         this.videoID = videoID;
         this.future = BackgroundThreadPool.submit(
             () -> {
                 for (uClientType clientType : CLIENT_TYPES_ORDER_TO_USE) {
-                    for (int i = 0; i < 20; i++) {
+                    videoRequireLogin.set(false);
+
+                    for (int i = 0; i < 2; i++) {
                         HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
                             new uRoute(
                                 uRoute.Method.POST,
 
-                                String.format(
-                                    "%s%s%s",
-
-                                    "player",
-                                    "?fields=streamingData",
-                                    "&alt=proto"
-                                )
+                                "player?fields=streamingData&alt=proto"
                             ).Compile(),
 
                             Arrays.asList(
@@ -81,8 +78,23 @@ public class uStreamingDataRequest {
 
                         if (connection != null) {
                             for (String requestKey : requestKeys) {
+                                if (requestKey.equals(requestKeys.get(0)) && !videoRequireLogin.get()) {
+                                    continue;
+                                }
+
                                 connection.setRequestProperty(requestKey, playerHeaders.get(requestKey));
                             }
+
+                            uVideoDetailsRequest defaultAudioTrackRequest =
+                                new uVideoDetailsRequest(videoID, playerHeaders, "defaultAudioTrackID");
+
+                            String defaultAudioTrackName = defaultAudioTrackRequest.GetRequestedInfo();
+
+                            Locale defaultAudioTrackLocale = defaultAudioTrackName.isEmpty()
+                                                                ?
+                                                                    Locale.getDefault()
+                                                                :
+                                                                    new Locale(defaultAudioTrackName);
 
                             JSONObject innerTubeBody = new JSONObject() {{
                                 put(
@@ -97,13 +109,12 @@ public class uStreamingDataRequest {
                                                 put("clientVersion", clientType.clientVersion);
                                                 put("deviceMake", clientType.osBrand);
                                                 put("deviceModel", clientType.deviceModel);
-                                                put("hl", clientType.defaultLocale.getLanguage());
-                                                put("gl", clientType.defaultLocale.getCountry());
+                                                if (!videoRequireLogin.get()) {
+                                                    put("hl", defaultAudioTrackLocale);
+                                                }
                                                 put("osName", clientType.osName);
                                                 put("osVersion", clientType.osVersion);
-                                                if (clientType.androidSDKVersion != null) {
-                                                    put("androidSdkVersion", clientType.androidSDKVersion);
-                                                }
+                                                put("androidSdkVersion", clientType.androidSDKVersion);
                                             }}
                                         );
                                     }}
@@ -129,13 +140,22 @@ public class uStreamingDataRequest {
 
                                         Log.d("uStreamingDataRequest", clientType.name());
 
-                                        SetStatsForNerdsClientName(String.format(" (%s)", clientType.name()));
+                                        SetStatsForNerdsClientName(
+                                            String.format(
+                                                " (%s - %s)",
+
+                                                clientType.name(),
+                                                !videoRequireLogin.get() ? "NO_AUTH" : "WITH_AUTH"
+                                            )
+                                        );
 
                                         return ByteBuffer.wrap(baos.toByteArray());
                                     }
                                 }
                             }
                         }
+
+                        videoRequireLogin.set(true);
                     }
                 }
 

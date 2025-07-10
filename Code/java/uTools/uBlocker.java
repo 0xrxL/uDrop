@@ -20,8 +20,6 @@ import static uTools.uUtils.HideViewByLinearLayoutParams;
 import static uTools.uUtils.HideViewGroupByLayoutParams;
 import static uTools.uUtils.HideViewGroupByMarginLayout;
 import uTools.VideoDetails.uVideoDetailsRequest;
-import static uTools.VideoDetails.uVideoDetailsRequest.GetRequestForVideoID;
-import static uTools.VideoDetails.uVideoDetailsRequest.SetFetchRequest;
 import static uTools.uUtils.SetAccountTabOpen;
 import static uTools.uUtils.SetHideWelcomeAndRules;
 import static uTools.uUtils.SetNavigationBarActionDown;
@@ -515,33 +513,31 @@ public class uBlocker {
 
                         Context context = GetMainActivity();
 
-                        SetFetchRequest(videoID);
-                        uVideoDetailsRequest videoIDRequest = GetRequestForVideoID(videoID);
+                        uVideoDetailsRequest channelIDRequest =
+                            new uVideoDetailsRequest(videoID, null, "channelID");
 
-                        if (videoIDRequest != null) {
-                            String channelID = videoIDRequest.GetChannelID();
+                        String channelID = channelIDRequest.GetRequestedInfo();
 
-                            if (channelID != null) {
-                                Intent openLiveChannelIntent = new Intent(
-                                    Intent.ACTION_VIEW,
+                        if (!channelID.isEmpty()) {
+                            Intent openLiveChannelIntent = new Intent(
+                                Intent.ACTION_VIEW,
 
-                                    Uri.parse(
-                                        String.format(
-                                            "%s%s",
+                                Uri.parse(
+                                    String.format(
+                                        "%s%s",
 
-                                            "https://www.youtube.com/channel/",
-                                            channelID
-                                        )
+                                        "https://www.youtube.com/channel/",
+                                        channelID
                                     )
-                                );
-                                openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                openLiveChannelIntent.setPackage(context.getPackageName());
+                                )
+                            );
+                            openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            openLiveChannelIntent.setPackage(context.getPackageName());
 
-                                context.startActivity(openLiveChannelIntent);
+                            context.startActivity(openLiveChannelIntent);
 
-                                openVideoChannelToastInProgress.cancel();
-                                openVideoChannelToastDone.show();
-                            }
+                            openVideoChannelToastInProgress.cancel();
+                            openVideoChannelToastDone.show();
                         }
                     } catch (Exception ignore) {
                         openVideoChannelToastError.show();

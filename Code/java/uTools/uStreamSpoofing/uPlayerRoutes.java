@@ -5,9 +5,15 @@ package uTools.uStreamSpoofing;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 
 public final class uPlayerRoutes {
+    public static final List<String> requestKeys = Arrays.asList(
+        "Authorization",
+        "X-GOOG-API-FORMAT-VERSION",
+        "X-Goog-Visitor-Id"
+    );
     private static final int HTTP_TIMEOUT_MILLISECONDS = 20 * 1000;
     public static String appVersionName = "1.0";
     public static HttpURLConnection GetPlayerResponseConnectionFromRoute(uRoute.CompiledRoute route, List<Object> clientTypeInfo) {

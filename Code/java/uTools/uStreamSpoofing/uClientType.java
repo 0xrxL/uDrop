@@ -2,8 +2,6 @@
 
 package uTools.uStreamSpoofing;
 
-import java.util.Locale;
-
 public enum uClientType {
     ANDROID_CREATOR(
         "35",
@@ -46,7 +44,6 @@ public enum uClientType {
     public final int clientID;
     public final String clientVersion;
     public final String cronetVersion;
-    public final Locale defaultLocale = Locale.getDefault();
     public final String deviceModel;
     public final String osBrand;
     public final String osBuildID;
@@ -64,12 +61,11 @@ public enum uClientType {
         this.osName = osName;
         this.osVersion = osVersion;
         this.userAgent = String.format(
-                            "%s/%s (Linux; U; Android %s; %s; %s; Build/%s; Cronet/%s)",
+                            "%s/%s (Linux; U; Android %s; %s; Build/%s; Cronet/%s)",
 
                             clientPackageName,
                             clientVersion,
                             osVersion,
-                            this.defaultLocale,
                             deviceModel,
                             osBuildID,
                             cronetVersion

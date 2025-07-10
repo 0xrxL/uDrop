@@ -74,7 +74,7 @@ public class uUtils {
 
     public static final ThreadPoolExecutor BackgroundThreadPool = new ThreadPoolExecutor(
         1,
-        1,
+        20,
         20 * 1000,
         TimeUnit.MILLISECONDS,
         new SynchronousQueue<>(),
