@@ -3206,9 +3206,10 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "\"fab\"",
-                        "const/",
-                        "\"pcc\""
+                        ".method protected final onCreate(Landroid/os/Bundle;)V",
+                        "const/16 0x12",
+                        "const/16 0xf",
+                        "sget-object"
                     ],
 
                     true,
@@ -3229,26 +3230,35 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j < scaleIndex.Lines(i, 26); j++)
+                                    for (int j = i; j < xmlSmaliProperties.LinesCount; j++)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
-                                            codeInject.Write();
+                                            for (int k = j; k <= scaleIndex.Lines(j, 23); k++)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[2]))
+                                                {
+                                                    for (int l = k; l < xmlSmaliProperties.LinesCount; l++)
+                                                    {
+                                                        if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[3]))
+                                                        {
+                                                            codeInject.Write();
 
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
+                                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                        }
 
-                                        if (!xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
-                                        {
-                                            codeInject.LinesReplace(
-                                                [
-                                                    ("",
+                                                        codeInject.LinesReplace(
+                                                            [
+                                                                ("",
 
-                                                    j,
+                                                                l,
 
-                                                    [""])
-                                                ]
-                                            );
+                                                                [""])
+                                                            ]
+                                                        );
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -4273,7 +4283,7 @@
             return [
                 new SmaliUtils.SubPatchModule<SmaliUtils.StringTransform[]>(
                     [
-                        new("<style name=\"Theme.YouTube.Launcher.Cairo\" parent=\"@style/Base.V23.Theme.YouTube.Launcher.Cairo.Dark\" />", "", "<style name=\"Theme.YouTube.Home\" parent=\"@style/Base.V23.Theme.YouTube.Launcher.Cairo.Dark\">\n    <item name=\"android:windowBackground\">@color/yt_black0</item>\n    </style>"),
+                        new("<style name=\"Theme.YouTube.Launcher.Cairo\" parent=\"@style/Base.V27.Theme.YouTube.Launcher.Cairo.Dark\" />", "", "<style name=\"Theme.YouTube.Home\" parent=\"@style/Base.V27.Theme.YouTube.Launcher.Cairo.Dark\">\n    <item name=\"android:windowBackground\">@color/yt_black0</item>\n    </style>"),
                     ],
 
                     true,
@@ -5332,11 +5342,11 @@
                              {
                                  if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                  {
-                                     for (int j = i; j <= scaleIndex.Lines(i, 186); j++)
+                                     for (int j = i; j <= scaleIndex.Lines(i, 227); j++)
                                      {
                                          if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                          {
-                                             for (int k = j; k >= scaleIndex.Lines(j, -5); k--)
+                                             for (int k = j; k >= scaleIndex.Lines(j, -9); k--)
                                              {
                                                  if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[2]))
                                                  {
@@ -6451,9 +6461,12 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "invoke-virtual Lcom/google/android/apps/youtube/app/common/player/overlay/YouTubePlayerOverlaysLayout;->clearFocus()V",
-                        "invoke-virtual Landroid/view/View;->setImportantForAccessibility(I)V",
-                        ".method"
+                        "\"NONE\"",
+                        "\"HIDDEN\"",
+                        "\"WATCH_WHILE_MINIMIZED\"",
+                        "\"WATCH_WHILE_MAXIMIZED\"",
+                        "\"WATCH_WHILE_FULLSCREEN\"",
+                        ".method public final (L{0};)V"
                     ],
 
                     true,
@@ -6466,39 +6479,32 @@
                         patchInteractions,
                         xmlSmaliInfo
                     ) => {
-                        if (xmlSmaliProperties.Path.EndsWith(uDropUtils.GetOSSpecificFullPath("/YouTubePlayerOverlaysLayout.smali")))
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1],
+                                xmlSmaliSearchKeys[2],
+                                xmlSmaliSearchKeys[3]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
                         {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
+                            xmlSmaliProperties.ReadXMLSmaliProxiedLines(uDropUtils.GetOSSpecificFullPath("com/google/android/apps/youtube/app/common/player/overlay/YouTubePlayerOverlaysLayout.smali"));
 
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            for (int i = xmlSmaliProperties.ProxiedLinesCount - 1; i >= 0; i--)
                             {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                if (xmlSmaliProperties.ProxiedLines[i].PartialContains(String.Format(xmlSmaliSearchKeys[5], Path.GetFileNameWithoutExtension(xmlSmaliProperties.Path))))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -6); j--)
-                                    {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
-                                        {
-                                            for (int k = j; k >= 0; k--)
-                                            {
-                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[2]))
-                                                {
-                                                    codeInject.Lines(
-                                                        [
-                                                            ("",
+                                    codeInject.ProxiedLines(
+                                        [
+                                            ("",
 
-                                                            k + 2,
+                                            i + 2,
 
-                                                            [
-                                                                $"invoke-static {{p1}}, L{uUtilsPath};->SetPlayerType(Ljava/lang/Enum;)V"
-                                                            ])
-                                                        ]
-                                                    ).Write();
+                                            [
+                                                $"invoke-static {{p1}}, L{uUtilsPath};->SetPlayerType(Ljava/lang/Enum;)V"
+                                            ])
+                                        ]
+                                    ).Write();
 
-                                                    return (patchInteractions, false, xmlSmaliInfo);
-                                                }
-                                            }
-                                        }
-                                    }
+                                    return (patchInteractions, false, xmlSmaliInfo);
                                 }
                             }
                         }
@@ -7271,7 +7277,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 61); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 67); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
                                         {
@@ -7468,7 +7474,8 @@
                         "invoke-virtual/range Lcom/google/android/libraries/youtube/rendering/ui/pivotbar/PivotBar;-> )Landroid/view/View;",
                         "move-result-object",
                         "invoke-static (I)L",
-                        "move-result-object"
+                        "move-result-object",
+                        ".end method"
                     ],
 
                     true,
@@ -7528,13 +7535,6 @@
                                                                 ]
                                                             );
 
-                                                            if (patchInteractions == 2)
-                                                            {
-                                                                codeInject.Write();
-
-                                                                return (0, false, []);
-                                                            }
-
                                                             patchInteractions++;
                                                             xmlSmaliInfo[0] = j.ToString();
 
@@ -7547,6 +7547,13 @@
                                             }
                                         }
                                     }
+                                }
+
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[6]) && patchInteractions > 0)
+                                {
+                                    codeInject.Write();
+
+                                    return (0, false, []);
                                 }
                             }
                         }

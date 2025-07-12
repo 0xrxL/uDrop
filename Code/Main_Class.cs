@@ -109,6 +109,7 @@ namespace uDrop.Code
                     APKUtils.ZipAlign();
                     APKUtils.Sign();
                     APKUtils.TemporaryResourceRemoval();
+                    goto END_CASE;
                 case "decompile":
                     APKUtils.Decompile();
                     goto END_CASE;
