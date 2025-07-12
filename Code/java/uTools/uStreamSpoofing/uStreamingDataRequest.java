@@ -31,7 +31,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import uTools.VideoDetails.uVideoDetailsRequest;
 
@@ -49,113 +48,145 @@ public class uStreamingDataRequest {
                 uClientType.ANDROID_CREATOR
             )
         );
+    private final List<Locale> defaultAudioTrackLocales = new ArrayList<>();
+    private Locale defaultAudioTrackLocale;
     private final int READ_BUFFER_SIZE = 8192;
     private uStreamingDataRequest(String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(playerHeaders);
-
-        AtomicBoolean videoRequireLogin = new AtomicBoolean(false);
 
         this.videoID = videoID;
         this.future = BackgroundThreadPool.submit(
             () -> {
                 for (uClientType clientType : CLIENT_TYPES_ORDER_TO_USE) {
-                    videoRequireLogin.set(false);
+                    boolean videoRequireLogin = false;
 
                     for (int i = 0; i < 2; i++) {
-                        HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
-                            new uRoute(
-                                uRoute.Method.POST,
+                        boolean videoRequireSimplifiedLocale = false;
 
-                                "player?fields=streamingData&alt=proto"
-                            ).Compile(),
+                        for (int j = 0; j < 2; j++) {
+                            HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
+                                new uRoute(
+                                    uRoute.Method.POST,
 
-                            Arrays.asList(
-                                clientType.userAgent,
-                                String.valueOf(clientType.clientID),
-                                clientType.clientVersion
-                            )
-                        );
+                                    "player?fields=streamingData&alt=proto"
+                                ).Compile(),
 
-                        if (connection != null) {
-                            for (String requestKey : requestKeys) {
-                                if (requestKey.equals(requestKeys.get(0)) && !videoRequireLogin.get()) {
-                                    continue;
+                                Arrays.asList(
+                                    clientType.userAgent,
+                                    String.valueOf(clientType.clientID),
+                                    clientType.clientVersion
+                                )
+                            );
+
+                            if (connection != null) {
+                                for (String requestKey : requestKeys) {
+                                    if (requestKey.equals(requestKeys.get(0)) && !videoRequireLogin) {
+                                        continue;
+                                    }
+
+                                    connection.setRequestProperty(requestKey, playerHeaders.get(requestKey));
                                 }
 
-                                connection.setRequestProperty(requestKey, playerHeaders.get(requestKey));
-                            }
+                                uVideoDetailsRequest defaultAudioTrackRequest =
+                                    new uVideoDetailsRequest(videoID, playerHeaders, "defaultAudioTrackID");
+                                String defaultAudioTrackName = defaultAudioTrackRequest.GetRequestedInfo();
 
-                            uVideoDetailsRequest defaultAudioTrackRequest =
-                                new uVideoDetailsRequest(videoID, playerHeaders, "defaultAudioTrackID");
+                                try {
+                                    String[] splitDefaultAudioTrackName = defaultAudioTrackName.split("-");
 
-                            String defaultAudioTrackName = defaultAudioTrackRequest.GetRequestedInfo();
+                                    defaultAudioTrackLocales.add(
+                                        new Locale(
+                                            splitDefaultAudioTrackName[0],
 
-                            Locale defaultAudioTrackLocale = defaultAudioTrackName.isEmpty()
-                                                                ?
-                                                                    Locale.getDefault()
-                                                                :
-                                                                    new Locale(defaultAudioTrackName);
+                                            splitDefaultAudioTrackName[1].toUpperCase()
+                                        )
+                                    );
+                                } catch (Exception ignore) {
+                                    defaultAudioTrackLocales.add(
+                                        new Locale(
+                                            defaultAudioTrackName,
 
-                            JSONObject innerTubeBody = new JSONObject() {{
-                                put(
-                                    "context",
+                                            defaultAudioTrackName.toUpperCase()
+                                        )
+                                    );
+                                }
+                                defaultAudioTrackLocales.add(new Locale(defaultAudioTrackName));
 
-                                    new JSONObject() {{
-                                        put(
-                                            "client",
+                                if (!videoRequireLogin) {
+                                    if (!videoRequireSimplifiedLocale) {
+                                        defaultAudioTrackLocale = defaultAudioTrackLocales.get(0);
+                                    } else {
+                                        defaultAudioTrackLocale = defaultAudioTrackLocales.get(1);
+                                    }
+                                }
 
-                                            new JSONObject() {{
-                                                put("clientName", clientType.name());
-                                                put("clientVersion", clientType.clientVersion);
-                                                put("deviceMake", clientType.osBrand);
-                                                put("deviceModel", clientType.deviceModel);
-                                                if (!videoRequireLogin.get()) {
-                                                    put("hl", defaultAudioTrackLocale);
-                                                }
-                                                put("osName", clientType.osName);
-                                                put("osVersion", clientType.osVersion);
-                                                put("androidSdkVersion", clientType.androidSDKVersion);
-                                            }}
-                                        );
-                                    }}
-                                );
-                                put("contentCheckOk", true);
-                                put("racyCheckOk", true);
-                                put("videoId", videoID);
-                            }};
+                                defaultAudioTrackLocales.clear();
 
-                            byte[] requestBody = innerTubeBody.toString().getBytes(StandardCharsets.UTF_8);
+                                JSONObject innerTubeBody = new JSONObject() {{
+                                    put(
+                                        "context",
 
-                            connection.setFixedLengthStreamingMode(requestBody.length);
-                            connection.getOutputStream().write(requestBody);
+                                        new JSONObject() {{
+                                            put(
+                                                "client",
 
-                            if (connection.getResponseCode() == 200) {
-                                int contentLength = connection.getContentLength();
+                                                new JSONObject() {{
+                                                    put("clientName", clientType.name());
+                                                    put("clientVersion", clientType.clientVersion);
+                                                    put("deviceMake", clientType.osBrand);
+                                                    put("deviceModel", clientType.deviceModel);
+                                                    if (defaultAudioTrackLocale != null) {
+                                                        put("hl", defaultAudioTrackLocale);
+                                                    }
+                                                    put("osName", clientType.osName);
+                                                    put("osVersion", clientType.osVersion);
+                                                    put("androidSdkVersion", clientType.androidSDKVersion);
+                                                }}
+                                            );
+                                        }}
+                                    );
+                                    put("contentCheckOk", true);
+                                    put("racyCheckOk", true);
+                                    put("videoId", videoID);
+                                }};
 
-                                if (contentLength != 0) {
-                                    try (InputStream inputStream = new BufferedInputStream(connection.getInputStream())) {
-                                        ByteArrayOutputStream baos = new ByteArrayOutputStream(Math.max(contentLength, READ_BUFFER_SIZE));
+                                defaultAudioTrackLocale = null;
 
-                                        inputStream.transferTo(baos);
+                                byte[] requestBody = innerTubeBody.toString().getBytes(StandardCharsets.UTF_8);
 
-                                        Log.d("uStreamingDataRequest", clientType.name());
+                                connection.setFixedLengthStreamingMode(requestBody.length);
+                                connection.getOutputStream().write(requestBody);
 
-                                        SetStatsForNerdsClientName(
-                                            String.format(
-                                                " (%s - %s)",
+                                if (connection.getResponseCode() == 200) {
+                                    int contentLength = connection.getContentLength();
 
-                                                clientType.name(),
-                                                !videoRequireLogin.get() ? "NO_AUTH" : "WITH_AUTH"
-                                            )
-                                        );
+                                    if (contentLength != 0) {
+                                        try (InputStream inputStream = new BufferedInputStream(connection.getInputStream())) {
+                                            ByteArrayOutputStream baos = new ByteArrayOutputStream(Math.max(contentLength, READ_BUFFER_SIZE));
 
-                                        return ByteBuffer.wrap(baos.toByteArray());
+                                            inputStream.transferTo(baos);
+
+                                            Log.d("uStreamingDataRequest", clientType.name());
+
+                                            SetStatsForNerdsClientName(
+                                                String.format(
+                                                    " (%s - %s)",
+
+                                                    clientType.name(),
+                                                    !videoRequireLogin ? "NO_AUTH" : "WITH_AUTH"
+                                                )
+                                            );
+
+                                            return ByteBuffer.wrap(baos.toByteArray());
+                                        }
                                     }
                                 }
                             }
+
+                            videoRequireSimplifiedLocale = true;
                         }
 
-                        videoRequireLogin.set(true);
+                        videoRequireLogin = true;
                     }
                 }
 
