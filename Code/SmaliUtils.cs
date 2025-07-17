@@ -347,7 +347,7 @@ namespace uDrop.Code
             return resLine;
         }
 
-        public static string GetFieldName(this string value)
+        public static string GetFieldName(this string value, bool getNameFromInvoke)
         {
             string output = "";
 
@@ -372,7 +372,7 @@ namespace uDrop.Code
                 }
             }
 
-            return output;
+            return !getNameFromInvoke ? output : output.Split(">")[0];
         }
 
         public static string GetMethodName(this string value, bool returnNameOnly)
