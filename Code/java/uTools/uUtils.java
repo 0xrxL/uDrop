@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
@@ -132,6 +133,49 @@ public class uUtils {
         return captionsButton;
     }
 
+    public static void ClearAppCache() {
+        File cacheDir = GetAppContext().getCacheDir();
+
+        if (cacheDir != null && cacheDir.isDirectory()) {
+            Stack<File> dirs = new Stack<>() {{
+                push(cacheDir);
+            }};
+
+            while (!dirs.isEmpty()) {
+                File currentDir = dirs.pop();
+
+                if (currentDir != null && currentDir.isDirectory()) {
+                    File[] cacheObjs = currentDir.listFiles();
+
+                    if (cacheObjs != null) {
+                        for (File cacheObj : cacheObjs) {
+                            String cacheObjPath = cacheObj.getAbsolutePath();
+
+                            if (!cacheObjPath.contains(GetClassName())) {
+                                if (cacheObj.isDirectory()) {
+                                    dirs.push(cacheObj);
+                                } else {
+                                    if (!cacheObj.delete()) {
+                                        Log.e(
+                                            GetClassName(),
+
+                                            String.format(
+                                                "%s%s",
+
+                                                "Cannot delete file: ",
+                                                cacheObjPath
+                                            )
+                                        );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private static boolean commentsPanelOpen = false;
     public static void SetCommentsPanelOpen(boolean value) {
         commentsPanelOpen = value;
@@ -186,14 +230,22 @@ public class uUtils {
     }
 
     public static AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> InitializeNewBlockList(AbstractMap.SimpleEntry<Set<String>, String> blockList) {
+        File automatonDataFolder = new File(GetAppContext().getCacheDir(), GetClassName());
+        if (!automatonDataFolder.exists() && !automatonDataFolder.mkdirs()) {
+            Log.e(
+                GetClassName(),
+
+                "Cannot create Aho-Corasick automaton data folder"
+            );
+        }
+
+        File automatonData = new File(automatonDataFolder, blockList.getValue());
+
         AhoCorasickDoubleArrayTrie<String> corasickObject = null;
-
-        File file = new File(appContext.getFilesDir(), blockList.getValue());
-
         boolean generateAutomatonData = false;
 
         try (
-            FileInputStream fis = new FileInputStream(file);
+            FileInputStream fis = new FileInputStream(automatonData);
             ObjectInputStream ois = new ObjectInputStream(fis)
         ) {
             corasickObject = new AhoCorasickDoubleArrayTrie<>();
@@ -215,7 +267,7 @@ public class uUtils {
                 Log.d(
                     GetClassName(),
 
-                    String.format("%s Aho-Corasick file succesfully loaded!", file.getName())
+                    String.format("%s Aho-Corasick file succesfully loaded!", automatonData.getName())
                 );
             } else {
                 generateAutomatonData = true;
@@ -249,7 +301,7 @@ public class uUtils {
                 );
 
             try (
-                FileOutputStream fos = new FileOutputStream(file);
+                FileOutputStream fos = new FileOutputStream(automatonData);
                 ObjectOutputStream oos = new ObjectOutputStream(fos)
             ) {
                 corasickObject.save(oos);
@@ -260,7 +312,7 @@ public class uUtils {
                 Log.d(
                     GetClassName(),
 
-                    String.format("%s Aho-Corasick file succesfully saved!", file.getName())
+                    String.format("%s Aho-Corasick file succesfully saved!", automatonData.getName())
                 );
             } catch (IOException e) {
                 Log.e(

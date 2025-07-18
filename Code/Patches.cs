@@ -4371,6 +4371,53 @@
         public static List<bool> Generic_Improvements()
         {
             return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        ".method private final shouldSkipDump([Ljava/lang/String;)Z",
+                        ".method protected onCreate(Landroid/os/Bundle;)V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
+                                {
+                                    codeInject.Lines(
+                                        [
+                                            ("Clear App Cache At Launch",
+
+                                            i + 2,
+
+                                            [
+                                                $"invoke-static {{}}, L{uUtilsPath};->ClearAppCache()V"
+                                            ])
+                                        ]
+                                    ).Write();
+
+                                    return (patchInteractions, false, xmlSmaliInfo);
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply,
+
                 new SmaliUtils.SubPatchModule<SmaliUtils.StringTransform[]>(
                     [
                         new("<style name=\"Theme.YouTube.Launcher.Cairo\" parent=\"@style/Base.V27.Theme.YouTube.Launcher.Cairo.Dark\" />", "", "<style name=\"Theme.YouTube.Home\" parent=\"@style/Base.V27.Theme.YouTube.Launcher.Cairo.Dark\">\n    <item name=\"android:windowBackground\">@color/yt_black0</item>\n    </style>"),
