@@ -247,6 +247,7 @@ public class uBlocker {
                     "image_shelf",
                     "info_card_teaser_overlay",
                     "infocards_section",
+                    "live_viewer_leaderboard_chat_entry_point",
                     "live_chat_sponsorships_new_member_announcement",
                     "live_chat_text_message_banner",
                     "live_chat_ticker_creator_goal_view_model",
