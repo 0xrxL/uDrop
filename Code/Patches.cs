@@ -2018,7 +2018,8 @@
                         "invoke-direct ;-><init>",
                         "invoke-virtual Ljava/util/ArrayList;->indexOf(Ljava/lang/Object;)I",
                         "invoke-virtual (IZ)V",
-                        ":cond_"
+                        ":cond_",
+                        "const/16"
                     ],
 
                     true,
@@ -2060,20 +2061,28 @@
                                                             {
                                                                 if (xmlSmaliProperties.ProxiedLines[m].PartialContains(xmlSmaliSearchKeys[5]))
                                                                 {
-                                                                    codeInject.ProxiedLines(
-                                                                        [
-                                                                            ("",
+                                                                    for (int n = m; n < xmlSmaliProperties.ProxiedLinesCount; n++)
+                                                                    {
+                                                                        if (xmlSmaliProperties.ProxiedLines[n].PartialContains(xmlSmaliSearchKeys[6]))
+                                                                        {
+                                                                            string freeRegister = xmlSmaliProperties.ProxiedLines[n].GetRegister(1);
 
-                                                                            m + 1,
+                                                                            codeInject.ProxiedLines(
+                                                                                [
+                                                                                    ("",
 
-                                                                            [
-                                                                                "const/4 v0, 0x1",
-                                                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
-                                                                            ])
-                                                                        ]
-                                                                    ).Write();
+                                                                                    m + 1,
 
-                                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                                                    [
+                                                                                        $"const/4 {freeRegister}, 0x1",
+                                                                                        $"invoke-static {{{freeRegister}}}, L{uUtilsPath};->SetNavigationBarActionDown(Z)V"
+                                                                                    ])
+                                                                                ]
+                                                                            ).Write();
+
+                                                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                                        }
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -3277,7 +3286,7 @@
                         "sput-object",
                         ".method protected final onCreate(Landroid/os/Bundle;)V",
                         "sget-object L{0};->{1}:",
-                        "invoke-direct ;-><init>(Ljava/lang/Object;I[B)V",
+                        "invoke-direct ;-><init>( )V",
                         "invoke-virtual ;Ljava/lang/Runnable;)V"
                     ],
 
@@ -4459,7 +4468,7 @@
                 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(269032877),
+                        SmaliUtils.GetResourceHex(1074339245),
                         "move-result "
                     ],
 
