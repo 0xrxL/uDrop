@@ -162,6 +162,7 @@ public class uBlocker {
         "FLAG",
         "OFFLINE_DOWNLOAD",
         "OUTLINE_YOUTUBE_MUSIC",
+        "OUTLINE_YOUTUBE_SHORTS_PLUS",
         "QUEUE_PLAY_NEXT"
     );
     public static boolean HideVideoPreviewFlyoutButton(Enum<?> button) {
