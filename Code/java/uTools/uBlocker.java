@@ -105,7 +105,7 @@ public class uBlocker {
         } catch (Exception ignored) {}
     }
 
-    private static final List<String> visibleButtons = List.of(
+    private static final List<String> visibleActionButtons = List.of(
         "segmentedLikeDislikeButtonViewModel",
         "yt_outline_share",
         "addToPlaylistButtonViewModel"
@@ -132,10 +132,7 @@ public class uBlocker {
                 .noneMatch(
                     s
                         ->
-                    s.contains(
-                        visibleButtons
-                        .get(visibleButtons.size() - 1)
-                    )
+                    s.contains(visibleActionButtons.get(visibleActionButtons.size() - 1))
                 )
             ) {
                 return;
@@ -148,7 +145,7 @@ public class uBlocker {
             for (int i = currentActionButtonsListSize - 1; i >= 0; i--) {
                 if (i <= 1
                         ||
-                    visibleButtons.stream().anyMatch(currentActionButtonsList.get(i)::contains)
+                    visibleActionButtons.stream().anyMatch(currentActionButtonsList.get(i)::contains)
                         ||
                     i > listSize - 1
                 ) {
@@ -158,6 +155,23 @@ public class uBlocker {
                 list.remove(i);
             }
         }
+    }
+
+    private static final Set<String> hiddenVideoPreviewFlyoutButtons = Set.of(
+        "EXTERNAL_LINK",
+        "FLAG",
+        "OFFLINE_DOWNLOAD",
+        "OUTLINE_YOUTUBE_MUSIC",
+        "QUEUE_PLAY_NEXT"
+    );
+    public static boolean HideVideoPreviewFlyoutButton(Enum<?> button) {
+        for (String hiddenVideoPreviewFlyoutButton : hiddenVideoPreviewFlyoutButtons) {
+            if (button.name().equals(hiddenVideoPreviewFlyoutButton)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean HideHighBitrateResolution(String originalValue) {

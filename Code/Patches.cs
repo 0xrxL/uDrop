@@ -7221,81 +7221,6 @@
 
                         return (patchInteractions, true, xmlSmaliInfo);
                     }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex("layout", "live_chat_item_context_menu_item"),
-                        "invoke-static ;)Ljava/lang/CharSequence;",
-                        $"and-int {SmaliUtils.GetResourceHex(8)}",
-                        "return-object"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.PartialContains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 22); j++)
-                                    {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
-                                        {
-                                            xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[j].GetInvokedSectionClass(1));
-
-                                            for (int k = 0; k < xmlSmaliProperties.ProxiedLinesCount; k++)
-                                            {
-                                                if (xmlSmaliProperties.ProxiedLines[k].PartialContains(xmlSmaliProperties.Lines[j].GetMethodName(false)))
-                                                {
-                                                    for (int l = k; l <= scaleIndex.ProxiedLines(k, 296); l++)
-                                                    {
-                                                        if (xmlSmaliProperties.ProxiedLines[l].PartialContains(xmlSmaliSearchKeys[2]))
-                                                        {
-                                                            for (int m = l; m >= scaleIndex.ProxiedLines(l, -5); m--)
-                                                            {
-                                                                if (xmlSmaliProperties.ProxiedLines[m].PartialContains(xmlSmaliSearchKeys[3]))
-                                                                {
-                                                                    codeInject.ProxiedLines(
-                                                                        [
-                                                                            ("Next In Queue Button",
-
-                                                                            m,
-
-                                                                            [
-                                                                                $"const/4 {xmlSmaliProperties.ProxiedLines[m].GetRegister(1)}, 0x0"
-                                                                            ])
-                                                                        ]
-                                                                    ).Write();
-
-                                                                    return (patchInteractions, false, xmlSmaliInfo);
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
                 ).Apply
             ];
         }
@@ -8005,6 +7930,119 @@
                                             ).Write();
 
                                             return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
+                ).Apply
+            ];
+        }
+
+        public static List<bool> Video_Preview_Flyout_Buttons_Filtering()
+        {
+            return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        "\"MENU_BOTTOM_SHEET_LISTENER_KEY\"",
+                        "\"Text missing for BottomSheetMenuItem with iconType: \"",
+                        "\"Text missing for BottomSheetMenuItem.\"",
+                        "sget-object :L",
+                        "invoke-static (I)L",
+                        "iget ",
+                        "invoke-static ;)Ljava/lang/CharSequence;",
+                        "move-result-object"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (new[] {
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1],
+                                xmlSmaliSearchKeys[2]
+                            }.All(xmlSmaliProperties.Full.PartialContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[2]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[3]))
+                                        {
+                                            string returnObject = xmlSmaliProperties.Lines[j].GetInvokedSection();
+
+                                            for (int k = 0; k < xmlSmaliProperties.LinesCount; k++)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[1]))
+                                                {
+                                                    for (int l = k; l >= scaleIndex.Lines(k, -22); l--)
+                                                    {
+                                                        if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[4]))
+                                                        {
+                                                            string enumObject = xmlSmaliProperties.Lines[l].GetInvokedSection();
+
+                                                            for (int m = l; m >= scaleIndex.Lines(l, -5); m--)
+                                                            {
+                                                                if (xmlSmaliProperties.Lines[m].PartialContains(xmlSmaliSearchKeys[5]))
+                                                                {
+                                                                    string currentButtonObject = xmlSmaliProperties.Lines[m].GetInvokedSection();
+
+                                                                    for (int n = m; n >= scaleIndex.Lines(m, -39); n--)
+                                                                    {
+                                                                        if (xmlSmaliProperties.Lines[n].PartialContains(xmlSmaliSearchKeys[6]))
+                                                                        {
+                                                                            for (int o = n; o >= scaleIndex.Lines(n, -4); o--)
+                                                                            {
+                                                                                if (xmlSmaliProperties.Lines[o].PartialContains(xmlSmaliSearchKeys[7]))
+                                                                                {
+                                                                                    string currentButtonObjectRegister = xmlSmaliProperties.Lines[o].GetRegister(1);
+                                                                                    string buttonCheckFreeRegister = currentButtonObjectRegister.ScaleRegisterSize(1);
+
+                                                                                    codeInject.Lines(
+                                                                                        [
+                                                                                            ("",
+
+                                                                                            o + 1,
+
+                                                                                            [
+                                                                                                $"iget {buttonCheckFreeRegister}, {currentButtonObjectRegister}, {currentButtonObject}",
+                                                                                                $"invoke-static {{{buttonCheckFreeRegister}}}, {enumObject}",
+                                                                                                $"move-result-object {buttonCheckFreeRegister}",
+                                                                                                $"invoke-static {{{buttonCheckFreeRegister}}}, L{uBlockerPath};->HideVideoPreviewFlyoutButton(Ljava/lang/Enum;)Z",
+                                                                                                $"move-result {buttonCheckFreeRegister}",
+                                                                                                $"if-eqz {buttonCheckFreeRegister}, :video_preview_flyout_buttons_filtering",
+                                                                                                $"sget-object {buttonCheckFreeRegister}, {returnObject}",
+                                                                                                $"return-object {buttonCheckFreeRegister}",
+                                                                                                ":video_preview_flyout_buttons_filtering"
+                                                                                            ])
+                                                                                        ]
+                                                                                    ).Write();
+
+                                                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
