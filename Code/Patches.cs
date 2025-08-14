@@ -1224,7 +1224,8 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(45645570)
+                        SmaliUtils.GetResourceHex(45645570),
+                        "move-result"
                     ],
 
                     true,
@@ -1247,23 +1248,25 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    codeInject.LinesReplace(
-                                        [
-                                            ("Playback Stream Obfuscation Flag Disabler",
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("Playback Stream Obfuscation Flag Disabler",
 
-                                            i,
+                                                    j + 1,
 
-                                            [
-                                                xmlSmaliProperties.Lines[i].Replace(
-                                                    xmlSmaliSearchKeys[0],
+                                                    [
+                                                        $"const/16 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x0"
+                                                    ])
+                                                ]
+                                            ).Write();
 
-                                                    $"-{xmlSmaliSearchKeys[0]}"
-                                                )
-                                            ])
-                                        ]
-                                    ).Write();
-
-                                    return (patchInteractions, false, xmlSmaliInfo);
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1327,7 +1330,8 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex(45355374)
+                        SmaliUtils.GetResourceHex(45355374),
+                        "move-result"
                     ],
 
                     true,
@@ -1350,23 +1354,25 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    codeInject.LinesReplace(
-                                        [
-                                            ("Restart LiveStream Flag Disabler",
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("Restart LiveStream Flag Disabler",
 
-                                            i,
+                                                    j + 1,
 
-                                            [
-                                                xmlSmaliProperties.Lines[i].Replace(
-                                                    xmlSmaliSearchKeys[0],
+                                                    [
+                                                        $"const/16 {xmlSmaliProperties.Lines[j].GetRegister(1)}, 0x0"
+                                                    ])
+                                                ]
+                                            ).Write();
 
-                                                    $"-{xmlSmaliSearchKeys[0]}"
-                                                )
-                                            ])
-                                        ]
-                                    ).Write();
-
-                                    return (patchInteractions, false, xmlSmaliInfo);
+                                            return (patchInteractions, false, xmlSmaliInfo);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1470,7 +1476,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[2]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 9); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 13); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[3]))
                                         {
@@ -2837,7 +2843,7 @@
                     [
                         ".method onLayout(",
                         "invoke-direct ()Z",
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -3858,7 +3864,7 @@
                     [
                         SmaliUtils.GetResourceHex("dimen", "seek_easy_horizontal_touch_offset_to_start_scrubbing"),
                         "invoke-virtual Landroid/view/MotionEvent;->getAction()I",
-                        "move-result ",
+                        "move-result",
                         "const-wide/16"
                     ],
 
@@ -4465,7 +4471,7 @@
                     [
                         SmaliUtils.GetResourceHex("id", "lottie_animation"),
                         "invoke-interface (I)I",
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -4919,7 +4925,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex(45694309),
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -5080,7 +5086,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex(45675738),
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -5109,7 +5115,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("New Litho UI Text Components Enabler",
+                                                    ("New Litho Text Components Logic Enabler",
 
                                                     j + 1,
 
@@ -5488,7 +5494,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex(45672269),
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -5790,7 +5796,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex(45419603),
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -6052,7 +6058,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "invoke-virtual Landroid/view/View;->canScrollVertically",
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
@@ -7952,7 +7958,7 @@
                         "\"Text missing for BottomSheetMenuItem.\"",
                         "sget-object :L",
                         "invoke-static (I)L",
-                        "iget ",
+                        "iget",
                         "invoke-static ;)Ljava/lang/CharSequence;",
                         "move-result-object"
                     ],
@@ -8170,7 +8176,7 @@
                     [
                         SmaliUtils.GetResourceHex("string", "quality_ds_res"),
                         "invoke-virtual ;->ordinal()I",
-                        "move-result "
+                        "move-result"
                     ],
 
                     true,
