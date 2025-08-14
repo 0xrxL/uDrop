@@ -129,35 +129,45 @@ public class uVideoDetailsRequest {
 
                                     switch (infoToFetch) {
                                         case "actionButtons" -> {
-                                            JSONArray primaryContents =
-                                                ((JSONObject) jsonResponse
-                                                .getJSONObject("contents")
-                                                .getJSONObject("singleColumnWatchNextResults")
-                                                .getJSONObject("results")
-                                                .getJSONObject("results")
-                                                .getJSONArray("contents")
-                                                .get(0))
-                                                .getJSONObject("slimVideoMetadataSectionRenderer")
-                                                .getJSONArray("contents");
+                                            JSONArray primaryContentsArray =
+                                                jsonResponse
+                                                    .getJSONObject("contents")
+                                                    .getJSONObject("singleColumnWatchNextResults")
+                                                    .getJSONObject("results")
+                                                    .getJSONObject("results")
+                                                    .getJSONArray("contents");
 
-                                            JSONArray buttons =
-                                                ((JSONObject) primaryContents.get(primaryContents.length() - 1))
-                                                .getJSONObject("elementRenderer")
-                                                .getJSONObject("newElement")
-                                                .getJSONObject("type")
-                                                .getJSONObject("componentType")
-                                                .getJSONObject("model")
-                                                .getJSONObject("videoActionBarModel")
-                                                .getJSONObject("videoActionBarData")
-                                                .getJSONArray("buttons");
+                                            for (int i = 0; i < primaryContentsArray.length(); i++) {
+                                                JSONObject primaryContentsArrayObject = primaryContentsArray.getJSONObject(i);
+                                                
+                                                String secondaryContentsObjectTarget = "slimVideoMetadataSectionRenderer";
 
-                                            List<String> buttonsList = new ArrayList<>();
+                                                if (primaryContentsArrayObject.has(secondaryContentsObjectTarget)) {
+                                                    JSONArray secondaryContentsArray =
+                                                        primaryContentsArrayObject
+                                                            .getJSONObject(secondaryContentsObjectTarget)
+                                                            .getJSONArray("contents");
 
-                                            for (int i = 0; i < buttons.length(); i++) {
-                                                buttonsList.add(buttons.get(i).toString());
+                                                    JSONArray buttons =
+                                                        ((JSONObject) secondaryContentsArray.get(secondaryContentsArray.length() - 1))
+                                                            .getJSONObject("elementRenderer")
+                                                            .getJSONObject("newElement")
+                                                            .getJSONObject("type")
+                                                            .getJSONObject("componentType")
+                                                            .getJSONObject("model")
+                                                            .getJSONObject("videoActionBarModel")
+                                                            .getJSONObject("videoActionBarData")
+                                                            .getJSONArray("buttons");
+
+                                                    List<String> buttonsList = new ArrayList<>();
+
+                                                    for (int j = 0; j < buttons.length(); j++) {
+                                                        buttonsList.add(buttons.get(j).toString());
+                                                    }
+
+                                                    return buttonsList;
+                                                }
                                             }
-
-                                            return buttonsList;
                                         }
 
                                         case "channelID" -> {
