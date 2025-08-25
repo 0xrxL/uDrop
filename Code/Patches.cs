@@ -7712,8 +7712,8 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHex("layout", "mobile_topbar_button_item"),
-                        SmaliUtils.GetResourceHex("drawable", "yt_outline_new_search_black_24"),
-                        "invoke-static (I)",
+                        SmaliUtils.GetResourceHex("id", "new_content_dot"),
+                        "invoke-static (I)L",
                         "move-result-object",
                         "invoke-virtual setOnClickListener(Landroid/view/View$OnClickListener;)V"
                     ],
@@ -7739,7 +7739,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -46); j--)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 86); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
                                         {
@@ -7747,7 +7747,7 @@
                                             {
                                                 if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[3]))
                                                 {
-                                                    for (int l = i; l <= scaleIndex.Lines(i, 70); l++)
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 67); l++)
                                                     {
                                                         if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[4]))
                                                         {
