@@ -1476,7 +1476,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[2]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 9); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 13); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[3]))
                                         {
