@@ -1890,6 +1890,91 @@
 
                         return (patchInteractions, true, xmlSmaliInfo);
                     }
+                ).Apply,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        "\"DISABLED_FOR_PLAYBACK\"",
+                        "\"DISABLED_BY_SABR_STREAMING_URI\"",
+                        "sput-object",
+                        ".method private final (Lcom/google/android/libraries/youtube/innertube/model/media/PlayerConfigModel;Lcom/google/android/libraries/youtube/innertube/model/media/VideoStreamingData;)"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        xmlSmaliSearchKeys,
+                        scaleIndex,
+                        codeInject,
+                        patchInteractions,
+                        xmlSmaliInfo
+                    ) => {
+                        if (patchInteractions == 0)
+                        {
+                            if (new[] {
+                                    xmlSmaliSearchKeys[0],
+                                    xmlSmaliSearchKeys[1]
+                                }.All(xmlSmaliProperties.Full.PartialContains))
+                            {
+                                xmlSmaliProperties.ReadXMLSmaliLines();
+
+                                for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                                {
+                                    if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
+                                    {
+                                        for (int j = i; j <= scaleIndex.Lines(i, 17); j++)
+                                        {
+                                            if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[2]))
+                                            {
+                                                xmlSmaliInfo = [ xmlSmaliProperties.Lines[j].GetInvokedSection() ];
+
+                                                patchInteractions++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (new[] {
+                                    xmlSmaliInfo[0],
+                                }.All(xmlSmaliProperties.Full.PartialContains))
+                            {
+                                xmlSmaliProperties.ReadXMLSmaliLines();
+
+                                for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                                {
+                                    if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliInfo[0]))
+                                    {
+                                        for (int j = i; j >= 0; j--)
+                                        {
+                                            if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[3]))
+                                            {
+                                                codeInject.Lines(
+                                                    [
+                                                        ("SABR Library Disabler",
+
+                                                        j + 2,
+
+                                                        [
+                                                            $"sget-object v0, {xmlSmaliInfo[0]}",
+                                                            "return-object v0",
+                                                        ])
+                                                    ]
+                                                ).Write();
+
+                                                return (0, false, []);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (patchInteractions, true, xmlSmaliInfo);
+                    }
                 ).Apply
             ];
         }
@@ -8122,8 +8207,8 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "\"TriggerBundle doesn\\'t have the required metadata specified by the trigger \"",
-                        ".method (Ljava/util/List;)V"
+                        "\"Unexpected custom dimensions: scaling factor %f, padding %d\"",
+                        ".method public static (Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;)Z"
                     ],
 
                     true,
@@ -8157,7 +8242,8 @@
                                                     j + 2,
 
                                                     [
-                                                        "return-void"
+                                                        "const/16 v0, 0x1",
+                                                        "return v0"
                                                     ])
                                                 ]
                                             ).Write();

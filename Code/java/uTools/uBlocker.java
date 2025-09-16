@@ -131,6 +131,7 @@ public class uBlocker {
             identifier.startsWith("video_action_bar") &&
             list != null &&
             !list.isEmpty() &&
+            currentActionButtonsList != null &&
             !currentActionButtonsList.isEmpty() &&
             firstListElem != null &&
             firstListElem.toString().equals("LazilyConvertedElement")

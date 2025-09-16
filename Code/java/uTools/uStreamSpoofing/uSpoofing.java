@@ -24,10 +24,13 @@ import uTools.uUtils;
     "ConstantConditions",
 })
 public class uSpoofing {
+    private static final Uri INTERNET_CONNECTION_CHECK_URI =
+        Uri.parse("https://www.google.com/gen_204");
+
     public static Uri BlockGetWatchRequest(Uri playerRequestUri) {
         try {
             if (playerRequestUri.getPath().contains("get_watch")) {
-                return Uri.parse("https://127.0.0.0");
+                return INTERNET_CONNECTION_CHECK_URI;
             }
         } catch (Exception e) {
             Log.e(
@@ -45,7 +48,7 @@ public class uSpoofing {
             Uri originalUri = Uri.parse(originalUrlString);
 
             if (originalUri.getPath().contains("initplayback")) {
-                return originalUri.buildUpon().clearQuery().build().toString();
+                return INTERNET_CONNECTION_CHECK_URI.toString();
             }
         } catch (Exception e) {
             Log.e(
@@ -58,7 +61,7 @@ public class uSpoofing {
         return originalUrlString;
     }
 
-    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> pathExclusions =
+    private static final AbstractMap.SimpleEntry<AhoCorasickDoubleArrayTrie<String>, Integer> fetchStreamsExcludedPaths =
         InitializeNewBlockList(
             new AbstractMap.SimpleEntry<> (
                 Set.of(
@@ -68,7 +71,7 @@ public class uSpoofing {
                     "refresh"
                 ),
 
-                "pathExclusions"
+                "fetchStreamsExcludedPaths"
             )
         );
     public static void FetchStreams(String url, Map<String, String> requestHeaders) {
@@ -79,7 +82,7 @@ public class uSpoofing {
             if (path.contains("player") &&
                 !SearchInSetCorasick(
                     path,
-                    pathExclusions,
+                    fetchStreamsExcludedPaths,
                     uUtils.Entries.ANY
                 )
             ) {
