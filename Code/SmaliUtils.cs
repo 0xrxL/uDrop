@@ -12,7 +12,7 @@ namespace uDrop.Code
                 str;
             public string Transformed =
                 str.Replace(
-                    (!String.IsNullOrEmpty(sourceKeyword) ? sourceKeyword : str),
+                    !String.IsNullOrEmpty(sourceKeyword) ? sourceKeyword : str,
 
                     targetKeyword
                 );
@@ -311,7 +311,15 @@ namespace uDrop.Code
                 "\nError: No smali folder exists in decompiled apk path".QuitWithException();
             }
 
-            return smaliDirs;
+            return [..
+                        smaliDirs.OrderBy(p =>
+                            Regex.Match(p, @"\d+").Success
+                            ?
+                                int.Parse(Regex.Match(p, @"\d+").Value)
+                            :
+                                int.MinValue
+                        )
+                    ];
         }
 
         public static string GetResourceHex(int decimalRes)

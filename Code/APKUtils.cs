@@ -185,97 +185,80 @@ namespace uDrop.Code
         {
             "\nBalancing Smali Folders...".StartProcessLog();
 
-            List<string> dirPaths = SmaliUtils.GetSmaliFolders();
-            int dirsPathCount = dirPaths.Count - 1;
-
-            int currentDirPathIndex = 0;
+            List<string> dirs = SmaliUtils.GetSmaliFolders();
+            int currentDirsCount = dirs.Count();
+            int originalDirsCount = currentDirsCount;
             string rootDirPath = uDropUtils.GetOSSpecificFullPath(
-                                    $"{Directory.GetParent(dirPaths.First())!.FullName}"
+                                    $"{Directory.GetParent(dirs.First())!.FullName}"
                                 );
-            string currentDirPath = $"{rootDirPath}/smali";
-            bool isLastExistingDir;
-            bool isFolderOversized;
+            int maxDirFilesAmount = 4000;
+            bool isCurrentDirOversized;
+            string nextDirName;
+            bool isNextDirExisting;
+            int currentDirIndex = 0;
+            int currentDirFilesCount;
+            int nextDirIndex;
 
-            List<string> dirFiles;
-            int dirFilesCount;
-
-            int filesToMove = 4000;
-            int checkedFilesCount;
-            int checkedAmountToMove;
-            while (true)
+            while (currentDirIndex < currentDirsCount)
             {
-                isLastExistingDir = currentDirPathIndex >= dirsPathCount;
+                Stack<string> currentDirFiles = new(
+                                                    Directory.GetFiles(
+                                                        dirs[currentDirIndex],
 
-                dirFiles = [..
-                                Directory.GetFiles(
-                                    !isLastExistingDir ? currentDirPath : $"{rootDirPath}/smali_classes6",
+                                                        "*.smali*",
 
-                                    "*.*",
-                                    
-                                    SearchOption.AllDirectories
-                                )
-                            ];
-                dirFilesCount = dirFiles.Count;
-                isFolderOversized = dirFilesCount > filesToMove;
+                                                        SearchOption.TopDirectoryOnly
+                                                    )
+                                                    .OrderBy(
+                                                        f => f
+                                                    )
+                                                );
+                currentDirFilesCount = currentDirFiles.Count();
+                nextDirIndex = currentDirIndex + 1;
 
-                if (isFolderOversized)
+                isCurrentDirOversized = currentDirFilesCount > maxDirFilesAmount;
+                nextDirName = $"{rootDirPath}/smali_classes{nextDirIndex + 1}";
+                isNextDirExisting = Directory.Exists(nextDirName);
+
+                if (isCurrentDirOversized)
                 {
-                    if (!Directory.Exists(currentDirPath))
+                    if (!isNextDirExisting)
                     {
-                        Directory.CreateDirectory(currentDirPath);
+                        dirs.Add(nextDirName);
+
+                        Directory.CreateDirectory(dirs.Last());
                     }
 
-                    checkedFilesCount = dirFilesCount - filesToMove;
-                    checkedAmountToMove = !isLastExistingDir
-                                            ?
-                                            checkedFilesCount
-                                            :
-                                            checkedFilesCount >= filesToMove
-                                                ?
-                                                filesToMove
-                                                :
-                                                checkedFilesCount
-                                            ;
-
-                    for (int i = 0; i < checkedAmountToMove; i++)
+                    while (currentDirFilesCount > maxDirFilesAmount)
                     {
+                        string dirFileToMove = currentDirFiles.Pop();
+
                         File.Move(
-                            dirFiles[i],
+                            dirFileToMove,
 
-                            uDropUtils.GetOSSpecificFullPath(
-                                $"{(!isLastExistingDir
-                                    ?
-                                    dirPaths[dirsPathCount]
-                                    :
-                                    currentDirPath)
-                                }/{
-                                    Path.GetFileName(dirFiles[i])
-                                }"
-                            )
+                            dirFileToMove.Replace(dirs[currentDirIndex], dirs[nextDirIndex])
                         );
+
+                        currentDirFilesCount--;
                     }
-                }
-                else if (isLastExistingDir)
-                {
-                    break;
                 }
 
                 $"\n{
-                    new DirectoryInfo(currentDirPath).Name
+                    new DirectoryInfo(dirs[currentDirIndex]).Name
                 } ---> {
-                    (currentDirPathIndex <= dirsPathCount
+                    (currentDirsCount <= originalDirsCount
                     ?
-                        isFolderOversized
-                            ?
-                                "Fixed"
-                            :
-                                "Passed"
+                        isCurrentDirOversized
+                        ?
+                            "Fixed"
+                        :
+                            "Passed"
                     :
                         "New")
                 }".PatchLog();
 
-                currentDirPathIndex++;
-                currentDirPath = $"{rootDirPath}/smali_classes{currentDirPathIndex + 1}";
+                currentDirsCount += isCurrentDirOversized && !isNextDirExisting ? 1 : 0;
+                currentDirIndex++;
             }
 
             "\nSmali Folders succesfully balanced".EndProcessLog(true);
