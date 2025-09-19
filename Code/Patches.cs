@@ -5442,7 +5442,7 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "Landroidx/window/layout/WindowMetricsCalculator;->computeCurrentWindowMetrics(Landroid/app/Activity;)Landroidx/window/layout/WindowMetrics;",
+                        "isInMultiWindowMode()Z",
                         "(Landroid/content/res/Configuration;)V",
                         "return-void",
                         "invoke-virtual Lj$/util/Optional;->ifPresent(Ljava/util/function/Consumer;)V",
@@ -5994,7 +5994,7 @@
                              {
                                  if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                  {
-                                     for (int j = i; j <= scaleIndex.Lines(i, 227); j++)
+                                     for (int j = i; j <= scaleIndex.Lines(i, 289); j++)
                                      {
                                          if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                          {
@@ -6006,7 +6006,7 @@
                                                      {
                                                          if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[3]))
                                                          {
-                                                             for (int m = l; m >= scaleIndex.Lines(l, -5); m--)
+                                                             for (int m = l; m >= scaleIndex.Lines(l, -7); m--)
                                                              {
                                                                  if (xmlSmaliProperties.Lines[m].PartialContains(xmlSmaliSearchKeys[4]))
                                                                  {
