@@ -27,6 +27,22 @@ public class uSpoofing {
     private static final Uri INTERNET_CONNECTION_CHECK_URI =
         Uri.parse("https://www.google.com/gen_204");
 
+    public static String BlockGetAttRequest(String originalUrlString) {
+        try {
+            if (Uri.parse(originalUrlString).getPath().contains("att/get")) {
+                return INTERNET_CONNECTION_CHECK_URI.toString();
+            }
+        } catch (Exception e) {
+            Log.e(
+                GetClassName(),
+
+                e.toString()
+            );
+        }
+
+        return originalUrlString;
+    }
+
     public static Uri BlockGetWatchRequest(Uri playerRequestUri) {
         try {
             if (playerRequestUri.getPath().contains("get_watch")) {
@@ -45,9 +61,7 @@ public class uSpoofing {
 
     public static String BlockInitPlaybackRequest(String originalUrlString) {
         try {
-            Uri originalUri = Uri.parse(originalUrlString);
-
-            if (originalUri.getPath().contains("initplayback")) {
+            if (Uri.parse(originalUrlString).getPath().contains("initplayback")) {
                 return INTERNET_CONNECTION_CHECK_URI.toString();
             }
         } catch (Exception e) {

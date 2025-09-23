@@ -1562,6 +1562,8 @@
                                                             k,
 
                                                             [
+                                                                $"invoke-static {{{buildRequestFirstRegister}}}, L{uSpoofingPath};->BlockGetAttRequest(Ljava/lang/String;)Ljava/lang/String;",
+                                                                $"move-result-object {buildRequestFirstRegister}",
                                                                 $"move-object/from16 {buildRequestSecondRegister}, p1",
                                                                 $"invoke-static {{{buildRequestFirstRegister}, {buildRequestSecondRegister}}}, L{uSpoofingPath};->FetchStreams(Ljava/lang/String;Ljava/util/Map;)V"
                                                             ])
