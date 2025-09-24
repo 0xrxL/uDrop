@@ -3483,7 +3483,7 @@
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
                                 {
-                                    for (int j = i; j >= scaleIndex.Lines(i, -29); j--)
+                                    for (int j = i; j >= scaleIndex.Lines(i, -33); j--)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
                                         {
