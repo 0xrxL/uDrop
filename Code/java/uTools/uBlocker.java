@@ -639,8 +639,9 @@ public class uBlocker {
     private static final Set<String> hiddenTabMeAccountButtons = Set.of(
         "ASSESSMENT",
         "FEEDBACK",
-        "UNLIMITED",
-        "HELP"
+        "HELP",
+        "SELL",
+        "UNLIMITED"
     );
     public static void HideTabMeAccountButton(View button, Enum<?> buttonName) {
         try {
