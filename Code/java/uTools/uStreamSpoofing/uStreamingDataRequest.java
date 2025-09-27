@@ -58,62 +58,74 @@ public class uStreamingDataRequest {
     private uStreamingDataRequest(String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(playerHeaders);
 
-        Object defaultAudioTrackRequest = new uVideoDetailsRequest(
-            videoID,
-            playerHeaders,
-            "defaultAudioTrackID"
-        )
-        .GetRequestedInfo();
-        String defaultAudioTrackName =
-            defaultAudioTrackRequest instanceof String
-            ?
-                (String) defaultAudioTrackRequest
-            :
-                "en-US";
-        defaultAudioTrackLocales.clear();
+        this.videoID = videoID;
+
         try {
-            String[] splitDefaultAudioTrackName = defaultAudioTrackName.split("-");
+            defaultAudioTrackLocales.clear();
 
-            defaultAudioTrackLocales.add(
-                new Locale(
-                    splitDefaultAudioTrackName[0],
+            Object defaultAudioTrackNameRequest = new uVideoDetailsRequest(
+                videoID,
+                playerHeaders,
+                "defaultAudioTrackID"
+            )
+            .GetRequestedInfo();
 
-                    splitDefaultAudioTrackName[1].toUpperCase()
-                )
-            );
+            String defaultAudioTrackName = (String) defaultAudioTrackNameRequest;
+
+            String hyphen = "-";
+
+            if (defaultAudioTrackName.contains(hyphen)) {
+                String[] splitDefaultAudioTrackName = defaultAudioTrackName.split(hyphen);
+
+                defaultAudioTrackLocales.add(
+                    new Locale(
+                        splitDefaultAudioTrackName[0],
+
+                        splitDefaultAudioTrackName[1].toUpperCase()
+                    )
+                );
+            } else {
+                Log.w(
+                    GetClassName(),
+
+                    "The audio track name is not separated by a hyphen"
+                );
+
+                defaultAudioTrackLocales.add(
+                    new Locale(
+                        defaultAudioTrackName,
+
+                        defaultAudioTrackName.toUpperCase()
+                    )
+                );
+            }
+
+            defaultAudioTrackLocales.add(new Locale(defaultAudioTrackName));
         } catch (Exception e) {
             Log.e(
                 GetClassName(),
 
                 e.toString()
             );
+        }
 
-            defaultAudioTrackLocales.add(
-                new Locale(
-                    defaultAudioTrackName,
+        try {
+            Object actionButtonsRequest = new uVideoDetailsRequest(
+                videoID,
+                playerHeaders,
+                "actionButtons"
+            )
+            .GetRequestedInfo();
 
-                    defaultAudioTrackName.toUpperCase()
-                )
+            SetCurrentActionButtonsList((List<String>) actionButtonsRequest);
+        } catch (Exception e) {
+            Log.e(
+                GetClassName(),
+
+                e.toString()
             );
         }
-        defaultAudioTrackLocales.add(new Locale(defaultAudioTrackName));
 
-        Object actionButtonsRequest = new uVideoDetailsRequest(
-            videoID,
-            playerHeaders,
-            "actionButtons"
-        )
-        .GetRequestedInfo();
-        NullifiesCurrentActionButtonsList();
-        SetCurrentActionButtonsList(
-            actionButtonsRequest instanceof List<?>
-            ?
-                (List<String>) actionButtonsRequest
-            :
-                new ArrayList<>()
-        );
-
-        this.videoID = videoID;
         this.future = BackgroundThreadPool.submit(
             () -> {
                 for (uClientType clientType : CLIENT_TYPES_ORDER_TO_USE) {
@@ -147,7 +159,7 @@ public class uStreamingDataRequest {
                                 }
 
                                 Locale defaultAudioTrackLocale =
-                                    !videoRequireLogin
+                                    !videoRequireLogin && !defaultAudioTrackLocales.isEmpty()
                                     ?
                                         defaultAudioTrackLocales.get(
                                             !videoRequireSimplifiedLocale
