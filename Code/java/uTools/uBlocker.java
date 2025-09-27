@@ -726,16 +726,23 @@ public class uBlocker {
 
                         Context context = GetMainActivity();
 
-                        Object channelIDRequest =
-                            new uVideoDetailsRequest(videoID, null, "channelID")
-                            .GetRequestedInfo();;
+                        String channelID = "";
+                        try {
+                            Object channelIDRequest = new uVideoDetailsRequest(
+                                videoID,
+                                null,
+                                "channelID"
+                            )
+                            .GetRequestedInfo();
 
-                        String channelID =
-                            channelIDRequest instanceof String
-                            ?
-                                (String) channelIDRequest
-                            :
-                                "";
+                            channelID = (String) channelIDRequest;
+                        } catch (Exception e) {
+                            Log.e(
+                                GetClassName(),
+
+                                e.toString()
+                            );
+                        }
 
                         if (!channelID.isEmpty()) {
                             Intent openLiveChannelIntent = new Intent(
