@@ -4342,8 +4342,15 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHex("layout", "endscreen_element_layout_video"),
-                        "check-cast Landroid/widget/FrameLayout;"
+                        ";->ordinal()I",
+                        "(Ljava/lang/Class;Ljava/lang/Object;I)[Ljava/lang/Class;",
+                        ";)[L",
+                        "0x400",
+                        "const/4 0x5",
+                        "const/16 0x8",
+                        "const/16 0x9",
+                        "const/4 0x0",
+                        ".method"
                     ],
 
                     true,
@@ -4357,193 +4364,53 @@
                         xmlSmaliInfo
                     ) => {
                         if (new[] {
-                                xmlSmaliSearchKeys[0]
+                                xmlSmaliSearchKeys[0],
+                                xmlSmaliSearchKeys[1],
+                                xmlSmaliSearchKeys[2],
+                                xmlSmaliSearchKeys[3]
                             }.All(xmlSmaliProperties.Full.PartialContains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
+                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[4]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 17); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 8); j++)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
+                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[5]))
                                         {
-                                            codeInject.Lines(
-                                                [
-                                                    ("",
+                                            for (int k = j; k <= scaleIndex.Lines(j, 9); k++)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialContains(xmlSmaliSearchKeys[6]))
+                                                {
+                                                    for (int l = k; l <= scaleIndex.Lines(k, 21); l++)
+                                                    {
+                                                        if (xmlSmaliProperties.Lines[l].PartialContains(xmlSmaliSearchKeys[7]))
+                                                        {
+                                                            for (int m = l; m >= 0; m--)
+                                                            {
+                                                                if (xmlSmaliProperties.Lines[m].PartialContains(xmlSmaliSearchKeys[8]))
+                                                                {
+                                                                    codeInject.Lines(
+                                                                        [
+                                                                            ("",
 
-                                                    j + 1,
+                                                                            m + 2,
 
-                                                    [
-                                                        $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uUtilsPath};->HideView(Landroid/view/View;)V"
-                                                    ])
-                                                ]
-                                            ).Write();
+                                                                            [
+                                                                                "return-void"
+                                                                            ])
+                                                                        ]
+                                                                    ).Write();
 
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex("layout", "endscreen_element_layout_circle"),
-                        "check-cast Landroid/widget/FrameLayout;"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.PartialContains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 17); j++)
-                                    {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
-                                        {
-                                            codeInject.Lines(
-                                                [
-                                                    ("",
-
-                                                    j + 1,
-
-                                                    [
-                                                        $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uUtilsPath};->HideView(Landroid/view/View;)V"
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex("layout", "endscreen_element_layout_icon"),
-                        "check-cast Landroid/widget/FrameLayout;"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.PartialContains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
-                            {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[0]))
-                                {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 17); j++)
-                                    {
-                                        if (xmlSmaliProperties.Lines[j].PartialContains(xmlSmaliSearchKeys[1]))
-                                        {
-                                            codeInject.Lines(
-                                                [
-                                                    ("",
-
-                                                    j + 1,
-
-                                                    [
-                                                        $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uUtilsPath};->HideView(Landroid/view/View;)V"
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        return (patchInteractions, true, xmlSmaliInfo);
-                    }
-                ).Apply,
-
-                new SmaliUtils.SubPatchModule<string[]>(
-                    [
-                        SmaliUtils.GetResourceHex("dimen", "app_related_end_screen_item_padding"),
-                        "invoke-virtual (IZI)V"
-                    ],
-
-                    true,
-
-                    (
-                        xmlSmaliProperties,
-                        xmlSmaliSearchKeys,
-                        scaleIndex,
-                        codeInject,
-                        patchInteractions,
-                        xmlSmaliInfo
-                    ) => {
-                        if (new[] {
-                                xmlSmaliSearchKeys[0]
-                            }.All(xmlSmaliProperties.Full.PartialContains))
-                        {
-                            xmlSmaliProperties.ReadXMLSmaliLines();
-
-                            for (int i = xmlSmaliProperties.LinesCount - 1; i >= scaleIndex.Lines(i, -10); i--)
-                            {
-                                if (xmlSmaliProperties.Lines[i].PartialContains(xmlSmaliSearchKeys[1]))
-                                {
-                                    xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Lines[i].GetInvokedSectionClass(1));
-
-                                    for (int j = 0; j < xmlSmaliProperties.ProxiedLinesCount; j++)
-                                    {
-                                        if (xmlSmaliProperties.ProxiedLines[j].MethodContains(xmlSmaliProperties.Lines[i].GetMethodName()))
-                                        {
-                                            codeInject.ProxiedLines(
-                                                [
-                                                    ("",
-
-                                                    j + 2,
-
-                                                    [
-                                                        "return-void"
-                                                    ])
-                                                ]
-                                            ).Write();
-
-                                            return (patchInteractions, false, xmlSmaliInfo);
+                                                                    return (patchInteractions, false, xmlSmaliInfo);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
