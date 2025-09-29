@@ -322,9 +322,9 @@ namespace uDrop.Code
                     ];
         }
 
-        public static string GetResourceHex(int decimalRes)
+        public static string GetResourceHex(long decimalRes)
         {
-            return $"0x{Convert.ToString(decimalRes, 16).ToLower()}";
+            return $"{(decimalRes < 0 ? "-" : "")}0x{Math.Abs(decimalRes).ToString("X").ToLower()}";
         }
         public static string GetResourceHex(string resType, string resName)
         {
