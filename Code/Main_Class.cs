@@ -9,16 +9,16 @@ namespace uDrop.Code
 
         //--------------------------------General Patcher Settings--------------------------------//
         public static readonly (string, string, string, string, bool) apkInfo = (                 //
-                /* Developer Name */                                                              //
-                "google-inc",                                                                     //
-                /* App Name */                                                                    //
-                "YouTube",                                                                        //
-                /* Patched App Name */                                                            //
-                "uTube",                                                                          //
-                /* App Version */                                                                 //
-                "",                                                                               //
-                /* APK Downloader */                                                              //
-                true                                                                              //
+            /* Developer Name */                                                              //
+            "google-inc",                                                                     //
+            /* App Name */                                                                    //
+            "YouTube",                                                                        //
+            /* Patched App Name */                                                            //
+            "uTube",                                                                          //
+            /* App Version */                                                                 //
+            "",                                                                               //
+            /* APK Downloader */                                                              //
+            true                                                                              //
         );                                                                                        //
         private static readonly string firstRootFolder =                                          //
             "APKs";                                                                               //
