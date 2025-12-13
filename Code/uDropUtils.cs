@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace uDrop.Code
 {
@@ -12,7 +13,7 @@ namespace uDrop.Code
             return isWindowsOS;
         }
 
-        public static ProcessStartInfo GetProcessStartInfo(string command)
+        public static ProcessStartInfo GetOSSpecificProcessStartInfo(string command)
         {
             return new ProcessStartInfo
             {
@@ -23,13 +24,6 @@ namespace uDrop.Code
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
-        }
-
-        public static string GetFullLibPath(string partialPath)
-        {
-            string fullPath = $"{APKUtils.uDropRootPath}{partialPath}";
-            
-            return GetIsWindowsOS() ? fullPath.Replace('/', '\\') : fullPath;
         }
 
         public static string GetOSLocalUserPath()
@@ -43,10 +37,21 @@ namespace uDrop.Code
 
         public static string GetOSSpecificFullPath(string fullPath)
         {
-            return GetIsWindowsOS() ? fullPath.Replace('/', Path.DirectorySeparatorChar) : fullPath;
+            string windowsSeparator = "\\";
+            string linuxSeparator = "/";
+
+            if ((GetIsWindowsOS() && !fullPath.Contains(windowsSeparator)) ||
+                (!GetIsWindowsOS() && !fullPath.Contains(linuxSeparator)))
+            {
+                return uRegex.GetOSSpecificFullPath().Replace(fullPath, GetIsWindowsOS() ? windowsSeparator : linuxSeparator);
+            }
+            else
+            {
+                return fullPath;
+            }
         }
 
-        public static void PrivateAPKPatches(string methodToCall)
+        public static void PrivateTypeMethodAPKPatches(string methodToCall)
         {
             string methodName;
 

@@ -78,7 +78,7 @@ namespace uDrop.Code
 
         public static bool Decompile()
         {
-            string installedFrameworkPath = $"{uDropUtils.GetOSLocalUserPath()}/apktool/framework/";
+            string installedFrameworkPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{uDropUtils.GetOSLocalUserPath()}/apktool/framework/");
             if (Directory.Exists(installedFrameworkPath))
             {
                 "\nRemoving Previous Building Framework...".StartProcessLog();
@@ -88,7 +88,7 @@ namespace uDrop.Code
                 "\nSuccesfully Done".EndProcessLog(true);
             }
 
-            string apktoolPath = uDropUtils.GetFullLibPath($"{libsPath}/apktool.jar");
+            string apktoolPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{libsPath}/apktool.jar");
             while (!File.Exists(apktoolPath))
             {
                 ("\nError: APKTool not found" +
@@ -100,13 +100,19 @@ namespace uDrop.Code
             ProcessStartInfo startInfo;
             string processError;
 
-            string frameworkPath = uDropUtils.GetFullLibPath($"{libsPath}/framework-res.apk");
+            string frameworkPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{libsPath}/framework-res.apk");
             if (File.Exists(frameworkPath))
             {
                 "\nInstalling Building Framework...".StartProcessLog();
 
                 process = new Process();
-                startInfo = uDropUtils.GetProcessStartInfo($"java -jar {apktoolPath} if {frameworkPath}");
+                startInfo = uDropUtils.GetOSSpecificProcessStartInfo(
+                    $"java -jar {
+                        apktoolPath
+                    } if {
+                        frameworkPath
+                    }"
+                );
                 process.StartInfo = startInfo;
                 process.Start();
 
@@ -140,7 +146,7 @@ namespace uDrop.Code
             "\nUnpacking APK...".StartProcessLog();
 
             process = new();
-            startInfo = uDropUtils.GetProcessStartInfo(
+            startInfo = uDropUtils.GetOSSpecificProcessStartInfo(
                             $"java -jar {
                                 apktoolPath
                             } d -f {
@@ -372,6 +378,11 @@ namespace uDrop.Code
             {
                 methodName = method.Name.Replace("_", " ");
 
+                if (!Main_Class.apkInfo.Item6 && method.Name.Equals("Non_Root"))
+                {
+                    continue;
+                }
+
                 methodName.StartPatchLog();
 
                 ((List<(bool, bool)>) method.Invoke(null, null)!).EndPatchLog(methodName);
@@ -417,10 +428,10 @@ namespace uDrop.Code
         {
             if (patchingFailed)
             {
-                DoneMessage();
+                PatchingDoneMessage();
             }
 
-            string apktoolPath = uDropUtils.GetFullLibPath($"{libsPath}/apktool.jar");
+            string apktoolPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{libsPath}/apktool.jar");
             while (!File.Exists(apktoolPath))
             {
                 ("\nError: APKTool not found" +
@@ -431,8 +442,15 @@ namespace uDrop.Code
             "\nRebuilding APK...".StartProcessLog();
 
             Process process = new();
-            ProcessStartInfo startInfo =
-                uDropUtils.GetProcessStartInfo($"java -jar {apktoolPath} b {Main_Class.apkDecompiledPath} -o {Main_Class.apkModdedPath}");
+            ProcessStartInfo startInfo = uDropUtils.GetOSSpecificProcessStartInfo(
+                                            $"java -jar {
+                                                apktoolPath
+                                            } b {
+                                                Main_Class.apkDecompiledPath
+                                            } -o {
+                                                Main_Class.apkModdedPath
+                                            }"
+                                        );
             process.StartInfo = startInfo;
             process.Start();
 
@@ -467,7 +485,7 @@ namespace uDrop.Code
 
         public static void ZipAlign()
         {
-            string zipalignPath = uDropUtils.GetFullLibPath($"{libsPath}/zipalign.jar");
+            string zipalignPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{libsPath}/zipalign.jar");
             while (!File.Exists(zipalignPath))
             {
                 ("\nError: ZipAlign not found" +
@@ -485,8 +503,15 @@ namespace uDrop.Code
             }
 
             Process process = new();
-            ProcessStartInfo startInfo =
-                uDropUtils.GetProcessStartInfo($"java -jar {zipalignPath} {alignedAPKPath} {Main_Class.apkModdedPath}");
+            ProcessStartInfo startInfo = uDropUtils.GetOSSpecificProcessStartInfo(
+                                            $"java -jar {
+                                                zipalignPath
+                                            } {
+                                                alignedAPKPath
+                                            } {
+                                                Main_Class.apkModdedPath
+                                            }"
+                                        );
             process.StartInfo = startInfo;
             process.Start();
             _ = process.StandardOutput.ReadToEnd();
@@ -521,9 +546,10 @@ namespace uDrop.Code
 
             bool signKeyFilesExists = false;
             string[] signKeyFilePaths = [
-                                            uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{signKeyFolderName}/signKey.keystore"),
-                                            uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{signKeyFolderName}/signKeyInfo.json")
-                                        ];
+                uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{signKeyFolderName}/signKey.keystore"),
+                
+                uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{signKeyFolderName}/signKeyInfo.json")
+            ];
             if (signKeyFilePaths.All(File.Exists))
             {
                 signKeyFilesExists = true;
@@ -537,7 +563,7 @@ namespace uDrop.Code
             }
             else
             {
-                string keyToolPath = uDropUtils.GetFullLibPath($"{libsPath}/keygen.jar");
+                string keyToolPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{libsPath}/keygen.jar");
                 if (!File.Exists(keyToolPath))
                 {
                     ("\nError: KeyGen tool not found" +
@@ -563,7 +589,7 @@ namespace uDrop.Code
 
                 process = new()
                 {
-                    StartInfo = uDropUtils.GetProcessStartInfo(
+                    StartInfo = uDropUtils.GetOSSpecificProcessStartInfo(
                                     $"java -jar {
                                         keyToolPath
                                     } keystore {
@@ -628,7 +654,7 @@ namespace uDrop.Code
                         .QuitWithException();
                 }
 
-                string apksignerPath = uDropUtils.GetFullLibPath($"{libsPath}/apksigner.jar");
+                string apksignerPath = uDropUtils.GetOSSpecificFullPath($"{uDropRootPath}{libsPath}/apksigner.jar");
                 while (!File.Exists(apksignerPath))
                 {
                     ("\nError: APKSigner not found" +
@@ -640,7 +666,7 @@ namespace uDrop.Code
 
                 process = new()
                 {
-                    StartInfo = uDropUtils.GetProcessStartInfo(
+                    StartInfo = uDropUtils.GetOSSpecificProcessStartInfo(
                                     $"java -jar {
                                         apksignerPath
                                     } sign --ks {
@@ -684,7 +710,7 @@ namespace uDrop.Code
             "\nTemporary Resources succesfully removed".EndProcessLog(true);
         }
 
-        public static void DoneMessage()
+        public static void PatchingDoneMessage()
         {
             Log.Divider();
 
