@@ -97,7 +97,7 @@ namespace uDrop.Code
         }
         public static void PatchLog(string path, string patch, string patchedAtLine)
         {
-            string message = $"\n{path.GetSmaliFilePartialPath()} ";
+            string message = $"\n{path.GetSmaliFileLastPath()} ";
             message += !String.IsNullOrEmpty(patch) ? $"---> {patch} " : "";
             message += !String.IsNullOrEmpty(patchedAtLine) ? $"---> {patchedAtLine}" : "";
 

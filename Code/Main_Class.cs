@@ -8,7 +8,7 @@ namespace uDrop.Code
         public static Stopwatch executionTime = new();
 
         //--------------------------------General Patcher Settings--------------------------------//
-        public static readonly (string, string, string, string, bool) apkInfo = (                 //
+        public static readonly (string, string, string, string, bool, bool) apkInfo = (           //
             /* Developer Name */                                                                  //
             "google-inc",                                                                         //
             /* App Name */                                                                        //
@@ -16,16 +16,28 @@ namespace uDrop.Code
             /* Patched App Name */                                                                //
             "uTube",                                                                              //
             /* App Version */                                                                     //
-            "",                                                                               //
+            "",                                                                                   //
             /* APK Downloader */                                                                  //
+            true,                                                                                 //
+            /* Include Non-Root Patch */                                                          //
             true                                                                                  //
         );                                                                                        //
+        public static readonly string uDropRootPath =                                             //
+            AppDomain.CurrentDomain.BaseDirectory;                                                //
         private static readonly string firstRootFolder =                                          //
-            "APKs";                                                                               //
+            $"{uDropRootPath}APKs";                                                              //
         public static readonly string firstCombinedRootFolders =                                  //
-            uDropUtils.GetOSSpecificFullPath($"{firstRootFolder}/Original");                      //
+            uDropUtils.GetOSSpecificFullPath(                                                     //
+                $"{                                                                               //
+                    firstRootFolder                                                               //
+                }/Original"                                                                       //
+            );                                                                                    //
         public static readonly string secondCombinedRootFolders =                                 //
-            uDropUtils.GetOSSpecificFullPath($"{firstRootFolder}/Modded");                        //
+            uDropUtils.GetOSSpecificFullPath(                                                     //
+                $"{                                                                               //
+                    firstRootFolder                                                               //
+                }/Modded"                                                                         //
+            );                                                                                    //
         public static string apkDecompiledPath =                                                  //
             uDropUtils.GetOSSpecificFullPath(                                                     //
                 $"{                                                                               //
@@ -61,7 +73,7 @@ namespace uDrop.Code
             Console.Title = "uDrop";
 
             Process process = new();
-            ProcessStartInfo startInfo = uDropUtils.GetProcessStartInfo("java -version");
+            ProcessStartInfo startInfo = uDropUtils.GetOSSpecificProcessStartInfo("java -version");
             process.StartInfo = startInfo;
             process.Start();
             _ = process.StandardOutput.ReadToEnd();
@@ -133,7 +145,7 @@ namespace uDrop.Code
                 case "debug":
                     APKUtils.Decompile();
 
-                    uDropUtils.PrivateAPKPatches("Debug");
+                    uDropUtils.PrivateTypeMethodAPKPatches("Debug");
 
                     APKUtils.Compile();
                     APKUtils.ZipAlign();
@@ -142,7 +154,7 @@ namespace uDrop.Code
                     goto END_CASE;
 
                 case "debug_p":
-                    uDropUtils.PrivateAPKPatches("Debug_Patch");
+                    uDropUtils.PrivateTypeMethodAPKPatches("Debug_Patch");
                     goto END_CASE;
 
                 case "debug_p_p":
@@ -182,24 +194,21 @@ namespace uDrop.Code
 
 
 
-            bool excludeGetSetMethods = true;
+            bool callNextMethods = false;
             foreach (var method in new APKUtils().GetType().GetMethods(
                         BindingFlags.Public | BindingFlags.Static
-                    ))
-            {
-                if (excludeGetSetMethods)
+                    )
+            ) {
+                if (!callNextMethods && method.Name.Equals("Decompile"))
                 {
-                    if (!method.Name.Equals("Decompile"))
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        excludeGetSetMethods = false;
-                    }
+                    callNextMethods = true;
                 }
 
-                method.Invoke(null, null);
+
+                if (callNextMethods)
+                {
+                    method.Invoke(null, null);
+                }
             }
         }
     }

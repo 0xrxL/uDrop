@@ -57,8 +57,7 @@ namespace uDrop.Code
 
                         if (!versionNodeInner.Contains("APK Mirror"))
                         {
-                            string pattern = @"\d+\.\d+\.\d+";
-                            Match match = Regex.Match(versionNodeInner, pattern);
+                            Match match = uRegex.GetLastAPKRegex().Match(versionNodeInner);
 
                             if (match.Success)
                             {

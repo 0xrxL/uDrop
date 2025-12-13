@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace uDrop.Code
 {
@@ -12,24 +13,17 @@ namespace uDrop.Code
             return isWindowsOS;
         }
 
-        public static ProcessStartInfo GetProcessStartInfo(string command)
+        public static ProcessStartInfo GetOSSpecificProcessStartInfo(string command)
         {
             return new ProcessStartInfo
             {
                 FileName = GetIsWindowsOS() ? "cmd.exe" : "/bin/bash",
-                Arguments = GetIsWindowsOS() ? $"/C {command}" : $"-c \"{command}\"",
+                Arguments = $"{(GetIsWindowsOS() ? "/C" : "-c")} \"{command}\"",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
             };
-        }
-
-        public static string GetFullLibPath(string partialPath)
-        {
-            string fullPath = $"{APKUtils.uDropRootPath}{partialPath}";
-            
-            return GetIsWindowsOS() ? fullPath.Replace('/', '\\') : fullPath;
         }
 
         public static string GetOSLocalUserPath()
@@ -43,10 +37,20 @@ namespace uDrop.Code
 
         public static string GetOSSpecificFullPath(string fullPath)
         {
-            return GetIsWindowsOS() ? fullPath.Replace('/', Path.DirectorySeparatorChar) : fullPath;
+            string windowsSeparator = "\\";
+            string linuxSeparator = "/";
+
+            if ((GetIsWindowsOS() && fullPath.Contains(linuxSeparator))
+                                    ||
+                (!GetIsWindowsOS() && fullPath.Contains(windowsSeparator)))
+            {
+                return uRegex.GetOSSpecificFullPath().Replace(fullPath, GetIsWindowsOS() ? windowsSeparator : linuxSeparator);
+            }
+            
+            return fullPath;
         }
 
-        public static void PrivateAPKPatches(string methodToCall)
+        public static void PrivateTypeMethodAPKPatches(string methodToCall)
         {
             string methodName;
 

@@ -1,5 +1,4 @@
-﻿using IOPath = System.IO.Path;
-using System.Text;
+﻿using System.Text;
 using System.Text.RegularExpressions;
 
 namespace uDrop.Code
@@ -91,31 +90,47 @@ namespace uDrop.Code
 
                 public void ReadXMLSmaliProxiedLines(string partialPath)
                 {
-                    string smaliExtension = ".smali";
-                    if (!partialPath.Contains(smaliExtension))
-                    {
-                        partialPath += smaliExtension;
-                    }
+                    string smaliExtension =
+                        ".smali";
+                    string fixedPartialPath =
+                        uDropUtils.GetOSSpecificFullPath(
+                            $"{
+                                (char.IsLetterOrDigit(partialPath.First())
+                                ?
+                                    "/"
+                                :
+                                    "")
+                            }{
+                                partialPath
+                            }{
+                                (!partialPath.EndsWith(smaliExtension)
+                                ?
+                                    smaliExtension
+                                :
+                                    "")
+                            }"
+                        );
 
-                    string directorySeparatorChar = IOPath.DirectorySeparatorChar.ToString();
-                    if (!partialPath.Contains(directorySeparatorChar))
+                    List<string> fullSmaliPath = [..
+                                                    GetSmaliFolders()
+                                                    .Select(
+                                                        sFP
+                                                            =>
+                                                        $"{
+                                                            sFP
+                                                        }{
+                                                            fixedPartialPath.Replace(sFP, "")
+                                                        }"
+                                                    )
+                                                    .Where(fP => File.Exists(fP))
+                                                ];
+                    if (fullSmaliPath.Count.Equals(0))
                     {
-                        partialPath = $"{directorySeparatorChar}{partialPath}";
-                    }
-
-                    List<string> smaliPath = [.. APKUtils
-                                                .GetSmaliPaths()
-                                                .Where(
-                                                    f => f.Contains(partialPath)
-                                                )
-                                            ];
-                    if (smaliPath.Count.Equals(0))
-                    {
-                        $"\nError: {partialPath} file not found".QuitWithException();
+                        $"\nError: {fixedPartialPath} file not found".QuitWithException();
                     }
 
                     ProxiedPath =
-                        partialPath.GetSmaliFileFullPath();
+                        fullSmaliPath.First();
                     ProxiedLines =
                         [.. File.ReadAllLines(ProxiedPath)];
                     ProxiedLinesCount =
@@ -256,46 +271,34 @@ namespace uDrop.Code
 
                 public void Write()
                 {
+                    string fixedXMLSmaliContent = "";
+                    string xmlSmaliPath = "";
+                    string carriageSym = "\r";
+                    string newLineSym = "\n";
+
                     if (InjectionType.Equals(0) || InjectionType.Equals(1))
                     {
-                        File.WriteAllLines(xmlSmaliProperties.Path, xmlSmaliProperties.Lines);
+                        fixedXMLSmaliContent = string.Join(newLineSym, xmlSmaliProperties.Lines.Select(l => l.Replace(carriageSym, "")));
+                        xmlSmaliPath = xmlSmaliProperties.Path;
                     }
                     else if (InjectionType.Equals(2) || InjectionType.Equals(3))
                     {
-                        File.WriteAllLines(xmlSmaliProperties.ProxiedPath, xmlSmaliProperties.ProxiedLines);
+                        fixedXMLSmaliContent = string.Join(newLineSym, xmlSmaliProperties.ProxiedLines.Select(l => l.Replace(carriageSym, "")));
+                        xmlSmaliPath = xmlSmaliProperties.ProxiedPath;
                     }
                     else if (InjectionType.Equals(4))
                     {
-                        File.WriteAllText(xmlSmaliProperties.Path, xmlSmaliProperties.PatchedFull);
+                        fixedXMLSmaliContent = xmlSmaliProperties.PatchedFull.Replace($"{carriageSym}{newLineSym}", newLineSym);
+                        xmlSmaliPath = xmlSmaliProperties.Path;
                     }
+
+                    File.WriteAllText(xmlSmaliPath, fixedXMLSmaliContent);
                 }
             }
             public static CodeInject codeInject = new(xmlSmaliProperties);
         }
 
-        public static string GetSmaliFileFullPath(this string innerPathOrFileName)
-        {
-            string smaliExtension = ".smali";
-            if (!innerPathOrFileName.Contains(smaliExtension))
-            {
-                innerPathOrFileName += smaliExtension;
-            }
-
-            List<string> smaliPath = [.. APKUtils
-                                        .GetSmaliPaths()
-                                        .Where(
-                                            f => f.Contains(innerPathOrFileName)
-                                        )
-                                    ];
-            if (smaliPath.Count.Equals(0))
-            {
-                $"\nError: {innerPathOrFileName} file not found".QuitWithException();
-            }
-
-            return smaliPath.First();
-        }
-
-        public static string GetSmaliFilePartialPath(this string fullPath)
+        public static string GetSmaliFileLastPath(this string fullPath)
         {
             return uDropUtils.GetOSSpecificFullPath($"/{Path.GetFileName(Path.GetDirectoryName(fullPath))}/{Path.GetFileName(fullPath)}");
         }
@@ -310,7 +313,7 @@ namespace uDrop.Code
 
                                             SearchOption.TopDirectoryOnly
                                         )
-                                        .Where(f => f.Contains("smali"))
+                                        .Where(f => Path.GetFileName(f).StartsWith("smali"))
                                     ];
 
             if (smaliDirs.Count.Equals(0))
@@ -319,52 +322,19 @@ namespace uDrop.Code
             }
 
             return [..
-                        smaliDirs.OrderBy(p =>
-                            Regex.Match(p, @"\d+").Success
+                        smaliDirs.OrderBy(
+                            p
+                                =>
+                            uRegex.GetSmaliFoldersRegex().Match(p).Success
                             ?
-                                int.Parse(Regex.Match(p, @"\d+").Value)
+                                int.Parse(uRegex.GetSmaliFoldersRegex().Match(p).Value)
                             :
                                 int.MinValue
                         )
                     ];
         }
 
-        public static string GetResourceHex(long decimalRes)
-        {
-            return $"{(decimalRes < 0 ? "-" : "")}0x{Math.Abs(decimalRes).ToString("X").ToLower()}";
-        }
-        public static string GetResourceHex(string resType, string resName)
-        {
-            string publicXMLPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.apkDecompiledPath}/res/values/public.xml");
-
-            if (!File.Exists(publicXMLPath))
-            {
-                "\nError: 'public.xml' not found".QuitWithException();
-            }
-
-            string resLine = "";
-            try
-            {
-                resLine = File.ReadAllLines(publicXMLPath)
-                                .First(f =>
-                                    f.Contains("public") &&
-
-                                    f[f.IndexOf("type=")..].Split('\"')[1].Equals(resType) &&
-
-                                    f[f.IndexOf("name=")..].Split('\"')[1].Equals(resName)
-                                )
-                                .Split("id=")[1]
-                                .Split('\"', '\"')[1];
-            }
-            catch
-            {
-                $"\nError: resource {resName} not found".QuitWithException();
-            }
-
-            return resLine;
-        }
-
-        public static string GetFieldName(this string value, bool getNameFromInvoke)
+        public static string GetFieldName(this string value, bool getFromDescriptor)
         {
             string output = "";
 
@@ -389,7 +359,7 @@ namespace uDrop.Code
                 }
             }
 
-            return !getNameFromInvoke ? output : output.Split(">")[0];
+            return !getFromDescriptor ? output : output.Split(">").First();
         }
 
         public static string GetMethodName(this string value)
@@ -427,12 +397,7 @@ namespace uDrop.Code
             return methodNameString;
         }
 
-        public static string GetMethodClassTypeName(this string value)
-        {
-            return value.Split(")")[1];
-        }
-
-        public static string GetMethodParameterClassName(this string value, int index)
+        public static string GetMethodParametersClassNames(this string value, int index)
         {
             if (index == 0)
             {
@@ -500,7 +465,113 @@ namespace uDrop.Code
                     ?
                         outputs[fixedIndex]
                     :
-                        "X";
+                        "";
+        }
+
+        public static string GetMethodReturnClassName(this string value)
+        {
+            return value.Split(")").Last();
+        }
+
+        public static string GetClassNamesFromMethodDescriptor(this string value, int index)
+        {
+            if (index == 0)
+            {
+                ("\nError: Register index must be greater than zero\n" +
+                "\nPress any key to close the patcher.")
+                    .QuitWithException();
+            }
+
+            int fixedIndex = index - 1;
+            List<string> outputs = [];
+
+            bool outsideParametersSection = true;
+            bool acquireChar = false;
+            int outputsCount = 0;
+            foreach (var c in value)
+            {
+                if (outsideParametersSection)
+                {
+                    if (c.Equals('('))
+                    {
+                        outsideParametersSection = false;
+                    }
+                }
+                else
+                {
+                    if (c.Equals(')'))
+                    {
+                        outsideParametersSection = true;
+                    }
+                }
+
+                if (outsideParametersSection)
+                {
+                    if (!acquireChar && c.Equals('L'))
+                    {
+                        outputs.Add("");
+                        acquireChar = true;
+
+                        continue;
+                    }
+                    if (acquireChar)
+                    {
+                        if (c.Equals(';'))
+                        {
+                            outputsCount++;
+                            acquireChar = false;
+
+                            continue;
+                        }
+
+                        outputs[outputsCount] += c;
+                    }
+                }
+            }
+
+            if (index <= outputs.Count && !string.IsNullOrEmpty(outputs[fixedIndex]))
+            {
+                return outputs[fixedIndex];
+            }
+            else
+            {
+                ("\nError: No invoked section class found\n" +
+                "\nPress any key to close the patcher.")
+                    .QuitWithException();
+                
+                return "";
+            }
+        }
+
+        public static string GetMethodDescriptor(this string value)
+        {
+            string output = "";
+
+            bool acquireChar = false;
+            foreach (var c in value)
+            {
+                if (!acquireChar && c.Equals('L'))
+                {
+                    acquireChar = true;
+                }
+                if (acquireChar)
+                {
+                    output += c;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(output))
+            {
+                return output;
+            }
+            else
+            {
+                ("\nError: No invoked section found\n" +
+                "\nPress any key to close the patcher.")
+                    .QuitWithException();
+                
+                return "";
+            };
         }
 
         public static int GetMethodParametersCount(this string value)
@@ -512,9 +583,9 @@ namespace uDrop.Code
             catch
             {
                 "\nError: No parameters found".QuitWithException();
-            }
 
-            return -1;
+                return -1;
+            }
         }
 
         public static int GetOccurrenceCount(this string source, string target)
@@ -585,99 +656,64 @@ namespace uDrop.Code
                     }
                 }
             }
-
-            return index <= foundRegisters.Count
-                    ?
-                    foundRegisters[fixedIndex]
-                    :
-                    "X";
-        }
-
-        public static string GetInvokedSectionClass(this string value, int index)
-        {
-            if (index == 0)
+            
+            if (index <= foundRegisters.Count)
             {
-                ("\nError: Register index must be greater than zero\n" +
+                return foundRegisters[fixedIndex];
+            }
+            else
+            {
+                ("\nError: No register value found\n" +
                 "\nPress any key to close the patcher.")
                     .QuitWithException();
+                
+                return "";
             }
-
-            int fixedIndex = index - 1;
-            List<string> outputs = [];
-
-            bool outsideParametersSection = true;
-            bool acquireChar = false;
-            int outputsCount = 0;
-            foreach (var c in value)
-            {
-                if (outsideParametersSection)
-                {
-                    if (c.Equals('('))
-                    {
-                        outsideParametersSection = false;
-                    }
-                }
-                else
-                {
-                    if (c.Equals(')'))
-                    {
-                        outsideParametersSection = true;
-                    }
-                }
-
-                if (outsideParametersSection)
-                {
-                    if (!acquireChar && c.Equals('L'))
-                    {
-                        outputs.Add("");
-                        acquireChar = true;
-
-                        continue;
-                    }
-                    if (acquireChar)
-                    {
-                        if (c.Equals(';'))
-                        {
-                            outputsCount++;
-                            acquireChar = false;
-
-                            continue;
-                        }
-
-                        outputs[outputsCount] += c;
-                    }
-                }
-            }
-
-            return index <= outputs.Count && !string.IsNullOrEmpty(outputs[fixedIndex])
-                    ?
-                        outputs[fixedIndex]
-                    :
-                        "X";
         }
 
-        public static string GetInvokedSection(this string value)
+        public static string GetResourceHexByDecimal(long decimalRes)
         {
-            string output = "";
+            return $"{(decimalRes < 0 ? "-" : "")}0x{Math.Abs(decimalRes).ToString("X").ToLower()}";
+        }
+        
+        public static string GetResourceHexByName(string resType, string resName)
+        {
+            string publicXMLPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.apkDecompiledPath}/res/values/public.xml");
 
-            bool acquireChar = false;
-            foreach (var c in value)
+            if (!File.Exists(publicXMLPath))
             {
-                if (!acquireChar && c.Equals('L'))
-                {
-                    acquireChar = true;
-                }
-                if (acquireChar)
-                {
-                    output += c;
-                }
+                "\nError: 'public.xml' not found".QuitWithException();
             }
 
-            return !string.IsNullOrEmpty(output) ? output : "X";
+            string resLine = "";
+            try
+            {
+                resLine = File.ReadAllLines(publicXMLPath)
+                                .First(f =>
+                                    f.Contains("public") &&
+
+                                    f[f.IndexOf("type=")..].Split('\"')[1].Equals(resType) &&
+
+                                    f[f.IndexOf("name=")..].Split('\"')[1].Equals(resName)
+                                )
+                                .Split("id=")[1]
+                                .Split('\"', '\"')[1];
+            }
+            catch
+            {
+                $"\nError: resource {resName} not found".QuitWithException();
+            }
+
+            return resLine;
+        }
+
+        public static bool ContainsMethodName(this string value, string methodName)
+        {
+            return Regex.IsMatch(value, $@"{Regex.Escape(".method")}.*?\s{Regex.Escape($"{methodName}(")}");
         }
 
         private static readonly char emptyChar = ' ';
-        public static bool PartialContains(this string source, string target)
+        public static bool PartialsContains(this string source, string target)
         {
             string[] splittedTarget = target.TrimStart().TrimEnd().Split(emptyChar);
 
@@ -691,7 +727,6 @@ namespace uDrop.Code
             }
 
             int occurrencesFoundInSource = 0;
-
             foreach (string str in splittedTarget)
             {
                 if (source.Contains(str))
@@ -703,33 +738,15 @@ namespace uDrop.Code
             return occurrencesFoundInSource.Equals(splittedTarget.Length);
         }
 
-        public static bool MethodContains(this string value, string methodName)
+        public static string ScaleRegisterValue(this string value, int steps)
         {
-            return Regex.IsMatch(value, $@"{Regex.Escape(".method")}.*?\s{Regex.Escape($"{methodName}(")}");
-        }
-
-        public static bool ReferenceEntriesCount(this string value, string reference, int count)
-        {
-            return Regex.Matches(value, reference).Count == count;
-        }
-
-        public static string ScaleRegisterSize(this string value, int steps)
-        {
-            return RegexUtilities.Replace(
+            return uRegex.Replace(
                         value,
 
                         @"\d+",
 
                         match => (int.Parse(match.Value) + steps).ToString()
                     );
-        }
-    }
-    
-    public static class RegexUtilities  
-    {
-        public static string Replace(string input, string pattern, Func<Match, string> evaluator)
-        {
-            return new Regex(pattern).Replace(input, new MatchEvaluator(evaluator));
         }
     }
 }
