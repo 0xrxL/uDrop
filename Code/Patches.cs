@@ -4592,6 +4592,57 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
+                        "\"audio\"",
+                        "\"ACOMC\"",
+                        "invoke-virtual Landroid/media/AudioManager;->getStreamVolume(I)I",
+                        ".method public final (Z)V"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (new[] {
+                                targetSearchTerms[0],
+                                targetSearchTerms[1],
+                                targetSearchTerms[2]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = xmlSmaliProperties.LinesCount - 1; i >= 0; i--)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[3]))
+                                {
+                                    codeInject.Lines(
+                                        [
+                                            ("Without Audio",
+
+                                            i + 2,
+
+                                            [
+                                                "return-void"
+                                            ])
+                                        ]
+                                    ).Write();
+
+                                    return (interactionsCount, false, infoForNextSubPatch);
+                                }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
                         "\"pc\"",
                         ".method (Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;"
                     ],
@@ -4622,7 +4673,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("",
+                                                    ("With Audio",
 
                                                     j + 2,
 
@@ -4676,7 +4727,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("",
+                                                    ("With Audio",
 
                                                     j + 2,
 
@@ -4728,7 +4779,7 @@
                                         {
                                             codeInject.Lines(
                                                 [
-                                                    ("",
+                                                    ("With Audio",
 
                                                     j + 2,
 
