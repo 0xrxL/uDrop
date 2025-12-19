@@ -2,7 +2,6 @@
 
 package uTools.VideoDetails;
 
-import static uTools.uBlocker.chatActionButtonName;
 import static uTools.uBlocker.visibleActionButtons;
 import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFromRoute;
 import static uTools.uStreamSpoofing.uPlayerRoutes.requestKeys;
@@ -174,7 +173,7 @@ public class uVideoDetailsRequest {
                                                     for (int j = 0; j < actionButtonsList.length(); j++) {
                                                         String actionButtonName = actionButtonsList.get(j).toString();
 
-                                                        if (!actionButtonName.contains(chatActionButtonName)) {
+                                                        if (!actionButtonName.contains("_message_bubble_overlap")) {
                                                             finalActionButtonsList.add(actionButtonName);
                                                         }
                                                     }

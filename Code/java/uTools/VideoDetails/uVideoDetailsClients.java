@@ -4,19 +4,21 @@ package uTools.VideoDetails;
 
 import static uTools.uUtils.GetAppVersion;
 
+import android.os.Build;
+
 public enum uVideoDetailsClients {
     ANDROID(
         "defaultAudioTrackID,actionButtons",
-        "35",
+        String.valueOf(Build.VERSION.SDK_INT),
         3,
         "com.google.android.youtube",
         GetAppVersion(),
         "132.0.6779.0",
-        "Pixel 9 Pro Fold",
-        "Google",
-        "AP3A.241005.015.A2",
+        Build.MODEL,
+        Build.MANUFACTURER,
+        Build.DISPLAY,
         "Android",
-        "15",
+        Build.VERSION.RELEASE,
         null
     ),
     WEB_REMIX(

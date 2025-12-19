@@ -126,12 +126,15 @@ public class uBlocker {
         "addToPlaylistButtonViewModel",
         "compactifyChannelButtonViewModel",
         "segmentedLikeDislikeButtonViewModel",
-        "yt_outline_share"
+        "_share"
     );
-    public static final String chatActionButtonName = "yt_outline_message_bubble_overlap";
     public static void HideActionButtons(List<Object> list, String identifier) {
+        int zero = 0;
+        int one = 1;
+        int nullIndex = -one;
+
         List<String> remoteActionButtonsList = GetRemoteActionButtonsList();
-        Object firstListElem = list.get(0);
+        Object firstListElem = list.get(zero);
 
         if (identifier != null &&
             identifier.startsWith("compactify_video_action_bar") &&
@@ -144,31 +147,42 @@ public class uBlocker {
         ) {
             int listSize = list.size();
             int remoteActionButtonsListSize = remoteActionButtonsList.size();
-            int shareActionButtonIndex =
-                IntStream.range(0, remoteActionButtonsListSize)
-                .filter(i -> remoteActionButtonsList.get(i).contains(visibleActionButtons.get(3)))
-                .findFirst()
-                .orElse(-1);
 
-            if (shareActionButtonIndex > 0) {
+            int firstActionButtonsHookIndex =
+                IntStream.range(zero, remoteActionButtonsListSize)
+                    .filter(i -> remoteActionButtonsList.get(i).contains(visibleActionButtons.get(zero)))
+                    .findFirst()
+                    .orElse(nullIndex);
+            int secondActionButtonsHookIndex =
+                IntStream.range(zero, remoteActionButtonsListSize)
+                    .filter(i -> remoteActionButtonsList.get(i).contains("clipButtonViewModel"))
+                    .findFirst()
+                    .orElse(nullIndex);
+
+            int defaultActionButtonsHookIndex =
+                secondActionButtonsHookIndex != nullIndex
+                    &&
+                secondActionButtonsHookIndex > firstActionButtonsHookIndex
+                ?
+                    secondActionButtonsHookIndex
+                :
+                    firstActionButtonsHookIndex;
+
+            if (defaultActionButtonsHookIndex > nullIndex) {
                 int additionalActionButtonsAmount = listSize - remoteActionButtonsListSize;
 
-                if (additionalActionButtonsAmount >= 0) {
-                    for (int i = 0; i < additionalActionButtonsAmount; i++) {
+                if (additionalActionButtonsAmount >= zero) {
+                    for (int i = zero; i < additionalActionButtonsAmount; i++) {
                         remoteActionButtonsList.add(
-                            shareActionButtonIndex + 1,
+                            defaultActionButtonsHookIndex + one,
 
-                            switch (i) {
-                                case 0 -> "yt_outline_youtube_shorts_plus";
-                                case 1 -> chatActionButtonName;
-                                default -> "button";
-                            }
+                            i == zero ? "_shorts_plus" : "button"
                         );
 
                         remoteActionButtonsListSize++;
                     }
 
-                    for (int i = listSize - 1; i >= 0; i--) {
+                    for (int i = listSize - one; i >= zero; i--) {
                         if (visibleActionButtons
                             .stream()
                             .noneMatch(
