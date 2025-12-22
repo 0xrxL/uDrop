@@ -55,9 +55,9 @@ public class uStreamingDataRequest {
     private final List<uClientType> CLIENT_TYPES_ORDER_TO_USE =
         new ArrayList<>(
             Arrays.asList(
-                uClientType.ANDROID_VR,
-
                 uClientType.ANDROID,
+
+                uClientType.ANDROID_VR,
 
                 uClientType.VISIONOS,
 
@@ -65,56 +65,53 @@ public class uStreamingDataRequest {
             )
         );
     private String currentClientName;
-    private final List<Locale> defaultAudioTrackLocales = new ArrayList<>();
+    private Locale defaultAudioTrackLocale = null;
     private final Future<ByteBuffer> future;
     private byte[] requestBody;
     private boolean videoRequireLogin;
-    private boolean videoRequireSimplifiedLocale;
-    private boolean videoReloadHandlerAlreadyInQueue = false;
+    private boolean videoReloadHandlerAlreadyInQueue;
     private uStreamingDataRequest(String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(playerHeaders);
 
         videoReloadHandlerAlreadyInQueue = false;
 
         try {
-            defaultAudioTrackLocales.clear();
-
             Object defaultAudioTrackNameRequest = new uVideoDetailsRequest(
                 videoID,
+
                 playerHeaders,
+
                 "defaultAudioTrackID"
             )
             .GetRequestedInfo();
             String defaultAudioTrackName = (String) defaultAudioTrackNameRequest;
-            String hyphen = "-";
 
-            if (defaultAudioTrackName.contains(hyphen)) {
-                String[] splitDefaultAudioTrackName = defaultAudioTrackName.split(hyphen);
+            if (!defaultAudioTrackName.isEmpty()) {
+                String hyphen = "-";
+                boolean hyphenExists = defaultAudioTrackName.contains(hyphen);
 
-                defaultAudioTrackLocales.add(
-                    new Locale(
-                        splitDefaultAudioTrackName[0],
+                if (!hyphenExists) {
+                    Log.w(
+                        GetClassName(),
 
-                        splitDefaultAudioTrackName[1].toUpperCase()
-                    )
-                );
-            } else {
-                Log.w(
-                    GetClassName(),
+                        "The audio track name is not separated by a hyphen"
+                    );
+                }
 
-                    "The audio track name is not separated by a hyphen"
-                );
+                defaultAudioTrackLocale = new Locale(
+                    !hyphenExists
+                    ?
+                        String.format(
+                            "%s%s%s",
 
-                defaultAudioTrackLocales.add(
-                    new Locale(
-                        defaultAudioTrackName,
-
-                        defaultAudioTrackName.toUpperCase()
-                    )
+                            defaultAudioTrackName,
+                            hyphen,
+                            defaultAudioTrackName.toUpperCase()
+                        )
+                    :
+                        defaultAudioTrackName
                 );
             }
-
-            defaultAudioTrackLocales.add(new Locale(defaultAudioTrackName));
         } catch (Exception e) {
             Log.e(
                 GetClassName(),
@@ -126,7 +123,9 @@ public class uStreamingDataRequest {
         try {
             Object actionButtonsRequest = new uVideoDetailsRequest(
                 videoID,
+
                 playerHeaders,
+
                 "actionButtons"
             )
             .GetRequestedInfo();
@@ -146,124 +145,105 @@ public class uStreamingDataRequest {
                     videoRequireLogin = false;
 
                     for (int i = 0; i < 4; i++) { //Double with/without login attempts
-                        videoRequireSimplifiedLocale = false;
+                        HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
+                            new uRoute(
+                                uRoute.Method.POST,
 
-                        for (int j = 0; j < 2; j++) { //Single with/without simplified locale attempt
-                            HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
-                                new uRoute(
-                                    uRoute.Method.POST,
+                                "player?fields=streamingData&alt=proto"
+                            ).Compile(),
 
-                                    "player?fields=streamingData&alt=proto"
-                                ).Compile(),
+                            Arrays.asList(
+                                clientType.userAgent,
 
-                                Arrays.asList(
-                                    clientType.userAgent,
+                                String.valueOf(clientType.clientID),
 
-                                    String.valueOf(clientType.clientID),
+                                clientType.clientVersion
+                            )
+                        );
 
-                                    clientType.clientVersion
-                                )
-                            );
-
-                            if (connection != null) {
-                                for (String requestKey : requestKeys) {
-                                    if (requestKey.equals(requestKeys.get(0)) && !videoRequireLogin) {
-                                        continue;
-                                    }
-
-                                    connection.setRequestProperty(requestKey, playerHeaders.get(requestKey));
+                        if (connection != null) {
+                            for (String requestKey : requestKeys) {
+                                if (requestKey.equals(requestKeys.get(0)) && !videoRequireLogin) {
+                                    continue;
                                 }
 
-                                Locale defaultAudioTrackLocale =
-                                    !videoRequireLogin && !defaultAudioTrackLocales.isEmpty()
-                                    ?
-                                        defaultAudioTrackLocales.get(
-                                            !videoRequireSimplifiedLocale
-                                            ?
-                                                0
-                                            :
-                                                1
-                                        )
-                                    :
-                                        null;
-
-                                requestBody = new JSONObject() {{
-                                    put(
-                                        "context",
-
-                                        new JSONObject() {{
-                                            put(
-                                                "client",
-
-                                                new JSONObject() {{
-                                                    put("clientName", clientType.name());
-                                                    put("clientVersion", clientType.clientVersion);
-                                                    put("deviceMake", clientType.deviceMake);
-                                                    put("deviceModel", clientType.deviceModel);
-                                                    if (defaultAudioTrackLocale != null) {
-                                                        put("hl", defaultAudioTrackLocale);
-                                                    }
-                                                    put("osName", clientType.osName);
-                                                    put("osVersion", clientType.osVersion);
-                                                    if (clientType.androidSDKVersion != null) {
-                                                        put("androidSdkVersion", clientType.androidSDKVersion);
-                                                    }
-                                                }}
-                                            );
-                                        }}
-                                    );
-                                    put("contentCheckOk", true);
-                                    put("racyCheckOk", true);
-                                    put("videoId", videoID);
-                                }}
-                                .toString()
-                                .getBytes(StandardCharsets.UTF_8);
-
-                                connection.setFixedLengthStreamingMode(requestBody.length);
-                                connection.getOutputStream().write(requestBody);
-
-                                if (connection.getResponseCode() == 200 &&
-                                    connection.getContentLength() != 0) {
-                                        try (
-                                            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
-                                            ByteArrayOutputStream bAOS = new ByteArrayOutputStream()
-                                        ) {
-                                            byte[] buffer = new byte[2048];
-                                            int bytesRead;
-
-                                            while ((bytesRead = inputStream.read(buffer)) >= 0) {
-                                                bAOS.write(buffer, 0, bytesRead);
-                                            }
-
-                                            currentClientName =
-                                                String.format(
-                                                    " (%s - %s)",
-
-                                                    clientType.name(),
-                                                    !videoRequireLogin ? "NO_AUTH" : "WITH_AUTH"
-                                                );
-
-                                            SetStatsForNerdsClientName(currentClientName);
-                                            Log.d(GetClassName(), currentClientName);
-
-                                            videoIDPlaying = videoID;
-                                            VideoReload();
-
-                                            return ByteBuffer.wrap(bAOS.toByteArray());
-                                        } catch (Exception e) {
-                                            Log.e(
-                                                GetClassName(),
-
-                                                e.toString()
-                                            );
-                                        }
-                                }
+                                connection.setRequestProperty(requestKey, playerHeaders.get(requestKey));
                             }
 
-                            videoRequireSimplifiedLocale = true;
+                            requestBody = new JSONObject() {{
+                                put(
+                                    "context",
+
+                                    new JSONObject() {{
+                                        put(
+                                            "client",
+
+                                            new JSONObject() {{
+                                                put("clientName", clientType.name());
+                                                put("clientVersion", clientType.clientVersion);
+                                                put("deviceMake", clientType.deviceMake);
+                                                put("deviceModel", clientType.deviceModel);
+                                                if (!videoRequireLogin && defaultAudioTrackLocale != null) {
+                                                    put("hl", defaultAudioTrackLocale);
+                                                }
+                                                put("osName", clientType.osName);
+                                                put("osVersion", clientType.osVersion);
+                                                if (clientType.androidSDKVersion != null) {
+                                                    put("androidSdkVersion", clientType.androidSDKVersion);
+                                                }
+                                            }}
+                                        );
+                                    }}
+                                );
+                                put("contentCheckOk", true);
+                                put("racyCheckOk", true);
+                                put("videoId", videoID);
+                            }}
+                            .toString()
+                            .getBytes(StandardCharsets.UTF_8);
+
+                            connection.setFixedLengthStreamingMode(requestBody.length);
+                            connection.getOutputStream().write(requestBody);
+
+                            if (connection.getResponseCode() == 200 &&
+                                connection.getContentLength() != 0) {
+                                    try (
+                                        InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+                                        ByteArrayOutputStream bAOS = new ByteArrayOutputStream()
+                                    ) {
+                                        byte[] buffer = new byte[2048];
+                                        int bytesRead;
+
+                                        while ((bytesRead = inputStream.read(buffer)) >= 0) {
+                                            bAOS.write(buffer, 0, bytesRead);
+                                        }
+
+                                        currentClientName =
+                                            String.format(
+                                                " (%s - %s)",
+
+                                                clientType.name(),
+                                                !videoRequireLogin ? "NO_AUTH" : "WITH_AUTH"
+                                            );
+
+                                        SetStatsForNerdsClientName(currentClientName);
+                                        Log.d(GetClassName(), currentClientName);
+
+                                        videoIDPlaying = videoID;
+                                        VideoReload();
+
+                                        return ByteBuffer.wrap(bAOS.toByteArray());
+                                    } catch (Exception e) {
+                                        Log.e(
+                                            GetClassName(),
+
+                                            e.toString()
+                                        );
+                                    }
+                            }
                         }
 
-                        videoRequireLogin = true;
+                        videoRequireLogin = !videoRequireLogin;
                     }
                 }
 

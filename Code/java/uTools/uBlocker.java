@@ -332,9 +332,11 @@ public class uBlocker {
     private static final Set<String> videoOtherSettingsPanelComponent =
         Set.of(
             "yt_outline_experimental_help_circle",
+            "yt_outline_experimental_person_waves",
             "yt_outline_experimental_stable_volume",
             "yt_outline_experimental_vr",
             "yt_outline_experimental_youtube_music",
+            "yt_outline_person_waves",
             "yt_outline_question_circle",
             "yt_outline_volume_stable",
             "yt_outline_vr",
