@@ -89,17 +89,6 @@ public class uUtils {
         return accountTabOpen;
     }
 
-    private static List<String> remoteActionButtonsList;
-    public static void SetRemoteActionButtonsList(List<String> value) {
-        remoteActionButtonsList = value;
-    }
-    public static void NullifiesRemoteActionButtonsList() {
-        remoteActionButtonsList = null;
-    }
-    public static List<String> GetRemoteActionButtonsList() {
-        return remoteActionButtonsList;
-    }
-
     private static Context appContext;
     public static void SetAppContext(Context value) {
         appContext = value;

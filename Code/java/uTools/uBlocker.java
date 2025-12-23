@@ -11,7 +11,6 @@ import static uTools.uUtils.GetNavigationBarActionDown;
 import static uTools.uUtils.GetNavigationBarPivot;
 import static uTools.uUtils.GetPlayerType;
 import static uTools.uUtils.GetProtoBufferComponents;
-import static uTools.uUtils.GetRemoteActionButtonsList;
 import static uTools.uUtils.GetResourceIdentifier;
 import static uTools.uUtils.GetTopBarPivot;
 import static uTools.uUtils.GetVideoChannelOpen;
@@ -40,7 +39,6 @@ import com.hankcs.algorithm.AhoCorasickDoubleArrayTrie;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 @SuppressWarnings({
     "ConstantConditions"
@@ -122,79 +120,21 @@ public class uBlocker {
         return GetResourceIdentifier("drawable", "utube_fill_bell_cairo_black_24");
     }
 
-    public static final List<String> visibleActionButtons = List.of(
-        "addToPlaylistButtonViewModel",
-        "compactifyChannelButtonViewModel",
-        "segmentedLikeDislikeButtonViewModel",
-        "_share"
-    );
     public static void HideActionButtons(List<Object> list, String identifier) {
-        int zero = 0;
-        int one = 1;
-        int nullIndex = -one;
-
-        List<String> remoteActionButtonsList = GetRemoteActionButtonsList();
-        Object firstListElem = list.get(zero);
+        Object firstListElem = list.get(0);
 
         if (identifier != null &&
             identifier.startsWith("compactify_video_action_bar") &&
             list != null &&
             !list.isEmpty() &&
-            remoteActionButtonsList != null &&
-            !remoteActionButtonsList.isEmpty() &&
             firstListElem != null &&
             firstListElem.toString().equals("LazilyConvertedElement")
         ) {
             int listSize = list.size();
-            int remoteActionButtonsListSize = remoteActionButtonsList.size();
+            int amountButtonsToKeep = 3;
 
-            int firstActionButtonsHookIndex =
-                IntStream.range(zero, remoteActionButtonsListSize)
-                    .filter(i -> remoteActionButtonsList.get(i).contains(visibleActionButtons.get(zero)))
-                    .findFirst()
-                    .orElse(nullIndex);
-            int secondActionButtonsHookIndex =
-                IntStream.range(zero, remoteActionButtonsListSize)
-                    .filter(i -> remoteActionButtonsList.get(i).contains("clipButtonViewModel"))
-                    .findFirst()
-                    .orElse(nullIndex);
-
-            int defaultActionButtonsHookIndex =
-                secondActionButtonsHookIndex != nullIndex
-                    &&
-                secondActionButtonsHookIndex > firstActionButtonsHookIndex
-                ?
-                    secondActionButtonsHookIndex
-                :
-                    firstActionButtonsHookIndex;
-
-            if (defaultActionButtonsHookIndex > nullIndex) {
-                int additionalActionButtonsAmount = listSize - remoteActionButtonsListSize;
-
-                if (additionalActionButtonsAmount >= zero) {
-                    for (int i = zero; i < additionalActionButtonsAmount; i++) {
-                        remoteActionButtonsList.add(
-                            defaultActionButtonsHookIndex + one,
-
-                            i == zero ? "_shorts_plus" : "button"
-                        );
-
-                        remoteActionButtonsListSize++;
-                    }
-
-                    for (int i = listSize - one; i >= zero; i--) {
-                        if (visibleActionButtons
-                            .stream()
-                            .noneMatch(
-                                remoteActionButtonsList.get(i)
-                                    ::
-                                contains
-                            )
-                        ) {
-                            list.remove(i);
-                        }
-                    }
-                }
+            if (listSize > amountButtonsToKeep) {
+                list.subList(amountButtonsToKeep, listSize).clear();
             }
         }
     }
@@ -419,7 +359,6 @@ public class uBlocker {
                 "generalComponents"
             )
         );
-    private static final int libraryNavButtonIndex = 4;
     private static boolean moreDrawerAppsAndInfo = false;
     private static boolean quickQualityBottomSheet = false;
     public static boolean HideLithoTemplate(String templateTreeComponent) {

@@ -2,7 +2,6 @@
 
 package uTools.VideoDetails;
 
-import static uTools.uBlocker.visibleActionButtons;
 import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFromRoute;
 import static uTools.uStreamSpoofing.uPlayerRoutes.requestKeys;
 import static uTools.uUtils.BackgroundThreadPool;
@@ -16,10 +15,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Future;
@@ -36,7 +33,6 @@ public class uVideoDetailsRequest {
     }
 
     private final Map<String, String> infoTypes = new HashMap<>() {{
-        put("actionButtons", "next?fields=contents.singleColumnWatchNextResults.results.results.contents.slimVideoMetadataSectionRenderer.contents.elementRenderer.newElement.type.componentType.model.videoActionBarModel.videoActionBarData.buttons.buttonViewModel");
         put("channelID", "player?prettyPrint=false&fields=videoDetails.channelId");
         put("defaultAudioTrackID", "player?fields=streamingData.adaptiveFormats.audioTrack");
     }};
@@ -134,55 +130,6 @@ public class uVideoDetailsRequest {
                                     JSONObject jsonResponse = new JSONObject(jsonBuilder.toString());
 
                                     switch (infoToFetch) {
-                                        case "actionButtons" -> {
-                                            JSONArray primaryContentsArray =
-                                                jsonResponse
-                                                    .getJSONObject("contents")
-                                                    .getJSONObject("singleColumnWatchNextResults")
-                                                    .getJSONObject("results")
-                                                    .getJSONObject("results")
-                                                    .getJSONArray("contents");
-
-                                            for (int i = 0; i < primaryContentsArray.length(); i++) {
-                                                JSONObject primaryContentsArrayObject = primaryContentsArray.getJSONObject(i);
-                                                
-                                                String secondaryContentsObjectTarget = "slimVideoMetadataSectionRenderer";
-
-                                                if (primaryContentsArrayObject.has(secondaryContentsObjectTarget)) {
-                                                    JSONArray secondaryContentsArray =
-                                                        primaryContentsArrayObject
-                                                            .getJSONObject(secondaryContentsObjectTarget)
-                                                            .getJSONArray("contents");
-
-                                                    JSONArray actionButtonsList =
-                                                        ((JSONObject) secondaryContentsArray.get(secondaryContentsArray.length() - 1))
-                                                            .getJSONObject("elementRenderer")
-                                                            .getJSONObject("newElement")
-                                                            .getJSONObject("type")
-                                                            .getJSONObject("componentType")
-                                                            .getJSONObject("model")
-                                                            .getJSONObject("videoActionBarModel")
-                                                            .getJSONObject("videoActionBarData")
-                                                            .getJSONArray("buttons");
-
-                                                    List<String> finalActionButtonsList =
-                                                        new ArrayList<>(
-                                                            List.of(visibleActionButtons.get(1))
-                                                        );
-
-                                                    for (int j = 0; j < actionButtonsList.length(); j++) {
-                                                        String actionButtonName = actionButtonsList.get(j).toString();
-
-                                                        if (!actionButtonName.contains("_message_bubble_overlap")) {
-                                                            finalActionButtonsList.add(actionButtonName);
-                                                        }
-                                                    }
-
-                                                    return finalActionButtonsList;
-                                                }
-                                            }
-                                        }
-
                                         case "channelID" -> {
                                             return jsonResponse
                                                     .getJSONObject("videoDetails")

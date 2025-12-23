@@ -11,7 +11,6 @@ import static uTools.uUtils.GetVideoPlaybackStatus;
 import static uTools.uUtils.InitializeNewBlockList;
 import static uTools.uUtils.InitializeStreamCache;
 import static uTools.uUtils.SearchInSetCorasick;
-import static uTools.uUtils.SetRemoteActionButtonsList;
 import static uTools.uUtils.SetStatsForNerdsClientName;
 
 import android.os.Handler;
@@ -46,7 +45,6 @@ import uTools.uUtils;
 
 @SuppressWarnings({
     "DiscourageApi",
-    "unchecked"
 })
 public class uStreamingDataRequest {
     private static String videoIDToReload = "";
@@ -112,25 +110,6 @@ public class uStreamingDataRequest {
                         defaultAudioTrackName
                 );
             }
-        } catch (Exception e) {
-            Log.e(
-                GetClassName(),
-
-                e.toString()
-            );
-        }
-
-        try {
-            Object actionButtonsRequest = new uVideoDetailsRequest(
-                videoID,
-
-                playerHeaders,
-
-                "actionButtons"
-            )
-            .GetRequestedInfo();
-
-            SetRemoteActionButtonsList((List<String>) actionButtonsRequest);
         } catch (Exception e) {
             Log.e(
                 GetClassName(),
