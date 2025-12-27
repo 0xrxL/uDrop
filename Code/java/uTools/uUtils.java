@@ -268,6 +268,22 @@ public class uUtils {
         return "";
     }
 
+    public static int GetDrawableInt(String name) {
+        try {
+            return GetAppContext()
+                    .getResources()
+                    .getIdentifier(name, "drawable", GetAppContext().getPackageName());
+        } catch (Exception e) {
+            Log.e(
+                GetClassName(),
+
+                String.format("Cannot get the requested drawable %s", name)
+            );
+
+            return -1;
+        }
+    }
+
     public static void HideImageView(ImageView imageView) {
         imageView.setVisibility(View.GONE);
     }

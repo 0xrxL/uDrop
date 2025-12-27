@@ -12,6 +12,8 @@
             $"{uToolsRootFolder}/uUtils";
         private static readonly string uSpoofingPath =
             $"{uToolsRootFolder}/uStreamSpoofing/uSpoofing";
+        private static readonly string uStreamingDataRequestPath =
+            $"{uToolsRootFolder}/uStreamSpoofing/uStreamingDataRequest";
         
         private static List<(bool, bool)> Debug_Patch()
         {
@@ -32,7 +34,7 @@
                         (false, "invoke-virtual Landroid/view/MotionEvent;->getAction()I", 1),
                         (false, ".method onDoubleTap(", 2),
                         (false, ".method onDoubleTapEvent(", 2),
-                        (true, ".method onClick(", 2),
+                        (true, "const-string playlist", 1),
                         (false, ".method onCreate(", 2),
                         (false, ".method onCreateLayout(", 2),
                         (false, ".method onItemClick(", 2),
@@ -923,7 +925,7 @@
 
                 new SmaliUtils.SubPatchModule<SmaliUtils.StringTransform[]>(
                     [
-                        new("        <Preference android:icon=\"@drawable/yt_outline_gear_vd_theme_24\"", "        <Preference android:icon=\"@drawable/yt_outline_gear_vd_theme_24\"", $"<Preference android:persistent=\"false\" android:layout=\"@layout/preference_with_icon\" android:title=\"MicroG\" android:key=\"@string/general_key\" app:iconSpaceReserved=\"true\"> <intent android:targetPackage=\"{playServicesDomain.Transformed}.android.gms\" android:targetClass=\"org.microg.gms.ui.SettingsActivity\"/> </Preference>\n        <Preference android:icon=\"@drawable/yt_outline_gear_vd_theme_24\"")
+                        new("        <Preference android:icon=\"@drawable/yt_outline_gear_vd_theme_24\"", "", $"<Preference android:persistent=\"false\" android:layout=\"@layout/preference_with_icon\" android:title=\"MicroG\" android:key=\"@string/general_key\" app:iconSpaceReserved=\"true\"> <intent android:targetPackage=\"{playServicesDomain.Transformed}.android.gms\" android:targetClass=\"org.microg.gms.ui.SettingsActivity\"/> </Preference>\n        <Preference android:icon=\"@drawable/yt_outline_gear_vd_theme_24\"")
                     ],
 
                     true,
@@ -8720,6 +8722,106 @@ new SmaliUtils.SubPatchModule<string[]>(
                                         }
                                     }
                                 }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus
+            ];
+        }
+
+        public static List<(bool, bool)> Video_Player_Save_Button()
+        {
+            return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHexByName("id", "time_bar_live_label"),
+                        SmaliUtils.GetResourceHexByName("id", "fullscreen_button"),
+                        "move-result-object",
+                        "<FrameLayout android:id=\"@id/time_bar_chapter_title_container\""
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (new[] {
+                                targetSearchTerms[0],
+                                targetSearchTerms[1]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[1]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 11); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[2]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("",
+
+                                                    j + 1,
+
+                                                    [
+                                                        $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uStreamingDataRequestPath};->InjectSaveVideoToWatchLaterButton(Landroid/view/View;)V",
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (interactionsCount, false, infoForNextSubPatch);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus,
+
+                new SmaliUtils.SubPatchModule<SmaliUtils.StringTransform[]>(
+                    [
+                        new("<FrameLayout android:id=\"@id/time_bar_chapter_title_container\"", "", "<FrameLayout android:id=\"@id/time_bar_chapter_title_container\" android:layout_marginEnd=\"50dp\" ")
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (xmlSmaliProperties.Path.EndsWith(uDropUtils.GetOSSpecificFullPath("/youtube_video_exploder_controls_bottom_ui_container.xml")))
+                        {
+                            if (targetSearchTerms.Any(st => xmlSmaliProperties.Full.PartialsContains(st.Original)))
+                            {
+                                codeInject.FullReplace(
+                                    [
+                                        ("",
+
+                                        -1,
+
+                                        [""])
+                                    ],
+
+                                    targetSearchTerms
+                                ).Write();
+
+                                return (interactionsCount, false, infoForNextSubPatch);
                             }
                         }
 

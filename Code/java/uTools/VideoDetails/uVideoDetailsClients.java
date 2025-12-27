@@ -8,7 +8,7 @@ import android.os.Build;
 
 public enum uVideoDetailsClients {
     ANDROID(
-        "defaultAudioTrackID",
+        "defaultAudioTrackID,saveVideoToWatchLater",
         String.valueOf(Build.VERSION.SDK_INT),
         3,
         "com.google.android.youtube",

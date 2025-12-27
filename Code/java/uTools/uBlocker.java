@@ -650,7 +650,9 @@ public class uBlocker {
                         try {
                             Object channelIDRequest = new uVideoDetailsRequest(
                                 videoID,
+
                                 null,
+
                                 "channelID"
                             )
                             .GetRequestedInfo();

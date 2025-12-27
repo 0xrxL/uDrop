@@ -6,6 +6,8 @@ import static uTools.uBlocker.playerMaximized;
 import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFromRoute;
 import static uTools.uStreamSpoofing.uPlayerRoutes.requestKeys;
 import static uTools.uUtils.BackgroundThreadPool;
+import static uTools.uUtils.GetAppContext;
+import static uTools.uUtils.GetDrawableInt;
 import static uTools.uUtils.GetPlayerType;
 import static uTools.uUtils.GetVideoPlaybackStatus;
 import static uTools.uUtils.InitializeNewBlockList;
@@ -13,10 +15,17 @@ import static uTools.uUtils.InitializeStreamCache;
 import static uTools.uUtils.SearchInSetCorasick;
 import static uTools.uUtils.SetStatsForNerdsClientName;
 
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.hankcs.algorithm.AhoCorasickDoubleArrayTrie;
 
@@ -49,6 +58,8 @@ import uTools.uUtils;
 public class uStreamingDataRequest {
     private static String videoIDToReload = "";
     private static String videoIDPlaying = "";
+    private static Map<String, String> playerHeadersPlaying;
+
 
     private final List<uClientType> CLIENT_TYPES_ORDER_TO_USE =
         new ArrayList<>(
@@ -84,7 +95,7 @@ public class uStreamingDataRequest {
             .GetRequestedInfo();
             String defaultAudioTrackName = (String) defaultAudioTrackNameRequest;
 
-            if (!defaultAudioTrackName.isEmpty()) {
+            if (defaultAudioTrackName != null && !defaultAudioTrackName.isEmpty()) {
                 String hyphen = "-";
                 boolean hyphenExists = defaultAudioTrackName.contains(hyphen);
 
@@ -209,6 +220,8 @@ public class uStreamingDataRequest {
                                         Log.d(GetClassName(), currentClientName);
 
                                         videoIDPlaying = videoID;
+                                        playerHeadersPlaying = playerHeaders;
+
                                         VideoReload();
 
                                         return ByteBuffer.wrap(bAOS.toByteArray());
@@ -333,5 +346,141 @@ public class uStreamingDataRequest {
                 }
             }
         );
+    }
+
+    public static void InjectSaveVideoToWatchLaterButton(View sourceButton) {
+        if (sourceButton != null
+                &&
+            sourceButton.getParent() instanceof ViewGroup sourceButtonGroupParent
+        ) {
+            ImageView saveButton = new ImageView(GetAppContext());
+            saveButton.setId(View.generateViewId());
+            saveButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            saveButton.setImageResource(GetDrawableInt("utube_bookmark_icon"));
+            sourceButton.getViewTreeObserver().addOnPreDrawListener(
+                new ViewTreeObserver.OnPreDrawListener() {
+                    int[] sourceButtonPadding;
+                    Drawable sourceButtonBackground;
+                    Drawable saveButtonBackground = new ColorDrawable(android.graphics.Color.TRANSPARENT);
+                    float sourceButtonAlpha = 0;
+                    int sourceButtonVisibility = 0;
+                    float newSaveButtonPosX = 0;
+                    float newSaveButtonPosY = 0;
+
+                    @Override
+                    public boolean onPreDraw() {
+                        sourceButtonPadding = new int[] {
+                            sourceButton.getPaddingLeft(),
+                            sourceButton.getPaddingTop(),
+                            sourceButton.getPaddingRight(),
+                            sourceButton.getPaddingBottom()
+                        };
+                        if (!Arrays.equals(
+                            new int[] {
+                                saveButton.getPaddingLeft(),
+                                saveButton.getPaddingTop(),
+                                saveButton.getPaddingRight(),
+                                saveButton.getPaddingBottom()
+                            },
+
+                            sourceButtonPadding)
+                        ) {
+                            saveButton.setLayoutParams(
+                                new FrameLayout.LayoutParams(sourceButton.getLayoutParams())
+                            );
+
+                            saveButton.setPadding(
+                                sourceButtonPadding[0],
+                                sourceButtonPadding[1],
+                                sourceButtonPadding[2],
+                                sourceButtonPadding[3]
+                            );
+                        }
+
+                        sourceButtonBackground = sourceButton.getBackground();
+                        if (saveButtonBackground != sourceButtonBackground) {
+                            saveButton.setBackground(sourceButtonBackground.mutate());
+
+                            saveButtonBackground = saveButton.getBackground();
+                        }
+
+                        sourceButtonAlpha = sourceButton.getAlpha();
+                        if (saveButton.getAlpha() != sourceButtonAlpha) {
+                            saveButton.setAlpha(sourceButtonAlpha);
+                        }
+
+                        sourceButtonVisibility = sourceButton.getVisibility();
+                        if (saveButton.getVisibility() != sourceButtonVisibility) {
+                            saveButton.setVisibility(sourceButtonVisibility);
+                        }
+
+                        newSaveButtonPosX = sourceButton.getX() - sourceButton.getWidth();
+                        if (saveButton.getX() != newSaveButtonPosX) {
+                            saveButton.setX(newSaveButtonPosX);
+                        }
+
+                        newSaveButtonPosY = sourceButton.getY();
+                        if (saveButton.getY() != newSaveButtonPosY) {
+                            saveButton.setY(newSaveButtonPosY);
+                        }
+
+                        return true;
+                    }
+                }
+            );
+            saveButton.setOnClickListener(new View.OnClickListener() {
+                boolean savingAlreadyInQueue = false;
+                final uUtils.MakeToast videoAddedToast =
+                    new uUtils.MakeToast("Video saved in Watch Later");
+                final uUtils.MakeToast videoAddedErrorToast =
+                    new uUtils.MakeToast("Error: Video cannot be saved in Watch Later");
+                final uUtils.MakeToast videoAlreadyAddedToast =
+                    new uUtils.MakeToast("Video is already saved in Watch Later");
+
+                @Override
+                public void onClick(View v) {
+                    if (savingAlreadyInQueue) {
+                        return;
+                    }
+
+                    savingAlreadyInQueue = true;
+
+                    videoAddedToast.HideToast();
+                    videoAddedErrorToast.HideToast();
+                    videoAlreadyAddedToast.HideToast();
+
+                    try {
+                        Object savingStatusRequest = new uVideoDetailsRequest(
+                            videoIDPlaying,
+
+                            playerHeadersPlaying,
+
+                            "saveVideoToWatchLater"
+                        ).GetRequestedInfo();
+                        String savingStatus = (String) savingStatusRequest;
+
+                        if (savingStatus != null && savingStatus.contains("STATUS_SUCCEEDED")) {
+                            if (savingStatus.contains("setVideoId")) {
+                                videoAddedToast.ShowToast();
+                            } else {
+                                videoAlreadyAddedToast.ShowToast();
+                            }
+                        } else {
+                            videoAddedErrorToast.ShowToast();
+                        }
+
+                        savingAlreadyInQueue = false;
+                    } catch (Exception e) {
+                        Log.e(
+                            GetClassName(),
+
+                            e.toString()
+                        );
+                    }
+                }
+            });
+
+            sourceButtonGroupParent.addView(saveButton);
+        }
     }
 }

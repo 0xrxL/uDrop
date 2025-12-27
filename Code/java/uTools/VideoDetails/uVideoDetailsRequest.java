@@ -24,9 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 import uTools.uStreamSpoofing.uRoute;
 
-@SuppressWarnings({
-    "ExtractMethodRecommender"
-})
 public class uVideoDetailsRequest {
     private static String GetClassName() {
         return uVideoDetailsRequest.class.getSimpleName();
@@ -35,8 +32,10 @@ public class uVideoDetailsRequest {
     private final Map<String, String> infoTypes = new HashMap<>() {{
         put("channelID", "player?prettyPrint=false&fields=videoDetails.channelId");
         put("defaultAudioTrackID", "player?fields=streamingData.adaptiveFormats.audioTrack");
+        put("saveVideoToWatchLater", "browse/edit_playlist?fields=status,playlistEditResults");
     }};
     private final Future<?> future;
+    private byte[] requestBody;
     public uVideoDetailsRequest (String videoID, Map<String, String> playerHeaders, String infoToFetch) {
         this.future = BackgroundThreadPool.submit(
             () -> {
@@ -69,7 +68,7 @@ public class uVideoDetailsRequest {
                                 }
                             }
 
-                            JSONObject innerTubeBody = new JSONObject() {{
+                            requestBody = new JSONObject() {{
                                 put(
                                     "context",
 
@@ -102,9 +101,28 @@ public class uVideoDetailsRequest {
                                 put("contentCheckOk", true);
                                 put("racyCheckOk", true);
                                 put("videoId", videoID);
-                            }};
+                                if (infoToFetch.equals("saveVideoToWatchLater")) {
+                                    put("playlistId", "WL");
+                                    put("excludeWatchLater", false);
+                                    put(
+                                        "actions",
 
-                            byte[] requestBody = innerTubeBody.toString().getBytes(StandardCharsets.UTF_8);
+                                        new JSONArray() {{
+                                            put(
+                                                0,
+
+                                                new JSONObject() {{
+                                                    put("action", "ACTION_ADD_VIDEO");
+                                                    put("addedVideoId", videoID);
+                                                }}
+                                            );
+                                        }}
+                                    );
+                                }
+                            }}
+                            .toString()
+                            .getBytes(StandardCharsets.UTF_8);
+
                             connection.setFixedLengthStreamingMode(requestBody.length);
                             connection.getOutputStream().write(requestBody);
 
@@ -127,7 +145,8 @@ public class uVideoDetailsRequest {
                                         );
                                     }
 
-                                    JSONObject jsonResponse = new JSONObject(jsonBuilder.toString());
+                                    String jsonBuilderString = jsonBuilder.toString();
+                                    JSONObject jsonResponse = new JSONObject(jsonBuilderString);
 
                                     switch (infoToFetch) {
                                         case "channelID" -> {
@@ -142,14 +161,16 @@ public class uVideoDetailsRequest {
                                                 .getJSONObject("streamingData")
                                                 .getJSONArray("adaptiveFormats");
 
+                                            String audioTrackNodeName = "audioTrack";
+
                                             for (int i = 0; i < availableAudioTracks.length(); i++) {
                                                 JSONObject rootAudioTrack =
                                                     ((JSONObject) availableAudioTracks.get(i));
 
-                                                try {
+                                                if (rootAudioTrack.has(audioTrackNodeName)) {
                                                     JSONObject audioTrack =
                                                         rootAudioTrack
-                                                            .getJSONObject("audioTrack");
+                                                            .getJSONObject(audioTrackNodeName);
 
                                                     String audioTrackID =
                                                         audioTrack.getString("id");
@@ -161,14 +182,12 @@ public class uVideoDetailsRequest {
                                                         audioTrackID.endsWith(".4")) {
                                                             return audioTrackID.split("\\.")[0];
                                                     }
-                                                } catch (Exception e) {
-                                                    Log.e(
-                                                        GetClassName(),
-
-                                                        e.toString()
-                                                    );
                                                 }
                                             }
+                                        }
+
+                                        case "saveVideoToWatchLater" -> {
+                                            return jsonBuilderString;
                                         }
                                     }
                                 } catch (Exception e) {
