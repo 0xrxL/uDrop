@@ -7,7 +7,10 @@ import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFr
 import static uTools.uStreamSpoofing.uPlayerRoutes.requestKeys;
 import static uTools.uUtils.BackgroundThreadPool;
 import static uTools.uUtils.GetAppContext;
+import static uTools.uUtils.GetCommentsPanelOpen;
 import static uTools.uUtils.GetDrawableInt;
+import static uTools.uUtils.GetLithoActionDownDuration;
+import static uTools.uUtils.GetMainActivity;
 import static uTools.uUtils.GetPlayerType;
 import static uTools.uUtils.GetVideoPlaybackStatus;
 import static uTools.uUtils.InitializeNewBlockList;
@@ -15,8 +18,11 @@ import static uTools.uUtils.InitializeStreamCache;
 import static uTools.uUtils.SearchInSetCorasick;
 import static uTools.uUtils.SetStatsForNerdsClientName;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -24,7 +30,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.hankcs.algorithm.AhoCorasickDoubleArrayTrie;
@@ -376,18 +381,17 @@ public class uStreamingDataRequest {
                             sourceButton.getPaddingBottom()
                         };
                         if (!Arrays.equals(
-                            new int[] {
-                                saveButton.getPaddingLeft(),
-                                saveButton.getPaddingTop(),
-                                saveButton.getPaddingRight(),
-                                saveButton.getPaddingBottom()
-                            },
+                                new int[] {
+                                    saveButton.getPaddingLeft(),
+                                    saveButton.getPaddingTop(),
+                                    saveButton.getPaddingRight(),
+                                    saveButton.getPaddingBottom()
+                                },
 
-                            sourceButtonPadding)
+                                sourceButtonPadding
+                            )
                         ) {
-                            saveButton.setLayoutParams(
-                                new FrameLayout.LayoutParams(sourceButton.getLayoutParams())
-                            );
+                            saveButton.setLayoutParams(sourceButton.getLayoutParams());
 
                             saveButton.setPadding(
                                 sourceButtonPadding[0],
@@ -482,5 +486,77 @@ public class uStreamingDataRequest {
 
             sourceButtonGroupParent.addView(saveButton);
         }
+    }
+
+    private static final uUtils.MakeToast openVideoChannelToastInProgress =
+        new uUtils.MakeToast("Opening video channel...");
+    private static final uUtils.MakeToast openVideoChannelToastDone =
+        new uUtils.MakeToast("Channel opened");
+    private static final uUtils.MakeToast openVideoChannelToastError =
+        new uUtils.MakeToast("Error: Failed to open video channel");
+    private static Thread openVideoChannelThread = null;
+    public static boolean OpenVideoChannel(String videoID) {
+        if (openVideoChannelThread == null && !GetCommentsPanelOpen() && GetLithoActionDownDuration() >= 1000) {
+            openVideoChannelThread = new Thread(() -> {
+                try {
+                    openVideoChannelToastInProgress.ShowToast();
+
+                    String channelID = "";
+                    try {
+                        Object channelIDRequest = new uVideoDetailsRequest(
+                            videoID,
+
+                            null,
+
+                            "channelID"
+                        )
+                        .GetRequestedInfo();
+
+                        channelID = (String) channelIDRequest;
+                    } catch (Exception e) {
+                        Log.e(
+                            GetClassName(),
+
+                            e.toString()
+                        );
+                    }
+
+                    if (!channelID.isEmpty()) {
+                        Context context = GetMainActivity();
+                        assert context != null;
+
+                        Intent openLiveChannelIntent = new Intent(
+                            Intent.ACTION_VIEW,
+
+                            Uri.parse(
+                                String.format(
+                                    "https://www.youtube.com/channel/%s",
+
+                                    channelID
+                                )
+                            )
+                        );
+                        openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        openLiveChannelIntent.setPackage(context.getPackageName());
+
+                        context.startActivity(openLiveChannelIntent);
+
+                        openVideoChannelToastInProgress.HideToast();
+                        openVideoChannelToastDone.ShowToast();
+                    }
+                } catch (Exception e) {
+                    openVideoChannelToastError.ShowToast();
+                }
+
+                openVideoChannelThread.interrupt();
+                openVideoChannelThread = null;
+            });
+
+            openVideoChannelThread.start();
+
+            return true;
+        }
+
+        return false;
     }
 }

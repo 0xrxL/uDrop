@@ -7361,7 +7361,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                                                                                     [
                                                                                         $"invoke-virtual {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;->{xmlSmaliProperties.ProxiedLines[n].GetMethodName()}()Ljava/lang/String;",
                                                                                         $"move-result-object {freeConstStringRegister}",
-                                                                                        $"invoke-static {{{freeConstStringRegister}}}, L{uBlockerPath};->OpenVideoChannel(Ljava/lang/String;)Z",
+                                                                                        $"invoke-static {{{freeConstStringRegister}}}, L{uStreamingDataRequestPath};->OpenVideoChannel(Ljava/lang/String;)Z",
                                                                                         $"move-result {freeConstStringRegister}",
                                                                                         $"if-eqz {freeConstStringRegister}, :open_video_channel",
                                                                                         "return-void",

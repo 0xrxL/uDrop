@@ -1,12 +1,9 @@
 package uTools;
 
-import uTools.VideoDetails.uVideoDetailsRequest;
 import static uTools.uUtils.ByteBufferContainsString;
 import static uTools.uUtils.GetAccountTabOpen;
 import static uTools.uUtils.GetCommentsPanelOpen;
 import static uTools.uUtils.GetDarkTheme;
-import static uTools.uUtils.GetLithoActionDownDuration;
-import static uTools.uUtils.GetMainActivity;
 import static uTools.uUtils.GetNavigationBarActionDown;
 import static uTools.uUtils.GetNavigationBarPivot;
 import static uTools.uUtils.GetPlayerType;
@@ -24,8 +21,6 @@ import static uTools.uUtils.SetAccountTabOpen;
 import static uTools.uUtils.SetNavigationBarActionDown;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -628,79 +623,6 @@ public class uBlocker {
                 e.toString()
             );
         }
-    }
-
-    private static final MakeToast openVideoChannelToastInProgress =
-        new MakeToast("Opening video channel...");
-    private static final MakeToast openVideoChannelToastDone =
-        new MakeToast("Channel opened");
-    private static final MakeToast openVideoChannelToastError =
-        new MakeToast("Error: Failed to open video channel");
-    private static Thread openVideoChannelThread = null;
-    public static boolean OpenVideoChannel(String videoID) {
-        if (openVideoChannelThread == null) {
-            if (!GetCommentsPanelOpen() && GetLithoActionDownDuration() >= 1000) {
-                openVideoChannelThread = new Thread(() -> {
-                    try {
-                        openVideoChannelToastInProgress.ShowToast();
-
-                        Context context = GetMainActivity();
-
-                        String channelID = "";
-                        try {
-                            Object channelIDRequest = new uVideoDetailsRequest(
-                                videoID,
-
-                                null,
-
-                                "channelID"
-                            )
-                            .GetRequestedInfo();
-
-                            channelID = (String) channelIDRequest;
-                        } catch (Exception e) {
-                            Log.e(
-                                GetClassName(),
-
-                                e.toString()
-                            );
-                        }
-
-                        if (!channelID.isEmpty()) {
-                            Intent openLiveChannelIntent = new Intent(
-                                Intent.ACTION_VIEW,
-
-                                Uri.parse(
-                                    String.format(
-                                        "https://www.youtube.com/channel/%s",
-
-                                        channelID
-                                    )
-                                )
-                            );
-                            openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            openLiveChannelIntent.setPackage(context.getPackageName());
-
-                            context.startActivity(openLiveChannelIntent);
-
-                            openVideoChannelToastInProgress.HideToast();
-                            openVideoChannelToastDone.ShowToast();
-                        }
-                    } catch (Exception e) {
-                        openVideoChannelToastError.ShowToast();
-                    }
-
-                    openVideoChannelThread.interrupt();
-                    openVideoChannelThread = null;
-                });
-
-                openVideoChannelThread.start();
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     public static void OpenVideoResolutionsFlyout(RecyclerView recyclerView) {
