@@ -89,9 +89,7 @@ namespace uDrop.Code
             string apktoolPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.uDropRootPath}{libsPath}/apktool.jar");
             while (!File.Exists(apktoolPath))
             {
-                ("\nError: APKTool not found" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: APKTool not found".QuitWithException();
             }
 
             Process process;
@@ -132,9 +130,8 @@ namespace uDrop.Code
 
                     File.WriteAllText(uDropUtils.GetOSSpecificFullPath($"{GetLogsDirName()}/{LogFileName}"), processError);
 
-                    ("\nBuilding Framework installation failed!" +
-                    $"\nCheck '{GetLogsDirName()}/{LogFileName}' for further informations." +
-                    "\nPress any key to close the patcher.")
+                    ("Building Framework installation failed!" +
+                    $"\nCheck '{GetLogsDirName()}/{LogFileName}' for further informations.")
                         .QuitWithException();
                 }
 
@@ -174,9 +171,8 @@ namespace uDrop.Code
 
                 File.WriteAllText(uDropUtils.GetOSSpecificFullPath($"{GetLogsDirName()}/{LogFileName}"), processError);
 
-                ("\nUnpacking APK failed!" +
-                $"\nCheck '{GetLogsDirName()}/{LogFileName}' for further informations." +
-                "\nPress any key to close the patcher.")
+                ("Unpacking APK failed!" +
+                $"\nCheck '{GetLogsDirName()}/{LogFileName}' for further informations.")
                     .QuitWithException();
             }
 
@@ -395,9 +391,7 @@ namespace uDrop.Code
 
             if (!Directory.Exists(libDirPath))
             {
-                ("\nError: lib dir not found" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: lib dir not found".QuitWithException();
             }
 
             bool removedLibs = false;
@@ -432,9 +426,7 @@ namespace uDrop.Code
             string apktoolPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.uDropRootPath}{libsPath}/apktool.jar");
             while (!File.Exists(apktoolPath))
             {
-                ("\nError: APKTool not found" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: APKTool not found".QuitWithException();
             }
 
             "\nRebuilding APK...".StartProcessLog();
@@ -470,9 +462,8 @@ namespace uDrop.Code
 
                 File.WriteAllText(uDropUtils.GetOSSpecificFullPath($"{GetLogsDirName()}/{LogFileName}"), processError);
 
-                ("\nRebuilding APK failed!" +
-                $"\nCheck '{GetLogsDirName()}/{LogFileName}' for further informations." +
-                "\nPress any key to close the patcher.")
+                ("Rebuilding APK failed!" +
+                $"\nCheck '{GetLogsDirName()}/{LogFileName}' for further informations.")
                     .QuitWithException();
             }
 
@@ -486,9 +477,7 @@ namespace uDrop.Code
             string zipalignPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.uDropRootPath}{libsPath}/zipalign.jar");
             while (!File.Exists(zipalignPath))
             {
-                ("\nError: ZipAlign not found" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: ZipAlign not found".QuitWithException();
             }
 
             "\nAPK alignment...".StartProcessLog();
@@ -554,9 +543,8 @@ namespace uDrop.Code
             }
             else if (signKeyFilePaths.Any(File.Exists))
             {
-                ("\nError: 'sign.keystore' or 'signKeyInfo.json' not found" +
-                "\nCheck your signature files or delete the remaining to create new ones" +
-                "\nPress any key to close the patcher.")
+                ("Error: 'sign.keystore' or 'signKeyInfo.json' not found" +
+                "\nCheck your signature files or delete the remaining to create new ones")
                     .QuitWithException();
             }
             else
@@ -564,9 +552,7 @@ namespace uDrop.Code
                 string keyToolPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.uDropRootPath}{libsPath}/keygen.jar");
                 if (!File.Exists(keyToolPath))
                 {
-                    ("\nError: KeyGen tool not found" +
-                    "\nPress any key to close the patcher.")
-                        .QuitWithException();
+                    "Error: KeyGen tool not found".QuitWithException();
                 }
 
                 string[] randomStrings =
@@ -648,24 +634,18 @@ namespace uDrop.Code
 
                     if (signKeyInfoDeserialized.Alias.Equals(null) || signKeyInfoDeserialized.Pass.Equals(null))
                     {
-                        ("\nError: Alias or Pass is missing in 'signKeyInfo.json'" +
-                        "\nPress any key to close the patcher.")
-                            .QuitWithException();
+                        "Error: Alias or Pass is missing in 'signKeyInfo.json'".QuitWithException();
                     }
                 }
                 else
                 {
-                    ("\nError: 'signKeyInfo.json' is empty" +
-                    "\nPress any key to close the patcher.")
-                        .QuitWithException();
+                    "Error: 'signKeyInfo.json' is empty".QuitWithException();
                 }
 
                 string apksignerPath = uDropUtils.GetOSSpecificFullPath($"{Main_Class.uDropRootPath}{libsPath}/apksigner.jar");
                 while (!File.Exists(apksignerPath))
                 {
-                    ("\nError: APKSigner not found" +
-                    "\nPress any key to close the patcher.")
-                        .QuitWithException();
+                    "Error: APKSigner not found".QuitWithException();
                 }
 
                 "\nAPK signing...".StartProcessLog();

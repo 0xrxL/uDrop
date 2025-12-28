@@ -100,7 +100,7 @@ namespace uDrop.Code
 
                 if (versionPackageNode.Count.Equals(0))
                 {
-                    "\nError: Cannot download the APK package".QuitWithException();
+                    "Error: Cannot download the APK package".QuitWithException();
                 }
                 else if (!getLastVersion)
                 {
@@ -160,9 +160,9 @@ namespace uDrop.Code
                                                     .GetAttributeValue("href", "null")
                                                     .Replace("&amp;", "&");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                "\nError: Cannot download the APK package".QuitWithException();
+                e.ToString().QuitWithException();
             }
 
             while (!fileIntegrityOK)
@@ -212,9 +212,8 @@ namespace uDrop.Code
 
                     File.WriteAllText(uDropUtils.GetOSSpecificFullPath($"{APKUtils.GetLogsDirName()}/{LogFileName}"), e.ToString());
 
-                    ($"\nError: Unable to download APK" +
-                    $"\nCheck '{APKUtils.GetLogsDirName()}/{LogFileName}' for further informations." +
-                    "\nPress any key to close the patcher.")
+                    ($"Error: Unable to download APK" +
+                    $"\nCheck '{APKUtils.GetLogsDirName()}/{LogFileName}' for further informations.")
                         .QuitWithException();
                 }
 

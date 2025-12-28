@@ -8,7 +8,7 @@ namespace uDrop.Code
         public static Stopwatch executionTime = new();
 
         //--------------------------------General Patcher Settings--------------------------------//
-        public static readonly (string, string, string, string, bool, bool) apkInfo = (           //
+        public static readonly (string, string, string, string, bool, bool, bool) apkInfo = (     //
             /* Developer Name */                                                                  //
             "google-inc",                                                                         //
             /* App Name */                                                                        //
@@ -20,12 +20,14 @@ namespace uDrop.Code
             /* APK Downloader */                                                                  //
             true,                                                                                 //
             /* Include Non-Root Patch */                                                          //
-            true                                                                                  //
+            true,                                                                                 //
+            /* Include Optional Patches */                                                        //
+            false                                                                                 //
         );                                                                                        //
         public static readonly string uDropRootPath =                                             //
             AppDomain.CurrentDomain.BaseDirectory;                                                //
         private static readonly string firstRootFolder =                                          //
-            $"{uDropRootPath}APKs";                                                              //
+            $"{uDropRootPath}APKs";                                                               //
         public static readonly string firstCombinedRootFolders =                                  //
             uDropUtils.GetOSSpecificFullPath(                                                     //
                 $"{                                                                               //
@@ -82,9 +84,7 @@ namespace uDrop.Code
 
             if (!processError.Contains("version \""))
             {
-                ("\nError: Java is not installed" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: Java is not installed".QuitWithException();
             }
 
             executionTime.Start();

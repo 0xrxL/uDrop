@@ -126,7 +126,7 @@ namespace uDrop.Code
                                                 ];
                     if (fullSmaliPath.Count.Equals(0))
                     {
-                        $"\nError: {fixedPartialPath} file not found".QuitWithException();
+                        $"Error: {fixedPartialPath} file not found".QuitWithException();
                     }
 
                     ProxiedPath =
@@ -318,7 +318,7 @@ namespace uDrop.Code
 
             if (smaliDirs.Count.Equals(0))
             {
-                "\nError: No smali folder exists in decompiled apk path".QuitWithException();
+                "Error: No smali folder exists in decompiled apk path".QuitWithException();
             }
 
             return [..
@@ -391,7 +391,7 @@ namespace uDrop.Code
 
             if (String.IsNullOrEmpty(methodNameString))
             {
-                "\nError: No method name found".QuitWithException();
+                "Error: No method name found".QuitWithException();
             }
 
             return methodNameString;
@@ -401,9 +401,7 @@ namespace uDrop.Code
         {
             if (index == 0)
             {
-                ("\nError: Parameter Class index must be greater than zero\n" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: Parameter Class index must be greater than zero".QuitWithException();
             }
 
             int fixedIndex = index - 1;
@@ -470,16 +468,40 @@ namespace uDrop.Code
 
         public static string GetMethodReturnClassName(this string value)
         {
-            return value.Split(")").Last();
+            string endCircularBracket = ")";
+
+            if (value.Contains(endCircularBracket)) {
+
+                return value.Split(endCircularBracket).Last();
+            }
+            else
+            {
+                "Error: No method found as method return".QuitWithException();
+            }
+
+            return "";
+        }
+
+        public static string GetLabelName(this string value)
+        {
+            string doubleDot = ":";
+
+            if (value.PartialsContains($"if- {doubleDot}")) {
+                return $"{doubleDot}{value.Split(doubleDot).Last()}";
+            }
+            else
+            {
+                "Error: No label found".QuitWithException();
+            }
+
+            return "";
         }
 
         public static string GetClassNamesFromMethodDescriptor(this string value, int index)
         {
             if (index == 0)
             {
-                ("\nError: Register index must be greater than zero\n" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: Register index must be greater than zero".QuitWithException();
             }
 
             int fixedIndex = index - 1;
@@ -535,9 +557,7 @@ namespace uDrop.Code
             }
             else
             {
-                ("\nError: No invoked section class found\n" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: No class found in method descriptor".QuitWithException();
                 
                 return "";
             }
@@ -566,9 +586,7 @@ namespace uDrop.Code
             }
             else
             {
-                ("\nError: No invoked section found\n" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: No method descriptor found".QuitWithException();
                 
                 return "";
             };
@@ -582,7 +600,7 @@ namespace uDrop.Code
             }
             catch
             {
-                "\nError: No parameters found".QuitWithException();
+                "Error: No parameters found".QuitWithException();
 
                 return -1;
             }
@@ -599,9 +617,7 @@ namespace uDrop.Code
         {
             if (index == 0)
             {
-                ("\nError: Register index must be greater than zero\n" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: Register index must be greater than zero".QuitWithException();
             }
 
             int fixedIndex = index - 1;
@@ -663,9 +679,7 @@ namespace uDrop.Code
             }
             else
             {
-                ("\nError: No register value found\n" +
-                "\nPress any key to close the patcher.")
-                    .QuitWithException();
+                "Error: No register value found".QuitWithException();
                 
                 return "";
             }
@@ -682,7 +696,7 @@ namespace uDrop.Code
 
             if (!File.Exists(publicXMLPath))
             {
-                "\nError: 'public.xml' not found".QuitWithException();
+                "Error: 'public.xml' not found".QuitWithException();
             }
 
             string resLine = "";
@@ -701,7 +715,7 @@ namespace uDrop.Code
             }
             catch
             {
-                $"\nError: resource {resName} not found".QuitWithException();
+                $"Error: resource {resName} not found".QuitWithException();
             }
 
             return resLine;

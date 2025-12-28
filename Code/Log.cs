@@ -157,7 +157,7 @@ namespace uDrop.Code
         public static void QuitWithException(this string message)
         {
             $"\n{message}".ErrorLog();
-            "\nPress any key to close the app".ErrorLog();
+            "\nPress any key to close the patcher".ErrorLog();
             Console.ReadKey();
             Environment.Exit(0);
         }

@@ -7806,6 +7806,119 @@ new SmaliUtils.SubPatchModule<string[]>(
             ];
         }
 
+        public static List<(bool, bool)> Seekbar_Tapping()
+        {
+            return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        "\"timed_markers_bar_height\"",
+                        "\"timed_markers_width\"",
+                        ".method public final onTouchEvent(Landroid/view/MotionEvent;)Z",
+                        "Landroid/graphics/Point;->x:I",
+                        "if-eqz",
+                        "invoke-static Ljava/lang/Math;->min(II)I",
+                        "invoke-virtual ;-> (I)V",
+                        "invoke-static Ljava/lang/Math;->abs(I)I",
+                        "invoke-static Lj$/util/Optional;->of(Ljava/lang/Object;)Lj$/util/Optional;",
+                        "invoke-virtual ;-> (I)V"
+                    ],
+
+                    Main_Class.apkInfo.Item7,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (new[] {
+                                targetSearchTerms[0],
+                                targetSearchTerms[1],
+                                targetSearchTerms[2]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[2]))
+                                {
+                                    for (int j = i; j < scaleIndex.Lines(j, 48); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[3]))
+                                        {
+                                            for (int k = j; k <= scaleIndex.Lines(j, 21); k++)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[4]))
+                                                {
+                                                    for (int l = k; l < xmlSmaliProperties.LinesCount; l++)
+                                                    {
+                                                        if (xmlSmaliProperties.Lines[l].PartialsContains(targetSearchTerms[5]))
+                                                        {
+                                                            for (int m = l; m <= scaleIndex.Lines(l, 9); m++)
+                                                            {
+                                                                if (xmlSmaliProperties.Lines[m].PartialsContains(targetSearchTerms[6]))
+                                                                {
+                                                                    for (int n = m; n <= scaleIndex.Lines(m, 64); n++)
+                                                                    {
+                                                                        if (xmlSmaliProperties.Lines[n].PartialsContains(targetSearchTerms[7]))
+                                                                        {
+                                                                            for (int o = n; o <= scaleIndex.Lines(n, 33); o++)
+                                                                            {
+                                                                                if (xmlSmaliProperties.Lines[o].PartialsContains(targetSearchTerms[8]))
+                                                                                {
+                                                                                    for (int p = o; p <= scaleIndex.Lines(o, 21); p++)
+                                                                                    {
+                                                                                        if (xmlSmaliProperties.Lines[p].PartialsContains(targetSearchTerms[9]))
+                                                                                        {
+                                                                                            for (int q = k; q < xmlSmaliProperties.LinesCount; q++)
+                                                                                            {
+                                                                                                if (xmlSmaliProperties.Lines[q].Trim().StartsWith(xmlSmaliProperties.Lines[k].GetLabelName()))
+                                                                                                {
+                                                                                                    string seekbarXPosRegister = xmlSmaliProperties.Lines[j].GetRegister(1);
+                                                                                                    
+                                                                                                    codeInject.Lines(
+                                                                                                        [
+                                                                                                            ("",
+
+                                                                                                            q + 1,
+
+                                                                                                            [
+                                                                                                                $"invoke-virtual {{p0, {seekbarXPosRegister}}}, {xmlSmaliProperties.Lines[m].GetMethodDescriptor()}",
+                                                                                                                $"invoke-virtual {{p0, {seekbarXPosRegister}}}, {xmlSmaliProperties.Lines[p].GetMethodDescriptor()}",
+                                                                                                            ])
+                                                                                                        ]
+                                                                                                    ).Write();
+
+                                                                                                    return (interactionsCount, false, infoForNextSubPatch);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus
+            ];
+        }
+
         public static List<(bool, bool)> Shorts_Player_Bypasser()
         {
             return [
