@@ -3814,8 +3814,8 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHexByName("layout", "engagement_panel_title_header"),
-                        "invoke-virtual Landroid/widget/ImageView;->setImageResource(I)V",
+                        SmaliUtils.GetResourceHexByName("id", "panel_header_bottom_border"),
+                        "\"mea-\"",
                         ".method"
                     ],
 
@@ -3874,9 +3874,9 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHexByName("layout", "engagement_panel_title_header"),
-                        "invoke-interface Ljava/util/Iterator;->hasNext()Z",
-                        ".method"
+                        SmaliUtils.GetResourceHexByName("id", "panel_header_bottom_border"),
+                        "\"mea-\"",
+                        ".method public final )Z"
                     ],
 
                     true,
@@ -3903,7 +3903,7 @@
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
                                         {
-                                            for (int k = j; k >= 0; k--)
+                                            for (int k = j; k <= scaleIndex.Lines(j, 276); k++)
                                             {
                                                 if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[2]))
                                                 {
