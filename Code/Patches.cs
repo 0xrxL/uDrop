@@ -4594,10 +4594,8 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "\"audio\"",
-                        "\"ACOMC\"",
-                        "invoke-virtual Landroid/media/AudioManager;->getStreamVolume(I)I",
-                        ".method public final (Z)V"
+                        SmaliUtils.GetResourceHexByDecimal(45692436),
+                        ".method )Z"
                     ],
 
                     true,
@@ -4611,30 +4609,35 @@
                         infoForNextSubPatch
                     ) => {
                         if (new[] {
-                                targetSearchTerms[0],
-                                targetSearchTerms[1],
-                                targetSearchTerms[2]
+                                targetSearchTerms[0]
                             }.All(xmlSmaliProperties.Full.PartialsContains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
-                            for (int i = xmlSmaliProperties.LinesCount - 1; i >= 0; i--)
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
-                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[3]))
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[0]))
                                 {
-                                    codeInject.Lines(
-                                        [
-                                            ("Without Audio",
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("Without Audio",
 
-                                            i + 2,
+                                                    j + 2,
 
-                                            [
-                                                "return-void"
-                                            ])
-                                        ]
-                                    ).Write();
+                                                    [
+                                                        "const/16 v0, 0x0",
+                                                        "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
 
-                                    return (interactionsCount, false, infoForNextSubPatch);
+                                            return (interactionsCount, false, infoForNextSubPatch);
+                                        }
+                                    }
                                 }
                             }
                         }
