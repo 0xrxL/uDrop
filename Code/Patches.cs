@@ -29,12 +29,11 @@
                     [
                         (false, "invoke-virtual Landroid/content/Intent;", 1),
                         (false, ".method )Landroid/content/Intent;", 2),
-                        (false, ".method )Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;", 2),
                         (false, "invoke-virtual ;->finish()V", 1),
                         (false, "invoke-virtual Landroid/view/MotionEvent;->getAction()I", 1),
                         (false, ".method onDoubleTap(", 2),
                         (false, ".method onDoubleTapEvent(", 2),
-                        (true, "const-string playlist", 1),
+                        (true, ".method onClick(", 2),
                         (false, ".method onCreate(", 2),
                         (false, ".method onCreateLayout(", 2),
                         (false, ".method onItemClick(", 2),
@@ -1961,7 +1960,7 @@
                         "Landroid/net/Uri;->getAuthority()Ljava/lang/String;",
                         "Lj$/util/Optional;->get()Ljava/lang/Object;",
                         "Lj$/util/Optional;->isEmpty()Z",
-                        ".method private final (Lcom/google/android/libraries/youtube/innertube/model/media/PlayerConfigModel;Lcom/google/android/libraries/youtube/innertube/model/media/VideoStreamingData;)"
+                        ".method private final )L"
                     ],
 
                     true,
@@ -2022,7 +2021,8 @@
                                                         {
                                                             for (int m = l; m >= 0; m--)
                                                             {
-                                                                if (xmlSmaliProperties.Lines[m].PartialsContains(targetSearchTerms[6]))
+                                                                if (xmlSmaliProperties.Lines[m].PartialsContains(targetSearchTerms[6]) &&
+                                                                    xmlSmaliProperties.Lines[m].GetMethodParametersCount() == 2)
                                                                 {
                                                                     xmlSmaliProperties.ReadXMLSmaliProxiedLines(xmlSmaliProperties.Path);
 
@@ -2655,6 +2655,9 @@
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
+                        "\"baseUrl->\"",
+                        "\"params->\"",
+                        "\"headers->\"",
                         ".method compareTo(",
                         "invoke-static Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;",
                         "move-result-object"
@@ -2670,21 +2673,25 @@
                         interactionsCount,
                         infoForNextSubPatch
                     ) => {
-                        if (xmlSmaliProperties.Path.EndsWith(uDropUtils.GetOSSpecificFullPath("/TrackingUrlModel.smali")))
+                        if (new[] {
+                                targetSearchTerms[0],
+                                targetSearchTerms[1],
+                                targetSearchTerms[2]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
                             for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                             {
-                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[0]))
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[3]))
                                 {
                                     for (int j = i; j >= scaleIndex.Lines(i, -12); j--)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[4]))
                                         {
                                             for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
                                             {
-                                                if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[2]))
+                                                if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[5]))
                                                 {
                                                     string trackingUrlRegister = xmlSmaliProperties.Lines[k].GetRegister(1);
 
@@ -3573,8 +3580,8 @@
                     [
                         "\"Failed to start foreground priority player Service due to Android S+ restrictions\"",
                         "\"About to stop background service while in a pending state.\"",
-                        ".method public final declared-synchronized (Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;)V",
-                        "invoke-static (Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;)Z"
+                        ".method public final declared-synchronized )V",
+                        "invoke-static )Z"
                     ],
 
                     true,
@@ -3636,14 +3643,14 @@
 
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        "Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;",
                         "(Ljava/lang/Class;Ljava/lang/Object;I)[Ljava/lang/Class;",
+                        "\"MPPC\"",
                         "\"unsupported op code: \"",
                         $"const/4 {SmaliUtils.GetResourceHexByDecimal(0)}",
                         $"const/4 {SmaliUtils.GetResourceHexByDecimal(5)}",
                         $"const/4 {SmaliUtils.GetResourceHexByDecimal(2)}",
                         $"const/4 {SmaliUtils.GetResourceHexByDecimal(3)}",
-                        ".method"
+                        ".method (IL"
                     ],
 
                     true,
@@ -4649,7 +4656,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         "\"pc\"",
-                        ".method (Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;"
+                        ".method )V"
                     ],
 
                     true,
@@ -4674,7 +4681,8 @@
                                 {
                                     for (int j = i; j >= 0; j--)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]) &&
+                                            xmlSmaliProperties.Lines[j].GetMethodParametersCount() == 4)
                                         {
                                             codeInject.Lines(
                                                 [
@@ -4770,7 +4778,9 @@
                         interactionsCount,
                         infoForNextSubPatch
                     ) => {
-                        if (xmlSmaliProperties.Path.EndsWith(uDropUtils.GetOSSpecificFullPath("/SubtitleTrack.smali")))
+                        if (new[] {
+                                targetSearchTerms[0]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
                         {
                             xmlSmaliProperties.ReadXMLSmaliLines();
 
@@ -5697,7 +5707,7 @@ new SmaliUtils.SubPatchModule<string[]>(
 
                                                             for (int m = 0; m < xmlSmaliProperties.ProxiedLinesCount; m++)
                                                             {
-                                                                if (xmlSmaliProperties.ProxiedLines[m].PartialsContains(string.Format(targetSearchTerms[6], xmlSmaliProperties.Lines[l].GetMethodParametersClassNames(1))))
+                                                                if (xmlSmaliProperties.ProxiedLines[m].PartialsContains(string.Format(targetSearchTerms[6], xmlSmaliProperties.Lines[l].GetClassNameFromMethodParameters(1))))
                                                                 {
                                                                     for (int n = m; n <= scaleIndex.ProxiedLines(m, 5); n++)
                                                                     {
@@ -6544,9 +6554,9 @@ new SmaliUtils.SubPatchModule<string[]>(
                                                         {
                                                             for (int m = l; m <= scaleIndex.Lines(l, 44); m++)
                                                             {
-                                                                if (xmlSmaliProperties.Lines[m].PartialsContains($"{targetSearchTerms[5]} {xmlSmaliProperties.Lines[j].GetMethodParametersClassNames(2)}"))
+                                                                if (xmlSmaliProperties.Lines[m].PartialsContains($"{targetSearchTerms[5]} {xmlSmaliProperties.Lines[j].GetClassNameFromMethodParameters(2)}"))
                                                                 {
-                                                                    string stringBuilderClassName = xmlSmaliProperties.Lines[m].GetMethodParametersClassNames(1);
+                                                                    string stringBuilderClassName = xmlSmaliProperties.Lines[m].GetClassNameFromMethodParameters(1);
 
                                                                     for (int n = m; n < xmlSmaliProperties.LinesCount; n++)
                                                                     {
@@ -6739,7 +6749,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[3]))
                                         {
-                                            string identifierFieldClassName = xmlSmaliProperties.Lines[j].GetMethodParametersClassNames(2);
+                                            string identifierFieldClassName = xmlSmaliProperties.Lines[j].GetClassNameFromMethodParameters(2);
                                             string identifierFieldName = "";
 
                                             xmlSmaliProperties.ReadXMLSmaliProxiedLines(identifierFieldClassName);
@@ -6877,7 +6887,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHexByName("id", "action_pills"),
                         SmaliUtils.GetResourceHexByName("id", "live_chat_picker_toggle_button_tag"),
-                        ".method private final (Landroid/view/ViewGroup; ;Lcom/google/android/libraries/youtube/livechat/innertube/SupportedPickerPanelWrapper;)V",
+                        ".method private final (Landroid/view/ViewGroup; )V",
                         "invoke-virtual ;)Landroid/view/View;",
                         "move-result-object",
                         ".method private static ;)Z"
@@ -6906,7 +6916,8 @@ new SmaliUtils.SubPatchModule<string[]>(
                                 {
                                     for (int j = i; j >= 0; j--)
                                     {
-                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[2]))
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[2]) &&
+                                            xmlSmaliProperties.Lines[j].GetMethodParametersCount() == 3)
                                         {
                                             for (int k = j; k <= scaleIndex.Lines(j, 32); k++)
                                             {
@@ -7301,7 +7312,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                         "\"VideoPresenterConstants.VIDEO_THUMBNAIL_VIEW_KEY\"",
                         "\"VideoPresenterConstants.VIDEO_THUMBNAIL_DETAILS_KEY\"",
                         "\"VideoPresenterConstants.VIDEO_THUMBNAIL_BITMAP_KEY\"",
-                        "invoke-virtual Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;",
+                        "invoke-virtual ()L",
                         "move-result-object",
                         "\"PlaybackStartDescriptor:\\n  VideoId:%s\\n  PlaylistId:%s\\n  Index:%d\\n  VideoIds:%s\"",
                         "invoke-static Ljava/util/Locale;->getDefault()Ljava/util/Locale;",
@@ -7339,7 +7350,9 @@ new SmaliUtils.SubPatchModule<string[]>(
                                             {
                                                 if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[5]))
                                                 {
-                                                    xmlSmaliProperties.ReadXMLSmaliProxiedLines("com/google/android/libraries/youtube/player/model/PlaybackStartDescriptor.smali");
+                                                    string playbackStartDescriptorClassName = xmlSmaliProperties.Lines[j].GetClassNamesFromMethodDescriptor(2);
+
+                                                    xmlSmaliProperties.ReadXMLSmaliProxiedLines(playbackStartDescriptorClassName);
 
                                                     for (int l = 0; l < xmlSmaliProperties.ProxiedLinesCount; l++)
                                                     {
@@ -7362,7 +7375,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                                                                                     i,
 
                                                                                     [
-                                                                                        $"invoke-virtual {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;->{xmlSmaliProperties.ProxiedLines[n].GetMethodName()}()Ljava/lang/String;",
+                                                                                        $"invoke-virtual {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, L{playbackStartDescriptorClassName};->{xmlSmaliProperties.ProxiedLines[n].GetMethodName()}()Ljava/lang/String;",
                                                                                         $"move-result-object {freeConstStringRegister}",
                                                                                         $"invoke-static {{{freeConstStringRegister}}}, L{uStreamingDataRequestPath};->OpenVideoChannel(Ljava/lang/String;)Z",
                                                                                         $"move-result {freeConstStringRegister}",
@@ -7404,7 +7417,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                         "\"Null onEnterActions\"",
                         "\"Null onExitActions\"",
                         "player_overlay_timely_shelf",
-                        "and-int 0x80",
+                        "and-int 0x100",
                         ".method"
                     ],
 
@@ -7432,7 +7445,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                             {
                                 if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[4]))
                                 {
-                                    for (int j = i; j <= scaleIndex.Lines(i, 34); j++)
+                                    for (int j = i; j <= scaleIndex.Lines(i, 53); j++)
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[5]))
                                         {
@@ -7716,9 +7729,10 @@ new SmaliUtils.SubPatchModule<string[]>(
                         "\"c.supportedViewport\"",
                         "\"player.exception\"",
                         "\"vprng\"",
-                        ".method (Ljava/util/List;Ljava/util/Collection;Ljava/lang/String;L )[Lcom/google/android/libraries/youtube/innertube/model/media/VideoQuality;",
-                        "invoke-virtual Lcom/google/android/libraries/youtube/innertube/model/media/FormatStreamModel;-> )Ljava/lang/String;",
+                        ".method (Ljava/util/List;Ljava/util/Collection;Ljava/lang/String;L )[L",
+                        "invoke-virtual ()Ljava/lang/String;",
                         "move-result-object",
+                        "invoke-interface Ljava/util/Map;->containsKey(Ljava/lang/Object;)Z",
                         "invoke-interface Ljava/util/Map;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
                         "if-eqz"
                     ],
@@ -7754,40 +7768,46 @@ new SmaliUtils.SubPatchModule<string[]>(
                                                 {
                                                     if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[5]))
                                                     {
-                                                        for (int l = k; l <= scaleIndex.Lines(k, 30); l++)
+                                                        for (int l = k; l <= scaleIndex.Lines(k, 4); l++)
                                                         {
                                                             if (xmlSmaliProperties.Lines[l].PartialsContains(targetSearchTerms[6]))
                                                             {
-                                                                for (int m = l; m >= scaleIndex.Lines(l, -14); m--)
+                                                                for (int m = l; m <= scaleIndex.Lines(l, 26); m++)
                                                                 {
                                                                     if (xmlSmaliProperties.Lines[m].PartialsContains(targetSearchTerms[7]))
                                                                     {
-                                                                        string ifCondRegister = xmlSmaliProperties.Lines[m].GetRegister(1);
-                                                                        string videoResolutionItemRegister = xmlSmaliProperties.Lines[k].GetRegister(1);
+                                                                        for (int n = m; n >= scaleIndex.Lines(m, -14); n--)
+                                                                        {
+                                                                            if (xmlSmaliProperties.Lines[n].PartialsContains(targetSearchTerms[8]))
+                                                                            {
+                                                                                string ifCondRegister = xmlSmaliProperties.Lines[n].GetRegister(1);
+                                                                                string videoResolutionItemRegister = xmlSmaliProperties.Lines[k].GetRegister(1);
 
-                                                                        codeInject.Lines(
-                                                                            [
-                                                                                ("High Bitrate Resolution",
+                                                                                codeInject.Lines(
+                                                                                    [
+                                                                                        ("High Bitrate Resolution",
 
-                                                                                l + 1,
+                                                                                        m + 1,
 
-                                                                                [
-                                                                                    ":hide_high_bitrate_resolution"
-                                                                                ]),
+                                                                                        [
+                                                                                            ":hide_high_bitrate_resolution"
+                                                                                        ]),
 
-                                                                                ("High Bitrate Resolution",
+                                                                                        ("High Bitrate Resolution",
 
-                                                                                l,
+                                                                                        m,
 
-                                                                                [
-                                                                                    $"invoke-static {{{videoResolutionItemRegister}}}, L{uBlockerPath};->HideHighBitrateResolution(Ljava/lang/String;)Z",
-                                                                                    $"move-result {ifCondRegister}",
-                                                                                    $"if-nez {ifCondRegister}, :hide_high_bitrate_resolution"
-                                                                                ])
-                                                                            ]
-                                                                        ).Write();
+                                                                                        [
+                                                                                            $"invoke-static {{{videoResolutionItemRegister}}}, L{uBlockerPath};->HideHighBitrateResolution(Ljava/lang/String;)Z",
+                                                                                            $"move-result {ifCondRegister}",
+                                                                                            $"if-nez {ifCondRegister}, :hide_high_bitrate_resolution"
+                                                                                        ])
+                                                                                    ]
+                                                                                ).Write();
 
-                                                                        return (0, false, infoForNextSubPatch);
+                                                                                return (0, false, infoForNextSubPatch);
+                                                                            }
+                                                                        }
                                                                     }
                                                                 }
                                                             }
@@ -7964,7 +7984,9 @@ new SmaliUtils.SubPatchModule<string[]>(
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[4]))
                                         {
-                                            xmlSmaliProperties.ReadXMLSmaliProxiedLines("com/google/android/libraries/youtube/player/model/PlaybackStartDescriptor.smali");
+                                            string playbackStartDescriptorClassName = xmlSmaliProperties.Lines[j].GetClassNameFromMethodParameters(1);
+
+                                            xmlSmaliProperties.ReadXMLSmaliProxiedLines(playbackStartDescriptorClassName);
 
                                             for (int k = 0; k < xmlSmaliProperties.ProxiedLinesCount; k++)
                                             {
@@ -7985,7 +8007,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                                                                             j + 2,
 
                                                                             [
-                                                                                $"invoke-virtual/range {{p1 .. p1}}, Lcom/google/android/libraries/youtube/player/model/PlaybackStartDescriptor;->{xmlSmaliProperties.ProxiedLines[m].GetMethodName()}()Ljava/lang/String;",
+                                                                                $"invoke-virtual/range {{p1 .. p1}}, L{playbackStartDescriptorClassName};->{xmlSmaliProperties.ProxiedLines[m].GetMethodName()}()Ljava/lang/String;",
                                                                                 "move-result-object v0",
                                                                                 $"invoke-static {{v0}}, L{uUtilsPath};->OpenNewVideo(Ljava/lang/String;)V",
                                                                                 "return-void",
@@ -8779,7 +8801,7 @@ new SmaliUtils.SubPatchModule<string[]>(
                         ";->isEmpty()Z",
                         "Lj$/util/stream/Stream;->anyMatch(Ljava/util/function/Predicate;)Z",
                         "Lj$/util/stream/Stream;->flatMap(Ljava/util/function/Function;)Lj$/util/stream/Stream",
-                        ".method public static (Lcom/google/android/libraries/youtube/innertube/model/player/PlayerResponseModel;)Z"
+                        ".method public static ;)Z"
                     ],
 
                     true,
@@ -9238,9 +9260,10 @@ new SmaliUtils.SubPatchModule<string[]>(
             return [
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
-                        SmaliUtils.GetResourceHexByDecimal(257),
-                        SmaliUtils.GetResourceHexByDecimal(226205),
-                        ".method public final (Landroid/view/MotionEvent;FF)V",
+                        "Ljava/lang/Math;->atan2(DD)D",
+                        "Ljava/lang/Math;->toDegrees(D)D",
+                        "Landroid/view/MotionEvent;->getEventTime()J",
+                        ".method public final (Landroid/view/MotionEvent;Landroid/view/MotionEvent;FF)Z",
                         "invoke-static Ljava/lang/Math;->hypot(DD)D",
                         "invoke-virtual ()V",
                         ".method public constructor <init>",
@@ -9263,22 +9286,23 @@ new SmaliUtils.SubPatchModule<string[]>(
                         {
                             if (new[] {
                                     targetSearchTerms[0],
-                                    targetSearchTerms[1]
+                                    targetSearchTerms[1],
+                                    targetSearchTerms[2],
                                 }.All(xmlSmaliProperties.Full.PartialsContains))
                             {
                                 xmlSmaliProperties.ReadXMLSmaliLines();
 
                                 for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                                 {
-                                    if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[2]))
+                                    if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[3]))
                                     {
-                                        for (int j = i; j <= scaleIndex.Lines(i, 381); j++)
+                                        for (int j = i; j <= scaleIndex.Lines(i, 499); j++)
                                         {
-                                            if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[3]))
+                                            if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[4]))
                                             {
-                                                for (int k = j; k >= scaleIndex.Lines(j, -14); k--)
+                                                for (int k = j; k >= scaleIndex.Lines(j, -15); k--)
                                                 {
-                                                    if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[4]))
+                                                    if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[5]))
                                                     {
                                                         infoForNextSubPatch.Add("firstSmaliInfo");
                                                         infoForNextSubPatch.Add(xmlSmaliProperties.Lines[k].GetClassNamesFromMethodDescriptor(1));
@@ -9303,12 +9327,12 @@ new SmaliUtils.SubPatchModule<string[]>(
 
                                 for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
                                 {
-                                    if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[5]) &&
+                                    if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[6]) &&
                                         xmlSmaliProperties.Lines[i].GetMethodParametersCount() == 26)
                                     {
                                         for (int j = i; j <= scaleIndex.Lines(i, 5); j++)
                                         {
-                                            if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[6]))
+                                            if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[7]))
                                             {
                                                 infoForNextSubPatch.Add("secondSmaliInfo");
                                                 infoForNextSubPatch.Add((j + 1).ToString());
@@ -9335,11 +9359,11 @@ new SmaliUtils.SubPatchModule<string[]>(
 
                             for (int i = 0; i < xmlSmaliProperties.ProxiedLinesCount; i++)
                             {
-                                if (xmlSmaliProperties.ProxiedLines[i].PartialsContains(targetSearchTerms[7]))
+                                if (xmlSmaliProperties.ProxiedLines[i].PartialsContains(targetSearchTerms[8]))
                                 {
                                     int registersAmountIndex = i + 1;
 
-                                    if (xmlSmaliProperties.ProxiedLines[registersAmountIndex].PartialsContains(targetSearchTerms[8]))
+                                    if (xmlSmaliProperties.ProxiedLines[registersAmountIndex].PartialsContains(targetSearchTerms[9]))
                                     {
                                         codeInject.ProxiedLinesReplace(
                                             [

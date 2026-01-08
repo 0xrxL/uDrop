@@ -397,75 +397,6 @@ namespace uDrop.Code
             return methodNameString;
         }
 
-        public static string GetMethodParametersClassNames(this string value, int index)
-        {
-            if (index == 0)
-            {
-                "Error: Parameter Class index must be greater than zero".QuitWithException();
-            }
-
-            int fixedIndex = index - 1;
-            List<string> outputs = [];
-
-            bool insideParametersSection = false;
-            bool acquireChar = false;
-            int outputsCount = 0;
-            foreach (var c in value)
-            {
-                if (!insideParametersSection)
-                {
-                    if (c.Equals('('))
-                    {
-                        insideParametersSection = true;
-                    }
-                }
-                else
-                {
-                    if (c.Equals(')'))
-                    {
-                        insideParametersSection = false;
-                    }
-                }
-
-                if (insideParametersSection)
-                {
-                    if (!acquireChar)
-                    {
-                        if (c.Equals('L'))
-                        {
-                            outputs.Add("");
-                            acquireChar = true;
-
-                            continue;
-                        }
-                    }
-                    if (acquireChar)
-                    {
-                        if (c.Equals(';'))
-                        {
-                            outputsCount++;
-                            acquireChar = false;
-
-                            continue;
-                        }
-
-                        if (c.Equals(')'))
-                        {
-                            break;
-                        }
-
-                        outputs[outputsCount] += c;
-                    }
-                }
-            }
-
-            return index <= outputs.Count && !string.IsNullOrEmpty(outputs[fixedIndex])
-                    ?
-                        outputs[fixedIndex]
-                    :
-                        "";
-        }
-
         public static string GetMethodReturnClassName(this string value)
         {
             string endCircularBracket = ")";
@@ -561,6 +492,75 @@ namespace uDrop.Code
                 
                 return "";
             }
+        }
+
+        public static string GetClassNameFromMethodParameters(this string value, int index)
+        {
+            if (index == 0)
+            {
+                "Error: Parameter Class index must be greater than zero".QuitWithException();
+            }
+
+            int fixedIndex = index - 1;
+            List<string> outputs = [];
+
+            bool insideParametersSection = false;
+            bool acquireChar = false;
+            int outputsCount = 0;
+            foreach (var c in value)
+            {
+                if (!insideParametersSection)
+                {
+                    if (c.Equals('('))
+                    {
+                        insideParametersSection = true;
+                    }
+                }
+                else
+                {
+                    if (c.Equals(')'))
+                    {
+                        insideParametersSection = false;
+                    }
+                }
+
+                if (insideParametersSection)
+                {
+                    if (!acquireChar)
+                    {
+                        if (c.Equals('L'))
+                        {
+                            outputs.Add("");
+                            acquireChar = true;
+
+                            continue;
+                        }
+                    }
+                    if (acquireChar)
+                    {
+                        if (c.Equals(';'))
+                        {
+                            outputsCount++;
+                            acquireChar = false;
+
+                            continue;
+                        }
+
+                        if (c.Equals(')'))
+                        {
+                            break;
+                        }
+
+                        outputs[outputsCount] += c;
+                    }
+                }
+            }
+
+            return index <= outputs.Count && !string.IsNullOrEmpty(outputs[fixedIndex])
+                    ?
+                        outputs[fixedIndex]
+                    :
+                        "";
         }
 
         public static string GetMethodDescriptor(this string value)
