@@ -5444,7 +5444,7 @@
                     }
                 ).SubModuleStatus,
 
-new SmaliUtils.SubPatchModule<string[]>(
+                new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHexByDecimal(45694309),
                         ".method )Z"
@@ -6047,6 +6047,60 @@ new SmaliUtils.SubPatchModule<string[]>(
                                             codeInject.Lines(
                                                 [
                                                     ("Automatic Fullscreen Video Zoom Disabler",
+
+                                                    j + 2,
+
+                                                    [
+                                                        "const/16 v0, 0x0",
+                                                        "return v0"
+                                                    ])
+                                                ]
+                                            ).Write();
+
+                                            return (interactionsCount, false, infoForNextSubPatch);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus,
+
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHexByDecimal(45698813),
+                        ".method )Z"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (new[] {
+                                targetSearchTerms[0]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[0]))
+                                {
+                                    for (int j = i; j >= scaleIndex.Lines(i, -9); j--)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
+                                        {
+                                            codeInject.Lines(
+                                                [
+                                                    ("Stats For Nerds Visibility Fix",
 
                                                     j + 2,
 
