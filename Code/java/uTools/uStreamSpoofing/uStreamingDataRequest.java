@@ -140,6 +140,10 @@ public class uStreamingDataRequest {
                     videoRequireLogin = false;
 
                     for (int i = 0; i < 4; i++) { //Double with/without login attempts
+                        if (videoRequireLogin && !clientType.useAuth) {
+                            continue;
+                        }
+
                         HttpURLConnection connection = GetPlayerResponseConnectionFromRoute(
                             new uRoute(
                                 uRoute.Method.POST,

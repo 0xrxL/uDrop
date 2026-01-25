@@ -16,6 +16,7 @@ public enum uClientType {
         "",
         "Android",
         " 16;",
+        false,
         null
     ),
     ANDROID_CREATOR(
@@ -29,6 +30,7 @@ public enum uClientType {
         " Build/AP3A.241005.015.A2;",
         "Android",
         " 15;",
+        true,
         null
     ),
     ANDROID_VR(
@@ -42,6 +44,7 @@ public enum uClientType {
         " Build/QQ3A.200805.001;",
         "Android",
         " 10;",
+        false,
         null
     ),
     VISIONOS(
@@ -55,6 +58,7 @@ public enum uClientType {
         null,
         "visionOS",
         "1.3.21O771",
+        false,
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15"
     );
 
@@ -65,8 +69,9 @@ public enum uClientType {
     public final String deviceModel;
     public final String osName;
     public final String osVersion;
+    public final boolean useAuth;
     public String userAgent = "";
-    uClientType(String androidSDKVersion, int clientID, String clientPackageName, String clientVersion, String cronetVersion, String deviceMake, String deviceModel, String osBuildID, String osName, String osVersion, String userAgent) {
+    uClientType(String androidSDKVersion, int clientID, String clientPackageName, String clientVersion, String cronetVersion, String deviceMake, String deviceModel, String osBuildID, String osName, String osVersion, boolean useAuth, String userAgent) {
         this.androidSDKVersion = androidSDKVersion;
         this.clientID = clientID;
         this.clientVersion = clientVersion;
@@ -74,6 +79,7 @@ public enum uClientType {
         this.deviceModel = deviceModel;
         this.osName = osName;
         this.osVersion = osVersion;
+        this.useAuth = useAuth;
 
         if (userAgent == null) {
             if (Objects.equals(osName, "Android")) {
