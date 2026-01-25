@@ -383,7 +383,7 @@ public class uBlocker {
                 )
                     ||
                 (
-                    templateTreeComponent.startsWith("bottom_sheet_list_option")
+                    templateTreeComponent.startsWith("list_item")
                         &&
                     ByteBufferContainsString(
                         GetProtoBufferComponents(),
