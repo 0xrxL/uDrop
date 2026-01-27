@@ -498,67 +498,67 @@ public class uStreamingDataRequest {
         new uUtils.MakeToast("Channel opened");
     private static final uUtils.MakeToast openVideoChannelToastError =
         new uUtils.MakeToast("Error: Failed to open video channel");
-    private static Thread openVideoChannelThread = null;
+    private static boolean videoChannelOpeningAlreadyInQueue = false;
     public static boolean OpenVideoChannel(String videoID) {
-        if (openVideoChannelThread == null && !GetCommentsPanelOpen() && GetLithoActionDownDuration() >= 1000) {
-            openVideoChannelThread = new Thread(() -> {
-                try {
-                    openVideoChannelToastInProgress.ShowToast();
-
-                    String channelID = "";
-                    try {
-                        Object channelIDRequest = new uVideoDetailsRequest(
-                            videoID,
-
-                            null,
-
-                            "channelID"
-                        )
-                        .GetRequestedInfo();
-
-                        channelID = (String) channelIDRequest;
-                    } catch (Exception e) {
-                        Log.e(
-                            GetClassName(),
-
-                            e.toString()
-                        );
-                    }
-
-                    if (!channelID.isEmpty()) {
-                        Context context = GetMainActivity();
-                        assert context != null;
-
-                        Intent openLiveChannelIntent = new Intent(
-                            Intent.ACTION_VIEW,
-
-                            Uri.parse(
-                                String.format(
-                                    "https://www.youtube.com/channel/%s",
-
-                                    channelID
-                                )
-                            )
-                        );
-                        openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        openLiveChannelIntent.setPackage(context.getPackageName());
-
-                        context.startActivity(openLiveChannelIntent);
-
-                        openVideoChannelToastInProgress.HideToast();
-                        openVideoChannelToastDone.ShowToast();
-                    }
-                } catch (Exception e) {
-                    openVideoChannelToastError.ShowToast();
-                }
-
-                openVideoChannelThread.interrupt();
-                openVideoChannelThread = null;
-            });
-
-            openVideoChannelThread.start();
-
+        if (videoChannelOpeningAlreadyInQueue) {
             return true;
+        }
+
+        if (!GetCommentsPanelOpen() && GetLithoActionDownDuration() >= 1000) {
+            videoChannelOpeningAlreadyInQueue = true;
+
+            openVideoChannelToastInProgress.ShowToast();
+
+            String channelID = "";
+            try {
+                Object channelIDRequest = new uVideoDetailsRequest(
+                    videoID,
+
+                    null,
+
+                    "channelID"
+                )
+                .GetRequestedInfo();
+
+                channelID = (String) channelIDRequest;
+            } catch (Exception e) {
+                Log.e(
+                    GetClassName(),
+
+                    e.toString()
+                );
+
+                openVideoChannelToastError.ShowToast();
+
+                videoChannelOpeningAlreadyInQueue = false;
+            }
+
+            Context context = GetMainActivity();
+
+            if (!channelID.isEmpty() && context != null) {
+                Intent openLiveChannelIntent = new Intent(
+                    Intent.ACTION_VIEW,
+
+                    Uri.parse(
+                        String.format(
+                            "https://www.youtube.com/channel/%s",
+
+                            channelID
+                        )
+                    )
+                );
+                openLiveChannelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                openLiveChannelIntent.setPackage(context.getPackageName());
+
+                context.startActivity(openLiveChannelIntent);
+
+                openVideoChannelToastInProgress.HideToast();
+                openVideoChannelToastDone.ShowToast();
+
+                videoChannelOpeningAlreadyInQueue = false;
+
+                return true;
+            }
         }
 
         return false;

@@ -40,7 +40,7 @@
                         (false, ".method onBackPressed(", 2),
                         (false, ".method getOnBackPressedDispatcher(", 2),
                         (true, ".method onTouch(", 2),
-                        (false, ".method onTouchEvent(", 2)
+                        (true, ".method onTouchEvent(", 2)
                     ],
 
                     true,
@@ -3876,7 +3876,7 @@
                 new SmaliUtils.SubPatchModule<string[]>(
                     [
                         SmaliUtils.GetResourceHexByName("id", "panel_header_bottom_border"),
-                        "\"mea-\"",
+                        "\"EngagementPanelController: cannot show EngagementPanel before EngagementPanelController.init() has been called.\"",
                         ".method"
                     ],
 
@@ -3904,25 +3904,20 @@
                                     {
                                         if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[2]))
                                         {
-                                            if (interactionsCount < 3) {
-                                                interactionsCount++;
-                                            }
-                                            if (interactionsCount == 3) {
-                                                codeInject.Lines(
+                                            codeInject.Lines(
+                                                [
+                                                    ("",
+
+                                                    j + 2,
+
                                                     [
-                                                        ("",
+                                                        "const/16 v0, 0x1",
+                                                        $"invoke-static {{v0}}, L{uUtilsPath};->SetCommentsPanelOpen(Z)V"
+                                                    ])
+                                                ]
+                                            ).Write();
 
-                                                        j + 2,
-
-                                                        [
-                                                            "const/16 v0, 0x1",
-                                                            $"invoke-static {{v0}}, L{uUtilsPath};->SetCommentsPanelOpen(Z)V"
-                                                        ])
-                                                    ]
-                                                ).Write();
-
-                                                return (0, false, infoForNextSubPatch);
-                                            }
+                                            return (interactionsCount, false, infoForNextSubPatch);
                                         }
                                     }
                                 }

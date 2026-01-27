@@ -403,19 +403,19 @@ public class uUtils {
         };
     }
 
-    private static long lithoActionDownDuration = 0;
     private static long lithoActionDownStartTime = 0;
+    private static long lithoActionDownTotalDuration = 0;
     public static void SetLithoActionDownDuration(MotionEvent motionEvent) {
         switch (motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN ->
                 lithoActionDownStartTime = System.currentTimeMillis();
 
             case MotionEvent.ACTION_UP ->
-                lithoActionDownDuration = System.currentTimeMillis() - lithoActionDownStartTime;
+                lithoActionDownTotalDuration = System.currentTimeMillis() - lithoActionDownStartTime;
         }
     }
     public static long GetLithoActionDownDuration() {
-        return lithoActionDownDuration;
+        return lithoActionDownTotalDuration;
     }
 
     private static WeakReference<Activity> mainActivity;
