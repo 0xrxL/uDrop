@@ -6413,6 +6413,130 @@
                 ).SubModuleStatus
             ];
         }
+        public static List<(bool, bool)> Latest_Video_Top_Button_Removal()
+        {
+            return [
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHexByName("layout", "bar"),
+                        "invoke-virtual Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;",
+                        "move-result-object"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (new[] {
+                                targetSearchTerms[0]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[0]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 10); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
+                                        {
+                                            for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[2]))
+                                                {
+                                                    codeInject.Lines(
+                                                        [
+                                                            ("",
+
+                                                            k + 1,
+
+                                                            [
+                                                                $"invoke-static {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, L{uUtilsPath};->HideView(Landroid/view/View;)V",
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (interactionsCount, false, infoForNextSubPatch);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus,
+                
+                new SmaliUtils.SubPatchModule<string[]>(
+                    [
+                        SmaliUtils.GetResourceHexByName("layout", "content_pill"),
+                        "invoke-virtual Landroid/view/LayoutInflater;->inflate(ILandroid/view/ViewGroup;Z)Landroid/view/View;",
+                        "move-result-object"
+                    ],
+
+                    true,
+
+                    (
+                        xmlSmaliProperties,
+                        targetSearchTerms,
+                        scaleIndex,
+                        codeInject,
+                        interactionsCount,
+                        infoForNextSubPatch
+                    ) => {
+                        if (new[] {
+                                targetSearchTerms[0]
+                            }.All(xmlSmaliProperties.Full.PartialsContains))
+                        {
+                            xmlSmaliProperties.ReadXMLSmaliLines();
+
+                            for (int i = 0; i < xmlSmaliProperties.LinesCount; i++)
+                            {
+                                if (xmlSmaliProperties.Lines[i].PartialsContains(targetSearchTerms[0]))
+                                {
+                                    for (int j = i; j <= scaleIndex.Lines(i, 10); j++)
+                                    {
+                                        if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[1]))
+                                        {
+                                            for (int k = j; k <= scaleIndex.Lines(j, 6); k++)
+                                            {
+                                                if (xmlSmaliProperties.Lines[k].PartialsContains(targetSearchTerms[2]))
+                                                {
+                                                    codeInject.Lines(
+                                                        [
+                                                            ("",
+
+                                                            k + 1,
+
+                                                            [
+                                                                $"invoke-static {{{xmlSmaliProperties.Lines[k].GetRegister(1)}}}, L{uUtilsPath};->HideView(Landroid/view/View;)V",
+                                                            ])
+                                                        ]
+                                                    ).Write();
+
+                                                    return (interactionsCount, false, infoForNextSubPatch);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        return (interactionsCount, true, infoForNextSubPatch);
+                    }
+                ).SubModuleStatus
+            ];
+        }
 
         public static List<(bool, bool)> Litho_Elements_Removal()
         {
