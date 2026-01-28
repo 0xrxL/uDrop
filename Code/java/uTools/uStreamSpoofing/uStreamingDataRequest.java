@@ -65,17 +65,18 @@ public class uStreamingDataRequest {
     private static String videoIDPlaying = "";
     private static Map<String, String> playerHeadersPlaying;
 
-
     private final List<uClientType> CLIENT_TYPES_ORDER_TO_USE =
         new ArrayList<>(
             Arrays.asList(
-                uClientType.ANDROID,
+                uClientType.Android_VR_No_AV1,
 
-                uClientType.ANDROID_VR,
+                uClientType.Android_VR_No_AV1,
 
-                uClientType.VISIONOS,
+                uClientType.Vision_OS,
 
-                uClientType.ANDROID_CREATOR
+                uClientType.Android_Studio,
+
+                uClientType.Android_No_SDK
             )
         );
     private String currentClientName;
@@ -139,7 +140,7 @@ public class uStreamingDataRequest {
                 for (uClientType clientType : CLIENT_TYPES_ORDER_TO_USE) {
                     videoRequireLogin = false;
 
-                    for (int i = 0; i < 4; i++) { //Double with/without login attempts
+                    for (int i = 0; i < 2; i++) {
                         if (videoRequireLogin && !clientType.useAuth) {
                             continue;
                         }
@@ -178,7 +179,7 @@ public class uStreamingDataRequest {
                                             "client",
 
                                             new JSONObject() {{
-                                                put("clientName", clientType.name());
+                                                put("clientName", clientType.clientName);
                                                 put("clientVersion", clientType.clientVersion);
                                                 put("deviceMake", clientType.deviceMake);
                                                 put("deviceModel", clientType.deviceModel);
