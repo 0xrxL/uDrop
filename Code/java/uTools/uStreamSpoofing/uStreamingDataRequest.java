@@ -505,7 +505,24 @@ public class uStreamingDataRequest {
             return true;
         }
 
-        if (!GetCommentsPanelOpen() && GetLithoActionDownDuration() >= 1000) {
+        if ((
+                (SearchInSetCorasick(
+                    Objects.requireNonNull(GetPlayerType()).name(),
+                    playerMaximized,
+                    uUtils.Entries.ANY
+                )
+                    &&
+                !GetCommentsPanelOpen())
+            ||
+                !SearchInSetCorasick(
+                    Objects.requireNonNull(GetPlayerType()).name(),
+                    playerMaximized,
+                    uUtils.Entries.ANY
+                )
+            )
+                &&
+            GetLithoActionDownDuration() >= 1000
+        ) {
             videoChannelOpeningAlreadyInQueue = true;
 
             openVideoChannelToastInProgress.ShowToast();
