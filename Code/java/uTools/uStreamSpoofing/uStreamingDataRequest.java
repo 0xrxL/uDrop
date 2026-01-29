@@ -6,6 +6,7 @@ import static uTools.uBlocker.playerMaximized;
 import static uTools.uStreamSpoofing.uPlayerRoutes.GetPlayerResponseConnectionFromRoute;
 import static uTools.uStreamSpoofing.uPlayerRoutes.requestKeys;
 import static uTools.uUtils.BackgroundThreadPool;
+import static uTools.uUtils.ByteBufferContainsString;
 import static uTools.uUtils.GetAppContext;
 import static uTools.uUtils.GetCommentsPanelOpen;
 import static uTools.uUtils.GetDrawableInt;
@@ -85,6 +86,10 @@ public class uStreamingDataRequest {
     private byte[] requestBody;
     private boolean videoRequireLogin;
     private boolean videoReloadHandlerAlreadyInQueue;
+    private final Set<String> liveStreamTags = Set.of(
+        "yt_live_broadcast",
+        "yt_premiere_broadcast"
+    );
     private uStreamingDataRequest(String videoID, Map<String, String> playerHeaders) {
         Objects.requireNonNull(playerHeaders);
 
@@ -218,12 +223,21 @@ public class uStreamingDataRequest {
                                             bAOS.write(buffer, 0, bytesRead);
                                         }
 
+                                        ByteBuffer streamByteBufferArray = ByteBuffer.wrap(bAOS.toByteArray());
+
+                                        if (clientType == uClientType.Android_Studio
+                                                &&
+                                            ByteBufferContainsString(streamByteBufferArray, liveStreamTags, uUtils.Entries.ANY)
+                                        ) {
+                                            continue;
+                                        }
+
                                         currentClientName =
                                             String.format(
-                                                " (%s - %s)",
+                                                " (%s_%s)",
 
                                                 clientType.name(),
-                                                !videoRequireLogin ? "NO_AUTH" : "WITH_AUTH"
+                                                !videoRequireLogin ? "No_Auth" : "Auth"
                                             );
 
                                         SetStatsForNerdsClientName(currentClientName);
@@ -234,7 +248,7 @@ public class uStreamingDataRequest {
 
                                         VideoReload();
 
-                                        return ByteBuffer.wrap(bAOS.toByteArray());
+                                        return streamByteBufferArray;
                                     } catch (Exception e) {
                                         Log.e(
                                             GetClassName(),
