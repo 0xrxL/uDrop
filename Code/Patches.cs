@@ -2930,7 +2930,7 @@
                                         if (xmlSmaliProperties.Lines[j].PartialsContains(targetSearchTerms[3]))
                                         {
                                             string[] patch = [
-                                                $"invoke-static {{v0}}, L{uUtilsPath};->SetSystemTheme(Ljava/lang/Enum;)V"
+                                                $"invoke-static {{{xmlSmaliProperties.Lines[j].GetRegister(1)}}}, L{uUtilsPath};->SetSystemTheme(Ljava/lang/Enum;)V"
                                             ];
 
                                             codeInject.Lines(
@@ -9242,7 +9242,7 @@
                                                                                     string enumObject = xmlSmaliProperties.Lines[l].GetMethodDescriptor();
                                                                                     string currentButtonObject = xmlSmaliProperties.Lines[m].GetMethodDescriptor();
                                                                                     string currentButtonObjectRegister = xmlSmaliProperties.Lines[o].GetRegister(1);
-                                                                                    string buttonCheckFreeRegister = currentButtonObjectRegister.ScaleRegisterValue(1);
+                                                                                    string buttonCheckFreeRegister = xmlSmaliProperties.Lines[k].GetRegister(1);
 
                                                                                     codeInject.Lines(
                                                                                         [
